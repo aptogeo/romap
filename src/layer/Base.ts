@@ -5,6 +5,10 @@ import BaseLayer from 'ol/layer/Base';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
 
+interface Data {
+  [key: string]: any;
+}
+
 let globalOrder = 0;
 
 export interface IBaseProps {
@@ -13,9 +17,9 @@ export interface IBaseProps {
    */
   id?: string;
   /**
-   * Any additional datas.
+   * Additional data.
    */
-  data?: any;
+  data?: Data
   /**
    * type: BASE or OVERLAY.
    */
@@ -52,7 +56,7 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
 
   public id: string;
 
-  public data: any;
+  public data: Data;
 
   public type: string;
 
