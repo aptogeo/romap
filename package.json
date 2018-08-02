@@ -1,0 +1,81 @@
+{
+  "name": "romap",
+  "version": "0.0.1",
+  "description": "OpenLayers with React",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.dev.config.js --content-base src --hot --inline",
+    "prettier": "prettier --single-quote --print-width 120 --write --parser typescript '{src, test}/**/*.ts'; prettier --single-quote --print-width 120 --write --parser typescript '{src,test}/**/*.tsx'",
+    "lint": "npm run prettier && tslint '{src, test}/**/*.ts'; tslint '{src, test}/**/*.tsx'",
+    "build": "rimraf lib && npm run lint && tsc -p tsconfig.json",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptogeo/romap.git"
+  },
+  "keywords": [
+    "Web mapping",
+    "React",
+    "OpenLayers"
+  ],
+  "author": "Mathieu MAST",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-env": "^7.0.0-beta.55",
+    "@types/lodash": "^4.14.115",
+    "@types/openlayers": "^4.6.10",
+    "@types/prop-types": "^15.5.4",
+    "@types/react": "^16.4.7",
+    "@types/react-dom": "^16.0.6",
+    "awesome-typescript-loader": "^5.2.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-loader": "^7.1.5",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
+    "ol": "5.1.3",
+    "prettier": "^1.14.0",
+    "proj4": "2.4.4",
+    "rimraf": "^2.6.2",
+    "source-map-loader": "^0.2.3",
+    "style-loader": "^0.21.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "3.0.1",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
+  },
+  "dependencies": {
+    "es6-promise": "^4.2.4",
+    "lodash": "^4.17.10",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  },
+  "peerDependencies": {
+    "ol": "5.1.3",
+    "proj4": "2.4.4"
+  },
+  "publishConfig": {
+    "registry": "http://sigvnexus.lyon-dev2.local:8081/repository/npm-internal/"
+  }
+}

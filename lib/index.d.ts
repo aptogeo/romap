@@ -1,0 +1,11 @@
+export * from './Map';
+export * from './View';
+import * as _layer from './layer';
+export declare const layer: typeof _layer;
+import * as _source from './source';
+export declare const source: typeof _source;
+import * as _component from './component';
+export declare const component: typeof _component;
+import * as _net from './net';
+export declare const net: typeof _net;
+import 'es6-promise/auto';
