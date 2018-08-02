@@ -15,7 +15,7 @@
     "prettier": "prettier --single-quote --print-width 120 --write --parser typescript '{src, test}/**/*.ts'; prettier --single-quote --print-width 120 --write --parser typescript '{src,test}/**/*.tsx'",
     "lint": "npm run prettier && tslint '{src, test}/**/.{ts,tsx}'",
     "build": "rimraf lib && npm run lint && tsc -p tsconfig.json",
-    "precommit": "npm run build"
+    "precommit": "npm run build && git add"
   },
   "repository": {
     "type": "git",
