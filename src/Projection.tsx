@@ -45,6 +45,7 @@ export class Projection extends React.Component<IProjectionProps, any> {
       const extent = transformExtent(this.projectionInfo.lonLatValidity, 'EPSG:4326', this.projectionInfo.olProjection);
       this.projectionInfo.olProjection.setExtent(extent);
     }
+    projMap.set(this.projectionInfo.code, this.projectionInfo);
   }
 
   public render(): any {

@@ -19,7 +19,7 @@ export interface IBaseProps {
   /**
    * Additional data.
    */
-  data?: Data
+  data?: Data;
   /**
    * type: BASE or OVERLAY.
    */

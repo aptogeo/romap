@@ -55,12 +55,12 @@ class Maps extends React.Component {
           <Romap.component.PanZoom />
           <Romap.component.ScaleLine />
           <Romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
-          <Romap.layer.Tile source={world2D} data={{name: 'World 2D'}} />
-          <Romap.layer.Image source={britishNationalGrid} data={{name: 'British National Grid'}} />
+          <Romap.layer.Tile source={world2D} data={{ name: 'World 2D' }} />
+          <Romap.layer.Image source={britishNationalGrid} data={{ name: 'British National Grid' }} />
         </Romap.Map>
         <Romap.Map keyboardEventTarget={document}>
           <Romap.View center={[508000, 6000000]} zoom={5} />
-          <Romap.layer.Image source={landsatSource} data={{name: 'Landsat'}} />
+          <Romap.layer.Image source={landsatSource} data={{ name: 'Landsat' }} />
         </Romap.Map>
       </div>
     );
