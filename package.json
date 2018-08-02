@@ -43,8 +43,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "css-loader": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.2.0",
     "ol": "5.1.3",
     "prettier": "^1.14.0",
     "proj4": "2.4.4",
