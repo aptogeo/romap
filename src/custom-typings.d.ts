@@ -39,10 +39,11 @@ declare module 'ol/source/XYZ' {
 }
 
 declare module 'ol/source/ImageArcGISRest' {
-  export default class extends ol.source.ImageArcGISRest {
-    public imageSize_: number[];
-    public ratio_: number;
-  }
+  export default ol.source.ImageArcGISRest;
+}
+
+declare module 'ol/source/TileArcGISRest' {
+  export default ol.source.TileArcGISRest;
 }
 
 declare module 'ol/source/BingMaps' {
@@ -130,6 +131,8 @@ declare module 'ol/style/Stroke' {
 declare module 'proj4';
 
 declare module 'ol/proj';
+
+declare module 'ol/proj/proj4';
 
 declare module 'ol/proj/Projection' {
   export default ol.proj.Projection;

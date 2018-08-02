@@ -1,7 +1,7 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import BaseLayer from 'ol/layer/Base';
+import OlMap from 'ol/Map';
 import GroupLayer from 'ol/layer/Group';
+import BaseLayer from 'ol/layer/Base';
 import { Base, IBaseProps } from './Base';
 
 export interface IGroupProps extends IBaseProps {
@@ -16,11 +16,11 @@ export class Group extends Base<IGroupProps, any> {
     /**
      * OpenLayers map.
      */
-    olMap: PropTypes.object,
+    olMap: OlMap,
     /**
      * OpenLayers group.
      */
-    olGroup: PropTypes.object
+    olGroup: GroupLayer
   };
 
   public getChildContext() {

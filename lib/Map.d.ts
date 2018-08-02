@@ -1,53 +1,53 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import OlMap from 'ol/Map';
+import GroupLayer from 'ol/layer/Group';
 export interface IMapProps {
-    /**
-     * Content.
-     */
-    children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
-    /**
-     * Class name.
-     */
-    className?: string;
-    /**
-     * Keyboard Event Target.
-     */
-    keyboardEventTarget?: any;
+  /**
+   * Content.
+   */
+  children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
+  /**
+   * Class name.
+   */
+  className?: string;
+  /**
+   * Keyboard Event Target.
+   */
+  keyboardEventTarget?: any;
 }
 export declare class Map extends React.Component<IMapProps, {}> {
-    static defaultProps: {
-        className: string;
-    };
-    static childContextTypes: {
-        /**
-         * OpenLayers map.
-         */
-        olMap: PropTypes.Requireable<object>;
-        /**
-         * OpenLayers group.
-         */
-        olGroup: PropTypes.Requireable<object>;
-    };
+  static defaultProps: {
+    className: string;
+  };
+  static childContextTypes: {
     /**
      * OpenLayers map.
      */
-    private olMap;
+    olMap: typeof OlMap;
     /**
-     * OpenLayers view.
+     * OpenLayers group.
      */
-    private olView;
-    /**
-     * Div.
-     */
-    private divMap;
-    componentWillMount(): void;
-    componentDidMount(): void;
-    getChildContext(): {
-        olMap: OlMap;
-        olGroup: import("openlayers").layer.Group;
-    };
-    increaseLoadingCounter(): void;
-    decreaseLoadingCounter(): void;
-    render(): any;
+    olGroup: typeof GroupLayer;
+  };
+  /**
+   * OpenLayers map.
+   */
+  private olMap;
+  /**
+   * OpenLayers view.
+   */
+  private olView;
+  /**
+   * Div.
+   */
+  private divMap;
+  componentWillMount(): void;
+  componentDidMount(): void;
+  getChildContext(): {
+    olMap: OlMap;
+    olGroup: GroupLayer;
+  };
+  increaseLoadingCounter(): void;
+  decreaseLoadingCounter(): void;
+  render(): any;
 }

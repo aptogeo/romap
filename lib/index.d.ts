@@ -1,5 +1,6 @@
 export * from './Map';
 export * from './View';
+export * from './Projection';
 import * as _layer from './layer';
 export declare const layer: typeof _layer;
 import * as _source from './source';
@@ -8,4 +9,6 @@ import * as _component from './component';
 export declare const component: typeof _component;
 import * as _net from './net';
 export declare const net: typeof _net;
+import * as _utils from './utils';
+export declare const utils: typeof _utils;
 import 'es6-promise/auto';

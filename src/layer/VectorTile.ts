@@ -1,9 +1,9 @@
 import * as React from 'react';
 import BaseLayer from 'ol/layer/Base';
-import VectorLayer from 'ol/layer/Vector';
+import VectorTileLayer from 'ol/layer/VectorTile';
 import { Base, IBaseProps } from './Base';
 
-export interface IVectorProps extends IBaseProps {
+export interface IVectorTileProps extends IBaseProps {
   /**
    * Source.
    */
@@ -14,14 +14,14 @@ export interface IVectorProps extends IBaseProps {
   style?: any;
 }
 
-export class Vector extends Base<IVectorProps, any> {
+export class Vector extends Base<IVectorTileProps, any> {
   public style: any;
 
   public createOlLayer(): BaseLayer {
-    return new VectorLayer({ source: this.props.source });
+    return new VectorTileLayer({ source: this.props.source });
   }
 
-  public checkProps(props: IVectorProps) {
+  public checkProps(props: IVectorTileProps) {
     super.checkProps(props);
     this.setStyle(props.style);
   }

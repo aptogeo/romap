@@ -1,12 +1,12 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
+import OlMap from 'ol/Map';
 
 export class MapResizer extends React.Component<{}, {}> {
   public static contextTypes = {
     /**
      * OpenLayers map.
      */
-    olMap: PropTypes.object
+    olMap: OlMap
   };
 
   public componentWillMount() {

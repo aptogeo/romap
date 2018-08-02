@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
+import OlMap from 'ol/Map';
 import { getPointResolution } from 'ol/proj';
 
 const LEADING_DIGITS = [1, 2, 5];
@@ -29,7 +29,7 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
     /**
      * OpenLayers map.
      */
-    olMap: PropTypes.object
+    olMap: OlMap
   };
 
   /**

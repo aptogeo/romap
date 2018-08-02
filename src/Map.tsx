@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import OlMap from 'ol/Map';
+import GroupLayer from 'ol/layer/Group';
 import OlView from 'ol/View';
 
 export interface IMapProps {
@@ -27,11 +27,11 @@ export class Map extends React.Component<IMapProps, {}> {
     /**
      * OpenLayers map.
      */
-    olMap: PropTypes.object,
+    olMap: OlMap,
     /**
      * OpenLayers group.
      */
-    olGroup: PropTypes.object
+    olGroup: GroupLayer
   };
 
   /**

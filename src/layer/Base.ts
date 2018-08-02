@@ -1,5 +1,6 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
+import OlMap from 'ol/Map';
+import GroupLayer from 'ol/layer/Group';
 import BaseLayer from 'ol/layer/Base';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
@@ -42,11 +43,11 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
     /**
      * OpenLayers map.
      */
-    olMap: PropTypes.object,
+    olMap: OlMap,
     /**
      * OpenLayers group.
      */
-    olGroup: PropTypes.object
+    olGroup: GroupLayer
   };
 
   public id: string;

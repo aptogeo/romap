@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import View from 'ol/View';
+import OlMap from 'ol/Map';
+import OlView from 'ol/View';
 import { easeOut } from 'ol/easing';
 import { cloneView } from '../utils';
 
@@ -39,13 +39,13 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     /**
      * OpenLayers map.
      */
-    olMap: PropTypes.object
+    olMap: OlMap
   };
 
   /**
    * Origin.
    */
-  private origin: View;
+  private origin: OlView;
 
   /**
    * Button Rotate.

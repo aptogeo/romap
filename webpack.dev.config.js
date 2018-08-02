@@ -17,12 +17,12 @@ module.exports = {
   },
   module: {
     rules: [{
-        test: /\.tsx?$/,
-        use: ['awesome-typescript-loader'],
-      },{
-        test: /\.css?$/,
-        use: ['style-loader', 'css-loader']
-      }]
+      test: /\.tsx?$/,
+      use: ['awesome-typescript-loader'],
+    }, {
+      test: /\.css?$/,
+      use: ['style-loader', 'css-loader']
+    }]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -33,5 +33,10 @@ module.exports = {
       __DEVELOPMENT__: true,
       __DEVTOOLS__: true
     }),
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 };

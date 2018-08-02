@@ -1,7 +1,8 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
+import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
+import { Projection } from './Projection';
 
 export interface IViewProps {
   /**
@@ -23,7 +24,7 @@ export interface IViewProps {
   /*
    * Projection.
    */
-  olProjection?: OlProjection | string;
+  projection?: OlProjection | string;
 }
 
 export class View extends React.Component<IViewProps, any> {
@@ -31,7 +32,7 @@ export class View extends React.Component<IViewProps, any> {
     /**
      * OpenLayers map.
      */
-    olMap: PropTypes.object
+    olMap: OlMap
   };
 
   public componentDidMount() {
@@ -40,7 +41,7 @@ export class View extends React.Component<IViewProps, any> {
       zoom: this.props.zoom,
       resolution: this.props.resolution,
       rotation: this.props.rotation,
-      projection: this.props.olProjection
+      projection: this.props.projection
     });
     this.context.olMap.setView(view);
   }
