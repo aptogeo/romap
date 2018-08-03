@@ -14,6 +14,10 @@ export interface IPanZoomProps {
      */
     showPan?: boolean;
     /**
+     * Show Origin
+     */
+    showOrigin?: boolean;
+    /**
      * Show Rotation
      */
     showRotation?: boolean;
@@ -29,6 +33,7 @@ export declare class PanZoom extends React.Component<IPanZoomProps, any> {
         className: string;
         showZoom: boolean;
         showPan: boolean;
+        showOrigin: boolean;
         showRotation: boolean;
     };
     static contextTypes: {

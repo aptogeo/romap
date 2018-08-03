@@ -178,7 +178,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
         <button className={`${this.props.className}-origin`} onClick={this.handleOrigin.bind(this)} title={originTitle}>
           <span className={`${this.props.className}-span-origin`} />
         </button>
-      )
+      );
     }
     return (
       <div>

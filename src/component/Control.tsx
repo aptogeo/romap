@@ -77,9 +77,7 @@ export class Control extends React.Component<IControlProps, IControlState> {
             this.controlDiv = controlDiv;
           }}
         >
-          <div>
-            {children}
-          </div>
+          <div>{children}</div>
         </div>
       </div>
     );

@@ -52,8 +52,8 @@ export class Overlay extends React.Component<IOverlayProps, IOverlayState> {
   private oldPositionX: number;
 
   /**
-  * Old position Y.
-  */
+   * Old position Y.
+   */
   private oldPositionY: number;
 
   public componentWillMount() {
@@ -81,7 +81,7 @@ export class Overlay extends React.Component<IOverlayProps, IOverlayState> {
     this.context.olMap.removeOverlay(this.state.overlay);
   }
 
-  public  createOverlay() {
+  public createOverlay() {
     const overlay = new OlOverlay({
       element: this.overlayDiv.children[0],
       stopEvent: false,
@@ -134,9 +134,7 @@ export class Overlay extends React.Component<IOverlayProps, IOverlayState> {
             this.overlayDiv = overlayDiv;
           }}
         >
-          <div>
-            {children}
-          </div>
+          <div>{children}</div>
         </div>
       </div>
     );
