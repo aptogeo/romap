@@ -14,6 +14,10 @@ export interface IPanZoomProps {
    */
   showZoom?: boolean;
   /**
+   * Show Zoom Slider
+   */
+  showZoomSlider?: boolean;
+  /**
    * Show Pan
    */
   showPan?: boolean;
@@ -35,6 +39,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
   public static defaultProps = {
     className: 'panzoom',
     showZoom: true,
+    showZoomSlider: true,
     showPan: true,
     showOrigin: true,
     showRotation: true
@@ -176,24 +181,23 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     if (this.props.showOrigin) {
       origin = (
         <button className={`${this.props.className}-origin`} onClick={this.handleOrigin.bind(this)} title={originTitle}>
-          <span className={`${this.props.className}-span-origin`} />
         </button>
+      );
+    } else {
+      origin = (
+        <button className={`${this.props.className}-noorigin`} disabled />
       );
     }
     return (
       <div>
         <button className={`${this.props.className}-up`} onClick={this.handleUp.bind(this)} title={upTitle}>
-          <span className={`${this.props.className}-span-up`} />
         </button>
         <button className={`${this.props.className}-left`} onClick={this.handleLeft.bind(this)} title={leftTitle}>
-          <span className={`${this.props.className}-span-left`} />
         </button>
         {origin}
         <button className={`${this.props.className}-right`} onClick={this.handleRight.bind(this)} title={rightTitle}>
-          <span className={`${this.props.className}-span-right`} />
         </button>
         <button className={`${this.props.className}-down`} onClick={this.handleDown.bind(this)} title={downTitle}>
-          <span className={`${this.props.className}-span-down`} />
         </button>
       </div>
     );
@@ -206,13 +210,20 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     const { i18n } = this.props;
     const zoomTitle = i18n && i18n.zoomTitle ? i18n.zoomTitle : 'Zoom in';
     const unzoomTitle = i18n && i18n.unzoomTitle ? i18n.unzoomTitle : 'Zoom out';
+    let slider = null;
+    if (this.props.showZoomSlider) {
+      slider = (
+        <div className={`${this.props.className}-zoom-slider`}>
+          <button className={`${this.props.className}-zoom-slider-thumb`} />
+        </div>
+      );
+    }
     return (
       <div>
         <button className={`${this.props.className}-zoom`} onClick={this.handleZoom.bind(this)} title={zoomTitle}>
-          <span className={`${this.props.className}-span-zoom`} />
         </button>
+        {slider}
         <button className={`${this.props.className}-unzoom`} onClick={this.handleUnzoom.bind(this)} title={unzoomTitle}>
-          <span className={`${this.props.className}-span-unzoom`} />
         </button>
       </div>
     );

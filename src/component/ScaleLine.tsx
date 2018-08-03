@@ -137,7 +137,7 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
         ref={divScaleLine => {
           this.divScaleLine = divScaleLine;
         }}
-        className={`${this.props.className}  ol-unselectable ol-control`}
+        className={`${this.props.className} ol-unselectable ol-control`}
         title={scanlineTitle}
       >
         <div

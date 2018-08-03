@@ -6,7 +6,7 @@
 
 .panzoom button {
   height: 32px;
-  min-width: 32px;
+  width: 32px;
   background-color: rgba(213, 213, 213, 0.61);
   border-style: solid;
   border-color: rgba(172, 172, 172, 0.61);
@@ -14,25 +14,25 @@
   box-shadow: none;
 }
 
-.panzoom-up {
+button.panzoom-up {
   display: block;
   margin-left: 32px;
   border-width: 1px 1px 0px 1px !important;
   border-radius: 5px 5px 0px 0px !important;
 }
 
-.panzoom-span-up:after {
+button.panzoom-up:after {
   content: '↑';
 }
 
-.panzoom-left {
+button.panzoom-left {
   display: inline;
   margin-left: 0px;
   border-width: 1px 0px 1px 1px !important;
   border-radius: 5px 0px 0px 5px !important;
 }
 
-.panzoom-span-left:after {
+button.panzoom-left:after {
   content: '←';
 }
 
@@ -42,32 +42,42 @@
   border-radius: 0px !important;
 }
 
-.panzoom-span-origin:after {
+button.panzoom-origin:after {
   content: '⤢';
 }
 
-.panzoom-right {
+button.panzoom-noorigin {
+  display: inline;
+  border-width: 0px !important;
+  border-radius: 0px !important;
+}
+
+button.panzoom-noorigin:after {
+  content: '·';
+}
+
+button.panzoom-right {
   display: inline;
   border-width: 1px 1px 1px 0px !important;
   border-radius: 0px 5px 5px 0px !important;
 }
 
-.panzoom-span-right:after {
+button.panzoom-right:after {
   content: '→';
 }
 
-.panzoom-down {
+button.panzoom-down {
   display: block;
   margin-left: 32px;
   border-width: 0px 1px 1px 1px !important;
   border-radius: 0px 0px 5px 5px !important;
 }
 
-.panzoom-span-down:after {
+button.panzoom-down:after {
   content: '↓';
 }
 
-.panzoom-zoom {
+button.panzoom-zoom {
   display: block;
   margin-top: 2px;
   margin-left: 32px;
@@ -75,22 +85,39 @@
   border-radius: 5px 5px 0px 0px !important;
 }
 
-.panzoom-span-zoom:after {
+button.panzoom-zoom:after {
   content: '+';
 }
 
-.panzoom-unzoom {
+button.panzoom-unzoom {
   display: block;
   margin-left: 32px;
   border-width: 0px 1px 1px 1px !important;
   border-radius: 0px 0px 5px 5px !important;
 }
 
-.panzoom-span-unzoom:after {
+button.panzoom-unzoom:after {
   content: '-';
 }
 
-.panzoom-rotate {
+div.panzoom-zoom-slider {
+  margin-left: 32px;
+  width: 30px;
+  background-color: rgba(213, 213, 213, 0.61);
+  border-style: solid;
+  border-color: rgba(172, 172, 172, 0.61);
+  border-width: 1px 1px 1px 1px !important;
+}
+
+button.panzoom-zoom-slider-thumb {
+  position: relative;
+  width: 28px !important;
+  left: 1px !important;
+  height: 10px !important;
+  background-color: #242424 !important;
+}
+
+button.panzoom-rotate {
   display: block;
   margin-top: 2px;
   margin-left: 32px;
@@ -98,10 +125,6 @@
   border-radius: 5px 5px 5px 5px !important;
 }
 
-.panzoom-span-rotate {
-  display: block;
-}
-
-.panzoom-span-rotate:after {
+button.panzoom-rotate:after {
   content: '⇑';
 }

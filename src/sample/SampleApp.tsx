@@ -66,7 +66,7 @@ class Maps extends React.Component {
           <Romap.View center={[508000, 6000000]} zoom={5} />
           <Romap.layer.Image source={landsatSource} data={{ name: 'Landsat' }} />
           <Romap.component.Control>
-            <Romap.component.PanZoom />
+            <Romap.component.PanZoom showZoomSlider={false} showOrigin={false} />
           </Romap.component.Control>
           <Romap.component.Control>
             <Romap.component.ScaleLine />
