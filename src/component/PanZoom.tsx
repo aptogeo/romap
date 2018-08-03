@@ -180,25 +180,22 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     let origin = null;
     if (this.props.showOrigin) {
       origin = (
-        <button className={`${this.props.className}-origin`} onClick={this.handleOrigin.bind(this)} title={originTitle}>
-        </button>
+        <button
+          className={`${this.props.className}-origin`}
+          onClick={this.handleOrigin.bind(this)}
+          title={originTitle}
+        />
       );
     } else {
-      origin = (
-        <button className={`${this.props.className}-noorigin`} disabled />
-      );
+      origin = <button className={`${this.props.className}-noorigin`} disabled />;
     }
     return (
       <div>
-        <button className={`${this.props.className}-up`} onClick={this.handleUp.bind(this)} title={upTitle}>
-        </button>
-        <button className={`${this.props.className}-left`} onClick={this.handleLeft.bind(this)} title={leftTitle}>
-        </button>
+        <button className={`${this.props.className}-up`} onClick={this.handleUp.bind(this)} title={upTitle} />
+        <button className={`${this.props.className}-left`} onClick={this.handleLeft.bind(this)} title={leftTitle} />
         {origin}
-        <button className={`${this.props.className}-right`} onClick={this.handleRight.bind(this)} title={rightTitle}>
-        </button>
-        <button className={`${this.props.className}-down`} onClick={this.handleDown.bind(this)} title={downTitle}>
-        </button>
+        <button className={`${this.props.className}-right`} onClick={this.handleRight.bind(this)} title={rightTitle} />
+        <button className={`${this.props.className}-down`} onClick={this.handleDown.bind(this)} title={downTitle} />
       </div>
     );
   }
@@ -220,11 +217,13 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     }
     return (
       <div>
-        <button className={`${this.props.className}-zoom`} onClick={this.handleZoom.bind(this)} title={zoomTitle}>
-        </button>
+        <button className={`${this.props.className}-zoom`} onClick={this.handleZoom.bind(this)} title={zoomTitle} />
         {slider}
-        <button className={`${this.props.className}-unzoom`} onClick={this.handleUnzoom.bind(this)} title={unzoomTitle}>
-        </button>
+        <button
+          className={`${this.props.className}-unzoom`}
+          onClick={this.handleUnzoom.bind(this)}
+          title={unzoomTitle}
+        />
       </div>
     );
   }

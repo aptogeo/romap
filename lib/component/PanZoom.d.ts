@@ -10,6 +10,10 @@ export interface IPanZoomProps {
      */
     showZoom?: boolean;
     /**
+     * Show Zoom Slider
+     */
+    showZoomSlider?: boolean;
+    /**
      * Show Pan
      */
     showPan?: boolean;
@@ -32,6 +36,7 @@ export declare class PanZoom extends React.Component<IPanZoomProps, any> {
     static defaultProps: {
         className: string;
         showZoom: boolean;
+        showZoomSlider: boolean;
         showPan: boolean;
         showOrigin: boolean;
         showRotation: boolean;
