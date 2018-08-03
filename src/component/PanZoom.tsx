@@ -18,6 +18,10 @@ export interface IPanZoomProps {
    */
   showPan?: boolean;
   /**
+   * Show Origin
+   */
+  showOrigin?: boolean;
+  /**
    * Show Rotation
    */
   showRotation?: boolean;
@@ -32,6 +36,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     className: 'panzoom',
     showZoom: true,
     showPan: true,
+    showOrigin: true,
     showRotation: true
   };
 
@@ -162,11 +167,19 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
       return null;
     }
     const { i18n } = this.props;
-    const upTitle = i18n && i18n.upTitle ? i18n.upTitle : 'Pan north';
-    const downTitle = i18n && i18n.downTitle ? i18n.downTitle : 'Pan south';
-    const rightTitle = i18n && i18n.rightTitle ? i18n.rightTitle : 'Pan east';
-    const leftTitle = i18n && i18n.leftTitle ? i18n.leftTitle : 'Pan west';
-    const originTitle = i18n && i18n.originTitle ? i18n.originTitle : 'Zoom extents';
+    const upTitle = i18n && i18n.upTitle ? i18n.upTitle : 'Pan up';
+    const downTitle = i18n && i18n.downTitle ? i18n.downTitle : 'Pan down';
+    const rightTitle = i18n && i18n.rightTitle ? i18n.rightTitle : 'Pan right';
+    const leftTitle = i18n && i18n.leftTitle ? i18n.leftTitle : 'Pan left';
+    const originTitle = i18n && i18n.originTitle ? i18n.originTitle : 'Zoom origin';
+    let origin = null;
+    if (this.props.showOrigin) {
+      origin = (
+        <button className={`${this.props.className}-origin`} onClick={this.handleOrigin.bind(this)} title={originTitle}>
+          <span className={`${this.props.className}-span-origin`} />
+        </button>
+      )
+    }
     return (
       <div>
         <button className={`${this.props.className}-up`} onClick={this.handleUp.bind(this)} title={upTitle}>
@@ -175,9 +188,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
         <button className={`${this.props.className}-left`} onClick={this.handleLeft.bind(this)} title={leftTitle}>
           <span className={`${this.props.className}-span-left`} />
         </button>
-        <button className={`${this.props.className}-origin`} onClick={this.handleOrigin.bind(this)} title={originTitle}>
-          <span className={`${this.props.className}-span-origin`} />
-        </button>
+        {origin}
         <button className={`${this.props.className}-right`} onClick={this.handleRight.bind(this)} title={rightTitle}>
           <span className={`${this.props.className}-span-right`} />
         </button>

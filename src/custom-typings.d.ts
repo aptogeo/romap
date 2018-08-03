@@ -161,6 +161,10 @@ declare module 'ol/Overlay' {
   export default ol.Overlay;
 }
 
+declare module 'ol/control/Control' {
+  export default ol.control.Control;
+}
+
 declare module 'ol/Feature' {
   export default ol.Feature;
 }

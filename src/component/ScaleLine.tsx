@@ -49,7 +49,9 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
 
   public componentDidMount() {
     this.context.olMap.on('change:view', this.onViewChange);
-    this.onViewChange();
+    setTimeout(() => {
+      this.onViewChange();
+    }, 100);
   }
 
   public onViewChange = () => {
@@ -59,9 +61,6 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
 
   public onResolutionChange = () => {
     const view = this.context.olMap.getView();
-    if (view == null) {
-      return;
-    }
     const projection = view.getProjection();
     const units = projection.getUnits();
     const center = view.getCenter();
@@ -71,7 +70,10 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
 
     const nominalCount = this.props.minWidth * pointResolution;
     let suffix = '';
-    if (units === 'm' || units === 'degrees') {
+    if (units == null) {
+      return;
+    }
+    if (units === 'm' || units.match(/meter/i) || units === 'd' || units.match(/degree/i)) {
       if (nominalCount < 0.001) {
         suffix = 'μm';
         pointResolution *= 1000000;
@@ -84,7 +86,7 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
         suffix = 'km';
         pointResolution /= 1000;
       }
-    } else if (units === 'ft' || units === 'us-ft') {
+    } else if (units.match(/ft/i) || units.match(/feet/i) || units.match(/foot/i)) {
       if (nominalCount < 0.9144) {
         suffix = 'in';
         pointResolution *= 39.37;
