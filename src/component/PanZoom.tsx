@@ -67,10 +67,22 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
    */
   private spanRotate: any;
 
+  /**
+   * Container thumb.
+   */
+  private containerThumb: any;
+
+  /**
+   * Btn thumb.
+   */
+  private btnThumb: any;
+
   public componentDidMount() {
     setTimeout(() => {
       this.origin = cloneView(this.context.olMap.getView());
-    }, 300);
+      this.onViewChange();
+    }, 100);
+    this.context.olMap.on('change:view', this.onViewChange);
     this.context.olMap.on('postrender', (event: any) => {
       const frameState = event.frameState;
       if (frameState == null) {
@@ -93,38 +105,69 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     });
   }
 
-  public handleZoom(event: any) {
+  public onViewChange = () => {
+    this.context.olMap.getView().on('propertychange', this.onResolutionChange);
+    this.onResolutionChange();
+  };
+
+  public onResolutionChange = () => {
+    if (this.btnThumb == null) {
+      return;
+    }
+    const view = this.context.olMap.getView();
+    const resolution = view.getResolution();
+    const position = 1 - view.getValueForResolutionFunction()(resolution);
+    const computedBtnThumbStyle = window.getComputedStyle(this.btnThumb);
+    const btnThumbHeight = this.btnThumb.offsetHeight +
+      parseFloat(computedBtnThumbStyle['marginTop']) +
+      parseFloat(computedBtnThumbStyle['marginBottom']) +
+      1;
+    this.btnThumb.style.top = ((this.containerThumb.offsetHeight - btnThumbHeight) * position - btnThumbHeight) + 'px';
+  }
+
+  public handleZoom = () => {
     this.zoom(1);
   }
 
-  public handleUnzoom(event: any) {
+  public handleUnzoom = () => {
     this.zoom(-1);
   }
 
-  public handleOrigin(event: any) {
+  public handleOrigin = () => {
     if (this.origin) {
       this.context.olMap.setView(cloneView(this.origin));
     }
   }
 
-  public handleLeft(event: any) {
+  public handleLeft = () => {
     this.handleResetRotation();
     this.pan(-128, 0);
   }
 
-  public handleRight(event: any) {
+  public handleRight = () => {
     this.handleResetRotation();
     this.pan(128, 0);
   }
 
-  public handleUp(event: any) {
+  public handleUp = () => {
     this.handleResetRotation();
     this.pan(0, 128);
   }
 
-  public handleDown(event: any) {
+  public handleDown = () => {
     this.handleResetRotation();
     this.pan(0, -128);
+  }
+
+  public handleResetRotation = () => {
+    const view = this.context.olMap.getView();
+    if (view.getRotation() !== undefined) {
+      view.animate({
+        rotation: 0,
+        duration: 200,
+        easing: easeOut
+      });
+    }
   }
 
   public pan(deltaX: number, deltaY: number) {
@@ -156,17 +199,6 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     });
   }
 
-  public handleResetRotation() {
-    const view = this.context.olMap.getView();
-    if (view.getRotation() !== undefined) {
-      view.animate({
-        rotation: 0,
-        duration: 200,
-        easing: easeOut
-      });
-    }
-  }
-
   public renderPan(): any {
     if (!this.props.showPan) {
       return null;
@@ -182,7 +214,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
       origin = (
         <button
           className={`${this.props.className}-origin`}
-          onClick={this.handleOrigin.bind(this)}
+          onClick={this.handleOrigin}
           title={originTitle}
         />
       );
@@ -191,11 +223,11 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     }
     return (
       <div>
-        <button className={`${this.props.className}-up`} onClick={this.handleUp.bind(this)} title={upTitle} />
-        <button className={`${this.props.className}-left`} onClick={this.handleLeft.bind(this)} title={leftTitle} />
+        <button className={`${this.props.className}-up`} onClick={this.handleUp} title={upTitle} />
+        <button className={`${this.props.className}-left`} onClick={this.handleLeft} title={leftTitle} />
         {origin}
-        <button className={`${this.props.className}-right`} onClick={this.handleRight.bind(this)} title={rightTitle} />
-        <button className={`${this.props.className}-down`} onClick={this.handleDown.bind(this)} title={downTitle} />
+        <button className={`${this.props.className}-right`} onClick={this.handleRight} title={rightTitle} />
+        <button className={`${this.props.className}-down`} onClick={this.handleDown} title={downTitle} />
       </div>
     );
   }
@@ -210,18 +242,26 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     let slider = null;
     if (this.props.showZoomSlider) {
       slider = (
-        <div className={`${this.props.className}-zoom-slider`}>
-          <button className={`${this.props.className}-zoom-slider-thumb`} />
+        <div
+          ref={containerThumb => {
+            this.containerThumb = containerThumb;
+          }}
+          className={`${this.props.className}-zoom-slider`}>
+          <button
+            ref={btnThumb => {
+              this.btnThumb = btnThumb;
+            }}
+            className={`${this.props.className}-zoom-slider-thumb`} />
         </div>
       );
     }
     return (
       <div>
-        <button className={`${this.props.className}-zoom`} onClick={this.handleZoom.bind(this)} title={zoomTitle} />
+        <button className={`${this.props.className}-zoom`} onClick={this.handleZoom} title={zoomTitle} />
         {slider}
         <button
           className={`${this.props.className}-unzoom`}
-          onClick={this.handleUnzoom.bind(this)}
+          onClick={this.handleUnzoom}
           title={unzoomTitle}
         />
       </div>
@@ -241,7 +281,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
             this.buttonRotate = buttonRotate;
           }}
           className={`${this.props.className}-rotate`}
-          onClick={this.handleResetRotation.bind(this)}
+          onClick={this.handleResetRotation}
           title={rotateTitle}
         >
           <span
