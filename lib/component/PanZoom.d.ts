@@ -59,17 +59,27 @@ export declare class PanZoom extends React.Component<IPanZoomProps, any> {
      * Span Rotate.
      */
     private spanRotate;
+    /**
+     * Container thumb.
+     */
+    private containerThumb;
+    /**
+     * Btn thumb.
+     */
+    private btnThumb;
     componentDidMount(): void;
-    handleZoom(event: any): void;
-    handleUnzoom(event: any): void;
-    handleOrigin(event: any): void;
-    handleLeft(event: any): void;
-    handleRight(event: any): void;
-    handleUp(event: any): void;
-    handleDown(event: any): void;
+    onViewChange: () => void;
+    onResolutionChange: () => void;
+    handleZoom: () => void;
+    handleUnzoom: () => void;
+    handleOrigin: () => void;
+    handleLeft: () => void;
+    handleRight: () => void;
+    handleUp: () => void;
+    handleDown: () => void;
+    handleResetRotation: () => void;
     pan(deltaX: number, deltaY: number): void;
     zoom(delta: number): void;
-    handleResetRotation(): void;
     renderPan(): any;
     renderZoom(): any;
     renderRotation(): any;

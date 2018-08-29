@@ -118,46 +118,47 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     const resolution = view.getResolution();
     const position = 1 - view.getValueForResolutionFunction()(resolution);
     const computedBtnThumbStyle = window.getComputedStyle(this.btnThumb);
-    const btnThumbHeight = this.btnThumb.offsetHeight +
+    const btnThumbHeight =
+      this.btnThumb.offsetHeight +
       parseFloat(computedBtnThumbStyle['marginTop']) +
       parseFloat(computedBtnThumbStyle['marginBottom']) +
       1;
-    this.btnThumb.style.top = ((this.containerThumb.offsetHeight - btnThumbHeight) * position - btnThumbHeight) + 'px';
-  }
+    this.btnThumb.style.top = (this.containerThumb.offsetHeight - btnThumbHeight) * position - btnThumbHeight + 'px';
+  };
 
   public handleZoom = () => {
     this.zoom(1);
-  }
+  };
 
   public handleUnzoom = () => {
     this.zoom(-1);
-  }
+  };
 
   public handleOrigin = () => {
     if (this.origin) {
       this.context.olMap.setView(cloneView(this.origin));
     }
-  }
+  };
 
   public handleLeft = () => {
     this.handleResetRotation();
     this.pan(-128, 0);
-  }
+  };
 
   public handleRight = () => {
     this.handleResetRotation();
     this.pan(128, 0);
-  }
+  };
 
   public handleUp = () => {
     this.handleResetRotation();
     this.pan(0, 128);
-  }
+  };
 
   public handleDown = () => {
     this.handleResetRotation();
     this.pan(0, -128);
-  }
+  };
 
   public handleResetRotation = () => {
     const view = this.context.olMap.getView();
@@ -168,7 +169,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
         easing: easeOut
       });
     }
-  }
+  };
 
   public pan(deltaX: number, deltaY: number) {
     const view = this.context.olMap.getView();
@@ -211,13 +212,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     const originTitle = i18n && i18n.originTitle ? i18n.originTitle : 'Zoom origin';
     let origin = null;
     if (this.props.showOrigin) {
-      origin = (
-        <button
-          className={`${this.props.className}-origin`}
-          onClick={this.handleOrigin}
-          title={originTitle}
-        />
-      );
+      origin = <button className={`${this.props.className}-origin`} onClick={this.handleOrigin} title={originTitle} />;
     } else {
       origin = <button className={`${this.props.className}-noorigin`} disabled />;
     }
@@ -246,12 +241,14 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
           ref={containerThumb => {
             this.containerThumb = containerThumb;
           }}
-          className={`${this.props.className}-zoom-slider`}>
+          className={`${this.props.className}-zoom-slider`}
+        >
           <button
             ref={btnThumb => {
               this.btnThumb = btnThumb;
             }}
-            className={`${this.props.className}-zoom-slider-thumb`} />
+            className={`${this.props.className}-zoom-slider-thumb`}
+          />
         </div>
       );
     }
@@ -259,11 +256,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
       <div>
         <button className={`${this.props.className}-zoom`} onClick={this.handleZoom} title={zoomTitle} />
         {slider}
-        <button
-          className={`${this.props.className}-unzoom`}
-          onClick={this.handleUnzoom}
-          title={unzoomTitle}
-        />
+        <button className={`${this.props.className}-unzoom`} onClick={this.handleUnzoom} title={unzoomTitle} />
       </div>
     );
   }
