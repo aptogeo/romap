@@ -11,7 +11,22 @@ export interface IImageProps extends IBaseProps {
 }
 
 export class Image extends Base<IImageProps, any> {
+  public source: any;
+
   public createOlLayer(): BaseLayer {
-    return new ImageLayer({ source: this.props.source });
+    return new ImageLayer();
+  }
+
+  public checkProps(props: IImageProps) {
+    super.checkProps(props);
+    this.setSource(props.source);
+  }
+
+  public setSource(source: any) {
+    this.source = source;
+    if (this.source == null) {
+      this.source = undefined;
+    }
+    this.getOlLayer().setSource(source);
   }
 }

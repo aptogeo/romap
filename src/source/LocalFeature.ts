@@ -1,8 +1,8 @@
 import { isEqual, assign } from 'lodash';
-import Vector from 'ol/source/Vector';
 import Projection from 'ol/proj/Projection';
+import { AbstractFeature } from './AbstractFeature'
 
-export class LocalSource extends Vector {
+export class LocalFeature extends AbstractFeature {
   private savedFeatures: any;
 
   private oldViewProjection: any;

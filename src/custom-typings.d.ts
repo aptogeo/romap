@@ -1,5 +1,9 @@
 // LAYERS
 
+declare module 'ol/layer/Layer' {
+  export default ol.layer.Layer;
+}
+
 declare module 'ol/layer/Base' {
   export default ol.layer.Base;
 }
@@ -25,6 +29,10 @@ declare module 'ol/layer/Group' {
 }
 
 // SOURCES
+
+declare module 'ol/source/Source' {
+  export default ol.source.Source;
+}
 
 declare module 'ol/source/VectorTile' {
   export default ol.source.VectorTile;

@@ -1,77 +1,22 @@
-import { isEqual, assign } from 'lodash';
-import Vector from 'ol/source/Vector';
 import EsriJSON from 'ol/format/EsriJSON';
-import { send } from '../net';
+import { send, IResponse } from '../net';
+import { AbstractExternalFeature } from './AbstractExternalFeature'
 
-export class QueryArcGISRest extends Vector {
-  private srid: number;
-
-  private loadedFeatures: any;
-
-  private extent: any;
-
-  private resolution: any;
-
+export class QueryArcGISRest extends AbstractExternalFeature {
   private where: string;
 
   private format: any;
 
   constructor(options?: any) {
-    const opt = {};
-    assign(opt, options, {
-      useSpatialIndex: true,
-      loader: (extent: any, resolution: any, projection: any) => {
-        // ArcGIS Server only wants the numeric portion of the projection ID.
-        const srid = projection
-          .getCode()
-          .split(':')
-          .pop();
-        if (!isEqual(this.srid, srid)) {
-          this.srid = srid;
-          this.extent = null;
-          this.resolution = null;
-          this.clear();
-          return;
-        }
-        if (this.loadedFeatures != null) {
-          this.dispatchEvent('imageloadstart');
-          this.addFeatures(this.loadedFeatures);
-          this.dispatchEvent('imageloadend');
-        }
-      },
-      strategy: (extent: any, resolution: any) => {
-        if (this.srid != null) {
-          if (!isEqual(this.extent, extent) || !isEqual(this.resolution, resolution)) {
-            this.dispatchEvent('imageloadstart');
-            this.load(extent, this.srid).then(
-              (features: any) => {
-                this.loadedFeatures = features;
-                this.clear();
-                this.dispatchEvent('imageloadend');
-              },
-              () => {
-                this.loadedFeatures = [];
-                this.clear();
-                this.dispatchEvent('imageloaderror');
-              }
-            );
-          }
-        }
-        this.extent = extent;
-        this.resolution = resolution;
-        return [extent];
-      }
-    });
-
-    super(opt);
-
+    super(options);
     this.where = options.where;
-    this.srid = null;
-    this.loadedFeatures = null;
     this.format = new EsriJSON();
   }
 
-  public load(extent: any, srid: any) {
+  public load(extent: any, projectionCode: string) {
+    const srid = projectionCode
+          .split(':')
+          .pop();
     const geometry = encodeURIComponent(
       `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${
         extent[3]
@@ -82,7 +27,7 @@ export class QueryArcGISRest extends Vector {
       url += `&where=${this.where}`;
     }
     return send({ url, contentType: 'application/json' }).then(
-      (json: any) => this.format.readFeatures(json),
+      (response: IResponse) => this.format.readFeatures(response.body),
       () => {
         console.error(`Request error ${url}`);
       }

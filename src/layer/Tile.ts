@@ -11,7 +11,22 @@ export interface ITileProps extends IBaseProps {
 }
 
 export class Tile extends Base<ITileProps, any> {
+  public source: any;
+
   public createOlLayer(): BaseLayer {
-    return new TileLayer({ source: this.props.source });
+    return new TileLayer();
+  }
+
+  public checkProps(props: ITileProps) {
+    super.checkProps(props);
+    this.setSource(props.source);
+  }
+
+  public setSource(source: any) {
+    this.source = source;
+    if (this.source == null) {
+      this.source = undefined;
+    }
+    this.getOlLayer().setSource(source);
   }
 }

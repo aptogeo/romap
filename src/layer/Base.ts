@@ -17,6 +17,10 @@ export interface IBaseProps {
    */
   id?: string;
   /**
+   * Name.
+   */
+  name?: string;
+  /**
    * Additional data.
    */
   data?: Data;
@@ -55,6 +59,8 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
   };
 
   public id: string;
+
+  public name: string;
 
   public data: Data;
 
@@ -119,6 +125,7 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
 
   public checkProps(props: P) {
     this.setId(props.id);
+    this.setName(props.name);
     this.setData(props.data);
     this.setType(props.type);
     this.setVisible(props.visible);
@@ -179,6 +186,11 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
   public setId(id: string) {
     this.id = id;
     this.olLayer.set('id', this.id);
+  }
+
+  public setName(name: any) {
+    this.name = name;
+    this.olLayer.set('name', this.name);
   }
 
   public setData(data: any) {

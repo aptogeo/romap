@@ -1,8 +1,10 @@
 import * as React from 'react';
-import * as Romap from '../';
+import * as romap from '../';
 import TileArcGISRest from 'ol/source/TileArcGISRest';
 import ImageStatic from 'ol/source/ImageStatic';
 import ImageArcGISRest from 'ol/source/ImageArcGISRest';
+import Style from 'ol/style/Style';
+import Stroke from 'ol/style/Stroke';
 
 import './sample.css';
 import './panzoom.css';
@@ -17,8 +19,8 @@ export class SampleApp extends React.Component {
 
     return (
       <div>
-        <Romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
-        <Romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
+        <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
+        <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
         <Maps />
       </div>
     );
@@ -49,29 +51,40 @@ class Maps extends React.Component {
       ratio: 1
     });
 
+    const statesProvincesLinesSource = new romap.source.Wfs({
+      url: 'https://ahocevar.com/geoserver/wfs',
+      typename: 'ne:ne_10m_admin_1_states_provinces_lines_shp'
+    });
+
+    style:
     return (
       <div className="maps">
-        <Romap.Map keyboardEventTarget={document}>
-          <Romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
-          <Romap.layer.Tile source={world2D} data={{ name: 'World 2D' }} />
-          <Romap.layer.Image source={britishNationalGrid} data={{ name: 'British National Grid' }} />
-          <Romap.component.Control>
-            <Romap.component.PanZoom />
-          </Romap.component.Control>
-          <Romap.component.Control>
-            <Romap.component.ScaleLine />
-          </Romap.component.Control>
-        </Romap.Map>
-        <Romap.Map keyboardEventTarget={document}>
-          <Romap.View center={[508000, 6000000]} zoom={5} />
-          <Romap.layer.Image source={landsatSource} data={{ name: 'Landsat' }} />
-          <Romap.component.Control>
-            <Romap.component.PanZoom showZoomSlider={false} showOrigin={false} />
-          </Romap.component.Control>
-          <Romap.component.Control>
-            <Romap.component.ScaleLine />
-          </Romap.component.Control>
-        </Romap.Map>
+        <romap.Map keyboardEventTarget={document}>
+          <romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
+          <romap.layer.Tile source={world2D} data={{ name: 'World 2D' }} />
+          <romap.layer.Image source={britishNationalGrid} data={{ name: 'British National Grid' }} />
+          <romap.component.Control>
+            <romap.component.PanZoom />
+          </romap.component.Control>
+          <romap.component.Control>
+            <romap.component.ScaleLine />
+          </romap.component.Control>
+        </romap.Map>
+        <romap.Map keyboardEventTarget={document}>
+          <romap.View center={[508000, 6000000]} zoom={5} />
+          <romap.layer.Vector source={statesProvincesLinesSource} style={new Style({
+            stroke: new Stroke({
+              color: 'rgba(0, 0, 255, 1.0)',
+              width: 2
+            })
+          })} name='States Provinces Lines' />
+          <romap.component.Control>
+            <romap.component.PanZoom showZoomSlider={false} showOrigin={false} />
+          </romap.component.Control>
+          <romap.component.Control>
+            <romap.component.ScaleLine />
+          </romap.component.Control>
+        </romap.Map>
       </div>
     );
   }

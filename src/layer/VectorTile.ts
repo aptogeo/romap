@@ -14,16 +14,27 @@ export interface IVectorTileProps extends IBaseProps {
   style?: any;
 }
 
-export class Vector extends Base<IVectorTileProps, any> {
+export class VectorTile extends Base<IVectorTileProps, any> {
+  public source: any;
+
   public style: any;
 
   public createOlLayer(): BaseLayer {
-    return new VectorTileLayer({ source: this.props.source });
+    return new VectorTileLayer();
   }
 
   public checkProps(props: IVectorTileProps) {
     super.checkProps(props);
+    this.setSource(props.source);
     this.setStyle(props.style);
+  }
+
+  public setSource(source: any) {
+    this.source = source;
+    if (this.source == null) {
+      this.source = undefined;
+    }
+    this.getOlLayer().setSource(source);
   }
 
   public setStyle(style: any) {

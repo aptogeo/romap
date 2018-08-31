@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
-import { LocalSource } from '../source/LocalSource';
+import { LocalFeature } from '../source/LocalFeature';
 import { Base, IBaseProps } from './Base';
 
 export interface IDrawingProps extends IBaseProps {
@@ -16,7 +16,7 @@ export class Drawing extends Base<IDrawingProps, any> {
 
   public createOlLayer(): BaseLayer {
     return new VectorLayer({
-      source: new LocalSource({
+      source: new LocalFeature({
         wrapX: false
       })
     });

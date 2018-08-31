@@ -50,19 +50,18 @@ const unsendableRequestError = {
 };
 
 function deserializeBody(data: any, contentType: string): any {
-  let deserializedData = data;
   if (typeof data === 'string') {
-    if (/[\/+]json($|[^-\w])/.test(contentType)) {
+    if (/[\/+](\w+-)?json(-\w+)?/.test(contentType)) {
       // is JSON
       try {
-        deserializedData = JSON.parse(data);
+        return JSON.parse(data);
       } catch (err) {
         console.error(`Error to parse JSON ${err}`);
       }
-    } else if (contentType === 'application/x-www-form-urlencoded') {
+    } else if (/[\/+](\w+-)?form(-\w+)?/.test(contentType)) {
       // is Form
       const keyValues = data.split('&');
-      deserializedData = {};
+      const deserializedData = {} as any;
       for (const keyValue of keyValues) {
         const parts = keyValue.split('=');
         if (parts.length === 2) {
@@ -71,18 +70,21 @@ function deserializeBody(data: any, contentType: string): any {
           deserializedData[key] = value;
         }
       }
+    } else {
+      return data;
     }
+  } else {
+    return data;
   }
-  return deserializedData;
 }
 
 function serializeBody(data: any, contentType: string): any {
   let serializedData = data;
   if (typeof data === 'object') {
-    if (/[\/+]json($|[^-\w])/.test(contentType)) {
+    if (/[\/+](\w+-)?json(-\w+)?/.test(contentType)) {
       // is JSON
       serializedData = JSON.stringify(data);
-    } else if (contentType === 'application/x-www-form-urlencoded') {
+    } else if (/[\/+](\w+-)?form(-\w+)?/.test(contentType)) {
       // is Form
       const keyValues: string[] = [];
       for (const key in data) {
@@ -156,7 +158,7 @@ export function send(request: IRequest): Promise<IResponse> {
         // ResponseText is accessible only if responseType is '' or 'text' and on older browsers
         const text =
           (request.method !== 'HEAD' && (client.responseType === '' || client.responseType === 'text')) ||
-          typeof client.responseType === 'undefined'
+            typeof client.responseType === 'undefined'
             ? client.responseText
             : null;
         const contentType = client.getResponseHeader(contentTypeHeaderName);
