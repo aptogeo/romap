@@ -11,6 +11,10 @@ export interface IBaseProps {
      */
     id?: string;
     /**
+     * Name.
+     */
+    name?: string;
+    /**
      * Additional data.
      */
     data?: Data;
@@ -47,6 +51,7 @@ export declare class Base<P extends IBaseProps, S> extends React.Component<P, S>
         olGroup: typeof GroupLayer;
     };
     id: string;
+    name: string;
     data: Data;
     type: string;
     visible: boolean;
@@ -68,6 +73,7 @@ export declare class Base<P extends IBaseProps, S> extends React.Component<P, S>
     getOlSource(): any;
     setOlSource(olSource: any): any;
     setId(id: string): void;
+    setName(name: any): void;
     setData(data: any): void;
     setType(type: string): void;
     setOrder(order: number): void;

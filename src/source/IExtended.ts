@@ -9,8 +9,8 @@ export interface IExtended extends Source {
 }
 
 export interface IIdentifyRequest {
-  olMap: OlMap,
-  layer: Layer,
+  olMap: OlMap;
+  layer: Layer;
   pixel: [number, number];
   pixelTolerance: number;
   limit: number;

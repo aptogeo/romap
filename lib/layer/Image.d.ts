@@ -7,5 +7,8 @@ export interface IImageProps extends IBaseProps {
     source: any;
 }
 export declare class Image extends Base<IImageProps, any> {
+    source: any;
     createOlLayer(): BaseLayer;
+    checkProps(props: IImageProps): void;
+    setSource(source: any): void;
 }

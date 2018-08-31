@@ -11,8 +11,10 @@ export interface IVectorProps extends IBaseProps {
     style?: any;
 }
 export declare class Vector extends Base<IVectorProps, any> {
+    source: any;
     style: any;
     createOlLayer(): BaseLayer;
     checkProps(props: IVectorProps): void;
+    setSource(source: any): void;
     setStyle(style: any): void;
 }

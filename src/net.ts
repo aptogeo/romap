@@ -158,7 +158,7 @@ export function send(request: IRequest): Promise<IResponse> {
         // ResponseText is accessible only if responseType is '' or 'text' and on older browsers
         const text =
           (request.method !== 'HEAD' && (client.responseType === '' || client.responseType === 'text')) ||
-            typeof client.responseType === 'undefined'
+          typeof client.responseType === 'undefined'
             ? client.responseText
             : null;
         const contentType = client.getResponseHeader(contentTypeHeaderName);

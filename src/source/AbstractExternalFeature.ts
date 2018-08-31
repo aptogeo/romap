@@ -1,6 +1,6 @@
 import { isEqual, assign } from 'lodash';
 import Feature from 'ol/Feature';
-import { AbstractFeature } from './AbstractFeature'
+import { AbstractFeature } from './AbstractFeature';
 
 export class AbstractExternalFeature extends AbstractFeature {
   private projectionCode: string;
@@ -58,7 +58,6 @@ export class AbstractExternalFeature extends AbstractFeature {
   }
 
   public containsExtent(extent1: number[], extent2: number[]) {
-    return extent1[0] <= extent2[0] && extent2[2] <= extent1[2] &&
-      extent1[1] <= extent2[1] && extent2[3] <= extent1[3];
+    return extent1[0] <= extent2[0] && extent2[2] <= extent1[2] && extent1[1] <= extent2[1] && extent2[3] <= extent1[3];
   }
 }

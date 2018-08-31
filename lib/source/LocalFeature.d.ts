@@ -1,5 +1,5 @@
-import Vector from 'ol/source/Vector';
-export declare class LocalSource extends Vector {
+import { AbstractFeature } from './AbstractFeature';
+export declare class LocalFeature extends AbstractFeature {
     private savedFeatures;
     private oldViewProjection;
     private viewProjection;

@@ -56,8 +56,7 @@ class Maps extends React.Component {
       typename: 'ne:ne_10m_admin_1_states_provinces_lines_shp'
     });
 
-    style:
-    return (
+    style: return (
       <div className="maps">
         <romap.Map keyboardEventTarget={document}>
           <romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
@@ -72,12 +71,18 @@ class Maps extends React.Component {
         </romap.Map>
         <romap.Map keyboardEventTarget={document}>
           <romap.View center={[508000, 6000000]} zoom={5} />
-          <romap.layer.Vector source={statesProvincesLinesSource} style={new Style({
-            stroke: new Stroke({
-              color: 'rgba(0, 0, 255, 1.0)',
-              width: 2
-            })
-          })} name='States Provinces Lines' />
+          <romap.layer.Vector
+            source={statesProvincesLinesSource}
+            style={
+              new Style({
+                stroke: new Stroke({
+                  color: 'rgba(0, 0, 255, 1.0)',
+                  width: 2
+                })
+              })
+            }
+            name="States Provinces Lines"
+          />
           <romap.component.Control>
             <romap.component.PanZoom showZoomSlider={false} showOrigin={false} />
           </romap.component.Control>

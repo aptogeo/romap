@@ -1,11 +1,7 @@
-import Vector from 'ol/source/Vector';
-export declare class QueryArcGISRest extends Vector {
-    private srid;
-    private loadedFeatures;
-    private extent;
-    private resolution;
+import { AbstractExternalFeature } from './AbstractExternalFeature';
+export declare class QueryArcGISRest extends AbstractExternalFeature {
     private where;
     private format;
     constructor(options?: any);
-    load(extent: any, srid: any): Promise<any>;
+    load(extent: any, projectionCode: string): Promise<any>;
 }

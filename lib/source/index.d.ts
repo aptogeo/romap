@@ -1,3 +1,5 @@
-export * from './LocalSource';
+export * from './IExtended';
+export * from './AbstractFeature';
+export * from './LocalFeature';
 export * from './QueryArcGISRest';
-export * from './WfsSource';
+export * from './Wfs';

@@ -7,5 +7,8 @@ export interface ITileProps extends IBaseProps {
     source: any;
 }
 export declare class Tile extends Base<ITileProps, any> {
+    source: any;
     createOlLayer(): BaseLayer;
+    checkProps(props: ITileProps): void;
+    setSource(source: any): void;
 }

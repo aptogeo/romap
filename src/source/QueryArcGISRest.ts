@@ -1,6 +1,6 @@
 import EsriJSON from 'ol/format/EsriJSON';
 import { send, IResponse } from '../net';
-import { AbstractExternalFeature } from './AbstractExternalFeature'
+import { AbstractExternalFeature } from './AbstractExternalFeature';
 
 export class QueryArcGISRest extends AbstractExternalFeature {
   private where: string;
@@ -14,9 +14,7 @@ export class QueryArcGISRest extends AbstractExternalFeature {
   }
 
   public load(extent: any, projectionCode: string) {
-    const srid = projectionCode
-          .split(':')
-          .pop();
+    const srid = projectionCode.split(':').pop();
     const geometry = encodeURIComponent(
       `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${
         extent[3]

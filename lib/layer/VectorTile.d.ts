@@ -10,9 +10,11 @@ export interface IVectorTileProps extends IBaseProps {
      */
     style?: any;
 }
-export declare class Vector extends Base<IVectorTileProps, any> {
+export declare class VectorTile extends Base<IVectorTileProps, any> {
+    source: any;
     style: any;
     createOlLayer(): BaseLayer;
     checkProps(props: IVectorTileProps): void;
+    setSource(source: any): void;
     setStyle(style: any): void;
 }

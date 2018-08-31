@@ -1,6 +1,6 @@
 import { isEqual, assign } from 'lodash';
 import Projection from 'ol/proj/Projection';
-import { AbstractFeature } from './AbstractFeature'
+import { AbstractFeature } from './AbstractFeature';
 
 export class LocalFeature extends AbstractFeature {
   private savedFeatures: any;
