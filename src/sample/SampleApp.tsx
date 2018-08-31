@@ -56,7 +56,7 @@ class Maps extends React.Component {
       typename: 'ne:ne_10m_admin_1_states_provinces_lines_shp'
     });
 
-    style: return (
+    return (
       <div className="maps">
         <romap.Map keyboardEventTarget={document}>
           <romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
