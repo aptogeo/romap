@@ -1,8 +1,8 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
 import GroupLayer from 'ol/layer/Group';
 import BaseLayer from 'ol/layer/Base';
 import { Base, IBaseProps } from './Base';
+import { IMapContext } from '../Map'
 
 export interface IGroupProps extends IBaseProps {
   /**
@@ -11,17 +11,18 @@ export interface IGroupProps extends IBaseProps {
   children: React.ReactElement<any> | Array<React.ReactElement<any>>;
 }
 
-export class Group extends Base<IGroupProps, any> {
-  public static childContextTypes = {
-    /**
-     * OpenLayers map.
-     */
-    olMap: OlMap,
-    /**
-     * OpenLayers group.
-     */
-    olGroup: GroupLayer
+export class Group extends Base<IGroupProps, any> implements React.ChildContextProvider<IMapContext> {
+  public static contextTypes = {
+    olMap: (): any => null,
+    olGroup: (): any => null
   };
+
+  public static childContextTypes = {
+    olMap: (): any => null,
+    olGroup: (): any => null
+  };
+
+  public context: IMapContext;
 
   public getChildContext() {
     return {

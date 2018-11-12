@@ -15,6 +15,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css']
   },
+  mode: 'development',
   module: {
     rules: [{
       test: /\.tsx?$/,
@@ -31,7 +32,10 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       __DEVELOPMENT__: true,
-      __DEVTOOLS__: true
+      __DEVTOOLS__: true,
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
     }),
   ],
   optimization: {

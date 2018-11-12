@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as romap from '../';
-import TileArcGISRest from 'ol/source/TileArcGISRest';
 import ImageStatic from 'ol/source/ImageStatic';
-import ImageArcGISRest from 'ol/source/ImageArcGISRest';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 
@@ -29,7 +27,7 @@ export class SampleApp extends React.Component {
 
 class Maps extends React.Component {
   public render(): any {
-    const world2D = new TileArcGISRest({
+    const world2D = new romap.source.TileArcGISRest({
       url: 'https://services.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer',
       projection: 'EPSG:3857'
     });
@@ -41,7 +39,7 @@ class Maps extends React.Component {
       imageExtent: [0, 0, 700000, 1300000]
     });
 
-    const landsatSource = new ImageArcGISRest({
+    const landsatSource = new romap.source.ImageArcGISRest({
       url: 'https://landsat2.arcgis.com/arcgis/rest/services/Landsat8_Views/ImageServer',
       projection: 'EPSG:3857',
       params: {
@@ -60,8 +58,8 @@ class Maps extends React.Component {
       <div className="maps">
         <romap.Map keyboardEventTarget={document}>
           <romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
-          <romap.layer.Tile source={world2D} data={{ name: 'World 2D' }} />
-          <romap.layer.Image source={britishNationalGrid} data={{ name: 'British National Grid' }} />
+          <romap.layer.Tile source={world2D} name="World 2D" />
+          <romap.layer.Image source={britishNationalGrid} name="British National Grid" />
           <romap.component.Control>
             <romap.component.PanZoom />
           </romap.component.Control>
@@ -71,6 +69,7 @@ class Maps extends React.Component {
         </romap.Map>
         <romap.Map keyboardEventTarget={document}>
           <romap.View center={[508000, 6000000]} zoom={5} />
+          <romap.layer.Image source={landsatSource} name="Land sat" />
           <romap.layer.Vector
             source={statesProvincesLinesSource}
             style={

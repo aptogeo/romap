@@ -1,8 +1,9 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
 import OlView from 'ol/View';
-import { easeOut } from 'ol/easing';
+import { easingOut } from 'ol/easing';
 import { cloneView } from '../utils';
+import { IMapContext } from '../Map'
+
 
 export interface IPanZoomProps {
   /**
@@ -46,11 +47,11 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
   };
 
   public static contextTypes = {
-    /**
-     * OpenLayers map.
-     */
-    olMap: OlMap
+    olMap: (): any => null,
+    olGroup: (): any => null
   };
+
+  public context: IMapContext;
 
   /**
    * Origin.
@@ -116,7 +117,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     }
     const view = this.context.olMap.getView();
     const resolution = view.getResolution();
-    const position = 1 - view.getValueForResolutionFunction()(resolution);
+    const position = 1 - (view as any).getValueForResolutionFunction()(resolution);
     const computedBtnThumbStyle = window.getComputedStyle(this.btnThumb);
     const btnThumbHeight =
       this.btnThumb.offsetHeight +
@@ -166,7 +167,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
       view.animate({
         rotation: 0,
         duration: 200,
-        easing: easeOut
+        easing: easingOut
       });
     }
   };
@@ -183,7 +184,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     view.animate({
       center,
       duration: 200,
-      easing: easeOut
+      easing: easingOut
     });
   }
 
@@ -196,7 +197,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     view.animate({
       resolution: view.constrainResolution(res, delta),
       duration: 200,
-      easing: easeOut
+      easing: easingOut
     });
   }
 

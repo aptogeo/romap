@@ -1,9 +1,8 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
-import GroupLayer from 'ol/layer/Group';
 import BaseLayer from 'ol/layer/Base';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
+import { IMapContext } from '../Map'
 
 interface Data {
   [key: string]: any;
@@ -48,15 +47,11 @@ export interface IBaseProps {
 
 export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
   public static contextTypes = {
-    /**
-     * OpenLayers map.
-     */
-    olMap: OlMap,
-    /**
-     * OpenLayers group.
-     */
-    olGroup: GroupLayer
+    olMap: (): any => null,
+    olGroup: (): any => null
   };
+
+  public context: IMapContext;
 
   public id: string;
 
@@ -78,9 +73,10 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
 
   private olLayer: any = null;
 
-  public componentWillMount() {
+  constructor(props: any) {
+    super(props);
     this.olLayer = this.createOlLayer();
-    this.checkProps(this.props);
+    this.checkProps(props);
   }
 
   public componentDidMount() {
@@ -99,11 +95,8 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
     if (isEqual(nextProps, this.props)) {
       return false;
     }
-    return true;
-  }
-
-  public componentWillUpdate(nextProps: P) {
     this.checkProps(nextProps);
+    return true;
   }
 
   public componentWillUnmount() {

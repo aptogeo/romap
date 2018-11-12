@@ -30,13 +30,14 @@ export interface IProjectionProps {
 export class Projection extends React.Component<IProjectionProps, any> {
   public projectionInfo: ProjectionInfo;
 
-  public componentWillMount() {
+  constructor(props: any) {
+    super(props);
     this.projectionInfo = new ProjectionInfo();
-    this.projectionInfo.code = this.props.code;
-    this.projectionInfo.wkt = this.props.wkt;
-    this.projectionInfo.lonLatValidity = this.props.lonLatValidity;
-    this.projectionInfo.name = this.props.name;
-    this.projectionInfo.remarks = this.props.remarks;
+    this.projectionInfo.code = props.code;
+    this.projectionInfo.wkt = props.wkt;
+    this.projectionInfo.lonLatValidity = props.lonLatValidity;
+    this.projectionInfo.name = props.name;
+    this.projectionInfo.remarks = props.remarks;
     proj4.defs(this.projectionInfo.code, this.projectionInfo.wkt);
     console.info('Register projection ' + this.projectionInfo.code + ' - ' + this.projectionInfo.name);
     register(proj4);

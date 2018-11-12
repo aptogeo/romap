@@ -150,8 +150,9 @@ declare module 'ol/proj/Projection' {
 
 declare module 'ol/Map' {
   export default class extends ol.Map {
-    public increaseLoadingCounter: any;
-    public decreaseLoadingCounter: any;
+    public increaseLoadingCounter(): any;
+    public decreaseLoadingCounter(): any;
+    public getOverlayContainer(): any;
   }
 }
 

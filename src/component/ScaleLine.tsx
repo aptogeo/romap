@@ -1,6 +1,7 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
 import { getPointResolution } from 'ol/proj';
+import { IMapContext } from '../Map'
+
 
 const LEADING_DIGITS = [1, 2, 5];
 
@@ -26,11 +27,11 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
   };
 
   public static contextTypes = {
-    /**
-     * OpenLayers map.
-     */
-    olMap: OlMap
+    olMap: (): any => null,
+    olGroup: (): any => null
   };
+
+  public context: IMapContext;
 
   /**
    * Div ScaleLine.
@@ -73,7 +74,7 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
     if (units == null) {
       return;
     }
-    if (units === 'm' || units.match(/meter/i) || units === 'd' || units.match(/degree/i)) {
+    if (units.match(/m/i) || units.match(/meter/i) || units.match(/d/i) || units.match(/degree/i)) {
       if (nominalCount < 0.001) {
         suffix = 'μm';
         pointResolution *= 1000000;
