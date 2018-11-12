@@ -20,13 +20,13 @@ export interface IMapProps {
 
 export interface IMapContext {
   /**
-     * OpenLayers map.
-     */
-  olMap: OlMap,
+   * OpenLayers map.
+   */
+  olMap: OlMap;
   /**
    * OpenLayers group.
    */
-  olGroup: GroupLayer
+  olGroup: GroupLayer;
 }
 
 export class Map extends React.Component<IMapProps, {}> implements React.ChildContextProvider<IMapContext> {

@@ -2,8 +2,7 @@ import * as React from 'react';
 import OlView from 'ol/View';
 import { easingOut } from 'ol/easing';
 import { cloneView } from '../utils';
-import { IMapContext } from '../Map'
-
+import { IMapContext } from '../Map';
 
 export interface IPanZoomProps {
   /**

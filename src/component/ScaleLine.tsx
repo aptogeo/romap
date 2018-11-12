@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { getPointResolution } from 'ol/proj';
-import { IMapContext } from '../Map'
-
+import { IMapContext } from '../Map';
 
 const LEADING_DIGITS = [1, 2, 5];
 

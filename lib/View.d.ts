@@ -1,6 +1,6 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
 import OlProjection from 'ol/proj/Projection';
+import { IMapContext } from './Map';
 export interface IViewProps {
     /**
      * Center.
@@ -13,11 +13,10 @@ export interface IViewProps {
 }
 export declare class View extends React.Component<IViewProps, any> {
     static contextTypes: {
-        /**
-         * OpenLayers map.
-         */
-        olMap: typeof OlMap;
+        olMap: () => any;
+        olGroup: () => any;
     };
+    context: IMapContext;
     componentDidMount(): void;
     render(): any;
 }

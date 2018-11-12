@@ -1,7 +1,6 @@
 import * as React from 'react';
 import OlControl from 'ol/control/Control';
-import { IMapContext } from '../Map'
-
+import { IMapContext } from '../Map';
 
 export interface IControlProps {
   /**
@@ -22,7 +21,7 @@ export class Control extends React.Component<IControlProps, IControlState> {
     olMap: (): any => null,
     olGroup: (): any => null
   };
-  
+
   public context: IMapContext;
 
   /**

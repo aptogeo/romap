@@ -1,7 +1,6 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
-import { IMapContext } from '../Map'
-
+import { IMapContext } from '../Map';
 
 export interface IOverlayProps {
   /**

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
 import OlControl from 'ol/control/Control';
+import { IMapContext } from '../Map';
 export interface IControlProps {
     /**
      * Content.
@@ -15,11 +15,10 @@ export interface IControlState {
 }
 export declare class Control extends React.Component<IControlProps, IControlState> {
     static contextTypes: {
-        /**
-         * OpenLayers map.
-         */
-        olMap: typeof OlMap;
+        olMap: () => any;
+        olGroup: () => any;
     };
+    context: IMapContext;
     /**
      * OpenLayers control.
      */
@@ -28,7 +27,7 @@ export declare class Control extends React.Component<IControlProps, IControlStat
      * Control div.
      */
     private controlDiv;
-    componentWillMount(): void;
+    constructor(props: any);
     componentDidMount(): void;
     componentDidUpdate(): void;
     componentWillUnmount(): void;

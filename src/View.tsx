@@ -1,7 +1,7 @@
 import * as React from 'react';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
-import { IMapContext } from './Map'
+import { IMapContext } from './Map';
 
 export interface IViewProps {
   /**
@@ -31,7 +31,7 @@ export class View extends React.Component<IViewProps, any> {
     olMap: (): any => null,
     olGroup: (): any => null
   };
-  
+
   public context: IMapContext;
 
   public componentDidMount() {

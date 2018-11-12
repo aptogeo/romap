@@ -15,19 +15,23 @@ export interface IMapProps {
      */
     keyboardEventTarget?: any;
 }
-export declare class Map extends React.Component<IMapProps, {}> {
+export interface IMapContext {
+    /**
+     * OpenLayers map.
+     */
+    olMap: OlMap;
+    /**
+     * OpenLayers group.
+     */
+    olGroup: GroupLayer;
+}
+export declare class Map extends React.Component<IMapProps, {}> implements React.ChildContextProvider<IMapContext> {
     static defaultProps: {
         className: string;
     };
     static childContextTypes: {
-        /**
-         * OpenLayers map.
-         */
-        olMap: typeof OlMap;
-        /**
-         * OpenLayers group.
-         */
-        olGroup: typeof GroupLayer;
+        olMap: () => any;
+        olGroup: () => any;
     };
     /**
      * OpenLayers map.
@@ -41,7 +45,7 @@ export declare class Map extends React.Component<IMapProps, {}> {
      * Div.
      */
     private divMap;
-    componentWillMount(): void;
+    constructor(props: any);
     componentDidMount(): void;
     getChildContext(): {
         olMap: OlMap;

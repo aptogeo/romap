@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { IMapContext } from '../Map'
-
+import { IMapContext } from '../Map';
 
 export class MapResizer extends React.Component<{}, {}> {
   public static contextTypes = {
     olMap: (): any => null,
     olGroup: (): any => null
   };
-  
+
   public context: IMapContext;
 
   constructor(props: any) {

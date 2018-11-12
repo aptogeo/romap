@@ -120,15 +120,18 @@ export function send(request: IRequest): Promise<IResponse> {
   const normUrl = request.url.replace(/[^:](\/{2,})/g, '/').replace(/\/\.\//g, '/');
   return new Promise((resolve, reject) => {
     const client = new XMLHttpRequest();
-    let timer = setTimeout(() => {
-      timer = null;
-      try {
-        client.abort();
-      } catch (err) {
-        // Nothing
-      }
-      reject(timeoutError);
-    }, request && request.timeout ? request.timeout : defaultTimeout);
+    let timer = setTimeout(
+      () => {
+        timer = null;
+        try {
+          client.abort();
+        } catch (err) {
+          // Nothing
+        }
+        reject(timeoutError);
+      },
+      request && request.timeout ? request.timeout : defaultTimeout
+    );
     client.onreadystatechange = () => {
       if (client.readyState >= 2 && timer) {
         clearTimeout(timer);

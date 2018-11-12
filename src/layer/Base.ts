@@ -2,7 +2,7 @@ import * as React from 'react';
 import BaseLayer from 'ol/layer/Base';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
-import { IMapContext } from '../Map'
+import { IMapContext } from '../Map';
 
 interface Data {
   [key: string]: any;

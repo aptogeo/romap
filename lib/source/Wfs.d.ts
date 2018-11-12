@@ -4,5 +4,4 @@ export declare class Wfs extends AbstractExternalFeature {
     private format;
     constructor(options?: any);
     load(extent: number[], projectionCode: string): Promise<any>;
-    containsExtent(extent1: number[], extent2: number[]): boolean;
 }

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
-import GroupLayer from 'ol/layer/Group';
 import BaseLayer from 'ol/layer/Base';
+import { IMapContext } from '../Map';
 interface Data {
     [key: string]: any;
 }
@@ -41,15 +40,10 @@ export interface IBaseProps {
 }
 export declare class Base<P extends IBaseProps, S> extends React.Component<P, S> {
     static contextTypes: {
-        /**
-         * OpenLayers map.
-         */
-        olMap: typeof OlMap;
-        /**
-         * OpenLayers group.
-         */
-        olGroup: typeof GroupLayer;
+        olMap: () => any;
+        olGroup: () => any;
     };
+    context: IMapContext;
     id: string;
     name: string;
     data: Data;
@@ -60,10 +54,9 @@ export declare class Base<P extends IBaseProps, S> extends React.Component<P, S>
     order: number;
     zIndex: number;
     private olLayer;
-    componentWillMount(): void;
+    constructor(props: any);
     componentDidMount(): void;
     shouldComponentUpdate(nextProps: P): boolean;
-    componentWillUpdate(nextProps: P): void;
     componentWillUnmount(): void;
     createOlLayer(): BaseLayer;
     checkProps(props: P): void;
