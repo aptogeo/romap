@@ -29,11 +29,11 @@
   "author": "Mathieu MAST",
   "license": "ISC",
   "devDependencies": {
-    "@babel/preset-env": "^7.1.5",
+    "@babel/preset-env": "^7.1.6",
     "@types/lodash": "^4.14.118",
     "@types/openlayers": "^4.6.12",
     "@types/prop-types": "^15.5.6",
-    "@types/react": "^16.7.3",
+    "@types/react": "^16.7.6",
     "@types/react-dom": "^16.0.9",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^6.26.3",
@@ -50,10 +50,10 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
+    "tslint-config-prettier": "^1.16.0",
     "tslint-react": "^3.6.0",
     "typescript": "3.1.6",
-    "webpack": "^4.25.1",
+    "webpack": "^4.26.0",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"
   },
@@ -61,8 +61,8 @@
     "es6-promise": "^4.2.5",
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1"
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "peerDependencies": {
     "ol": "5.3.0",
