@@ -22,21 +22,19 @@ export interface IMapContext {
   /**
    * OpenLayers map.
    */
-  olMap: OlMap;
+  olMap?: OlMap;
   /**
    * OpenLayers group.
    */
-  olGroup: GroupLayer;
+  olGroup?: GroupLayer;
 }
 
-export class Map extends React.Component<IMapProps, {}> implements React.ChildContextProvider<IMapContext> {
+// Map context
+export const mapContext = React.createContext<IMapContext>({});
+
+export class Map extends React.Component<IMapProps, {}> {
   public static defaultProps = {
     className: 'map'
-  };
-
-  public static childContextTypes = {
-    olMap: (): any => null,
-    olGroup: (): any => null
   };
 
   /**
@@ -106,13 +104,6 @@ export class Map extends React.Component<IMapProps, {}> implements React.ChildCo
     this.olMap.setTarget(this.divMap);
   }
 
-  public getChildContext() {
-    return {
-      olMap: this.olMap,
-      olGroup: this.olMap.getLayerGroup()
-    };
-  }
-
   public increaseLoadingCounter() {
     const c = this.olMap.get('loadingCounter');
     if (c <= 0) {
@@ -146,7 +137,9 @@ export class Map extends React.Component<IMapProps, {}> implements React.ChildCo
           }}
           className={`${this.props.className}-olmap`}
         />
-        {this.props.children}
+        <mapContext.Provider value={{ olMap: this.olMap, olGroup: this.olMap.getLayerGroup() }}>
+          {this.props.children}
+        </mapContext.Provider>
       </div>
     );
   }

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import BaseLayer from 'ol/layer/Base';
-import { IMapContext } from '../Map';
 interface Data {
     [key: string]: any;
 }
@@ -39,11 +38,7 @@ export interface IBaseProps {
     opacity?: number;
 }
 export declare class Base<P extends IBaseProps, S> extends React.Component<P, S> {
-    static contextTypes: {
-        olMap: () => any;
-        olGroup: () => any;
-    };
-    context: IMapContext;
+    static contextType: React.Context<import("../Map").IMapContext>;
     id: string;
     name: string;
     data: Data;

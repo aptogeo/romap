@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { getPointResolution } from 'ol/proj';
-import { IMapContext } from '../Map';
+import { mapContext } from '../Map';
 
 const LEADING_DIGITS = [1, 2, 5];
 
@@ -25,12 +25,7 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
     minWidth: 64
   };
 
-  public static contextTypes = {
-    olMap: (): any => null,
-    olGroup: (): any => null
-  };
-
-  public context: IMapContext;
+  public static contextType = mapContext;
 
   /**
    * Div ScaleLine.

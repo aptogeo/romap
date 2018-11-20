@@ -19,19 +19,16 @@ export interface IMapContext {
     /**
      * OpenLayers map.
      */
-    olMap: OlMap;
+    olMap?: OlMap;
     /**
      * OpenLayers group.
      */
-    olGroup: GroupLayer;
+    olGroup?: GroupLayer;
 }
-export declare class Map extends React.Component<IMapProps, {}> implements React.ChildContextProvider<IMapContext> {
+export declare const mapContext: React.Context<IMapContext>;
+export declare class Map extends React.Component<IMapProps, {}> {
     static defaultProps: {
         className: string;
-    };
-    static childContextTypes: {
-        olMap: () => any;
-        olGroup: () => any;
     };
     /**
      * OpenLayers map.
@@ -47,10 +44,6 @@ export declare class Map extends React.Component<IMapProps, {}> implements React
     private divMap;
     constructor(props: any);
     componentDidMount(): void;
-    getChildContext(): {
-        olMap: OlMap;
-        olGroup: GroupLayer;
-    };
     increaseLoadingCounter(): void;
     decreaseLoadingCounter(): void;
     render(): any;

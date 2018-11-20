@@ -1,6 +1,5 @@
 import * as React from 'react';
 import OlProjection from 'ol/proj/Projection';
-import { IMapContext } from './Map';
 export interface IViewProps {
     /**
      * Center.
@@ -12,11 +11,7 @@ export interface IViewProps {
     projection?: OlProjection | string;
 }
 export declare class View extends React.Component<IViewProps, any> {
-    static contextTypes: {
-        olMap: () => any;
-        olGroup: () => any;
-    };
-    context: IMapContext;
+    static contextType: React.Context<import("./Map").IMapContext>;
     componentDidMount(): void;
     render(): any;
 }

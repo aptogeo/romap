@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IMapContext } from '../Map';
 export interface IPanZoomProps {
     /**
      * Class name.
@@ -41,11 +40,7 @@ export declare class PanZoom extends React.Component<IPanZoomProps, any> {
         showOrigin: boolean;
         showRotation: boolean;
     };
-    static contextTypes: {
-        olMap: () => any;
-        olGroup: () => any;
-    };
-    context: IMapContext;
+    static contextType: React.Context<import("../Map").IMapContext>;
     /**
      * Origin.
      */

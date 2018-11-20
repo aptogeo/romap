@@ -1,6 +1,6 @@
 {
   "name": "romap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "OpenLayers with React",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -27,7 +27,7 @@
     "OpenLayers"
   ],
   "author": "Mathieu MAST",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/preset-env": "^7.1.6",
     "@types/lodash": "^4.14.118",

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
-import { IMapContext } from '../Map';
+import { mapContext } from '../Map';
 
 export interface IOverlayProps {
   /**
@@ -34,12 +34,7 @@ export class Overlay extends React.Component<IOverlayProps, IOverlayState> {
     autoPan: false
   };
 
-  public static contextTypes = {
-    olMap: (): any => null,
-    olGroup: (): any => null
-  };
-
-  public context: IMapContext;
+  public static contextType = mapContext;
 
   /**
    * Overlay div.

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IMapContext } from '../Map';
 export interface IScaleLineProps {
     /**
      * Class name.
@@ -21,11 +20,7 @@ export declare class ScaleLine extends React.Component<IScaleLineProps, any> {
         className: string;
         minWidth: number;
     };
-    static contextTypes: {
-        olMap: () => any;
-        olGroup: () => any;
-    };
-    context: IMapContext;
+    static contextType: React.Context<import("../Map").IMapContext>;
     /**
      * Div ScaleLine.
      */

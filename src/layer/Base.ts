@@ -2,7 +2,7 @@ import * as React from 'react';
 import BaseLayer from 'ol/layer/Base';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
-import { IMapContext } from '../Map';
+import { mapContext } from '../Map';
 
 interface Data {
   [key: string]: any;
@@ -46,12 +46,7 @@ export interface IBaseProps {
 }
 
 export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
-  public static contextTypes = {
-    olMap: (): any => null,
-    olGroup: (): any => null
-  };
-
-  public context: IMapContext;
+  public static contextType = mapContext;
 
   public id: string;
 

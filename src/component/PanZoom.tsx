@@ -2,7 +2,7 @@ import * as React from 'react';
 import OlView from 'ol/View';
 import { easingOut } from 'ol/easing';
 import { cloneView } from '../utils';
-import { IMapContext } from '../Map';
+import { mapContext } from '../Map';
 
 export interface IPanZoomProps {
   /**
@@ -45,12 +45,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     showRotation: true
   };
 
-  public static contextTypes = {
-    olMap: (): any => null,
-    olGroup: (): any => null
-  };
-
-  public context: IMapContext;
+  public static contextType = mapContext;
 
   /**
    * Origin.
