@@ -26,6 +26,7 @@ declare module 'ol/Feature' {
 
 declare module 'ol/Observable' {
   export default ol.Observable;
+  export function unByKey(key: any): void;
 }
 
 // LAYERS
@@ -543,8 +544,19 @@ declare module 'proj4';
 
 // OTHERS
 
-declare module 'ol/easing';
+declare module 'ol/easing' {
+  export default ol.easing;
+  export function easeIn(t: number): number;
+  export function easeOut(t: number): number;
+  export function inAndOut(t: number): number;
+  export function linear(t: number): number;
+  export function upAndDown(t: number): number;
+}
 
-declare module 'ol/coordinate';
 
-declare module 'ol/sphere';
+
+declare module 'ol/sphere' {
+  export function getArea(geometry: ol.geom.Geometry, opt_options: any): number;
+  export function getDistance(c1: ol.Coordinate[], c2: ol.Coordinate[], opt_radius: number): number;
+  export function getLength(geometry: ol.geom.Geometry, opt_options: any): number;
+}

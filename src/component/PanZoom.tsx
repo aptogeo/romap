@@ -1,6 +1,6 @@
 import * as React from 'react';
 import OlView from 'ol/View';
-import { easingOut } from 'ol/easing';
+import { inAndOut } from 'ol/easing';
 import { cloneView } from '../utils';
 import { mapContext } from '../MapContext';
 
@@ -158,10 +158,13 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
   public handleResetRotation = () => {
     const view = this.context.olMap.getView();
     if (view.getRotation() !== undefined) {
+      if (view.getAnimating()) {
+        view.cancelAnimations();
+      }
       view.animate({
         rotation: 0,
         duration: 200,
-        easing: easingOut
+        easing: inAndOut
       });
     }
   };
@@ -178,7 +181,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     view.animate({
       center,
       duration: 200,
-      easing: easingOut
+      easing: inAndOut
     });
   }
 
@@ -191,7 +194,7 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
     view.animate({
       resolution: view.constrainResolution(res, delta),
       duration: 200,
-      easing: easingOut
+      easing: inAndOut
     });
   }
 
