@@ -2,7 +2,7 @@ import * as React from 'react';
 import GroupLayer from 'ol/layer/Group';
 import BaseLayer from 'ol/layer/Base';
 import { Base, IBaseProps } from './Base';
-import { mapContext } from '../Map';
+import { mapContext } from '../MapContext';
 
 export interface IGroupProps extends IBaseProps {
   /**

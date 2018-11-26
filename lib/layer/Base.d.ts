@@ -38,7 +38,10 @@ export interface IBaseProps {
     opacity?: number;
 }
 export declare class Base<P extends IBaseProps, S> extends React.Component<P, S> {
-    static contextType: React.Context<import("../Map").IMapContext>;
+    static contextType: React.Context<{
+        olMap?: import("openlayers").Map;
+        olGroup?: import("openlayers").layer.Group;
+    }>;
     id: string;
     name: string;
     data: Data;
@@ -49,7 +52,7 @@ export declare class Base<P extends IBaseProps, S> extends React.Component<P, S>
     order: number;
     zIndex: number;
     private olLayer;
-    constructor(props: any);
+    constructor(props: P);
     componentDidMount(): void;
     shouldComponentUpdate(nextProps: P): boolean;
     componentWillUnmount(): void;
@@ -68,10 +71,7 @@ export declare class Base<P extends IBaseProps, S> extends React.Component<P, S>
     setOpacity(opacity: number): void;
     setVisible(visible: boolean): void;
     setExtent(extent: number[]): void;
-    render(): any;
-    private handleLoadstart;
-    private handleLoadend;
-    private handleLoaderror;
     private handleBaseLayerPropertychange;
+    render(): any;
 }
 export {};

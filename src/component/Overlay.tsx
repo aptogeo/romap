@@ -1,6 +1,6 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
-import { mapContext } from '../Map';
+import { mapContext } from '../MapContext';
 
 export interface IOverlayProps {
   /**
@@ -51,7 +51,7 @@ export class Overlay extends React.Component<IOverlayProps, IOverlayState> {
    */
   private oldPositionY: number;
 
-  constructor(props: any) {
+  constructor(props: IOverlayProps) {
     super(props);
     this.state = {
       overlay: null

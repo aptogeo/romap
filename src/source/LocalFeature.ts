@@ -18,41 +18,40 @@ export class LocalFeature extends AbstractFeature {
   private optionStrategy: any;
 
   constructor(options?: any) {
-    const opt = {};
-    assign(opt, options, {
-      loader: (extent: any, resolution: any, projection: any) => {
-        if (!isEqual(projection, this.viewProjection)) {
-          this.oldViewProjection = this.viewProjection;
-          this.viewProjection = projection;
-          this.projectAll();
-        } else {
-          this.reportAll();
+    super(
+      assign({}, options, {
+        loader: (extent: any, resolution: any, projection: any) => {
+          if (!isEqual(projection, this.viewProjection)) {
+            this.oldViewProjection = this.viewProjection;
+            this.viewProjection = projection;
+            this.projectAll();
+          } else {
+            this.reportAll();
+          }
+          if (this.optionLoader) {
+            this.optionLoader.call(this, extent, resolution, projection);
+          }
+        },
+        strategy: (extent: any, resolution: any) => {
+          const features = this.getFeatures();
+          if (
+            !isEqual(this.lastExtent, extent) ||
+            !isEqual(this.lastResolution, resolution) ||
+            !this.savedFeatures ||
+            this.savedFeatures.length !== features.length
+          ) {
+            this.lastExtent = extent;
+            this.lastResolution = resolution;
+            this.savedFeatures = features.slice(0);
+            this.clearForReload();
+          }
+          if (this.optionStrategy) {
+            return this.optionStrategy.call(this, extent, resolution);
+          }
+          return [extent];
         }
-        if (this.optionLoader) {
-          this.optionLoader.call(this, extent, resolution, projection);
-        }
-      },
-      strategy: (extent: any, resolution: any) => {
-        const features = this.getFeatures();
-        if (
-          !isEqual(this.lastExtent, extent) ||
-          !isEqual(this.lastResolution, resolution) ||
-          !this.savedFeatures ||
-          this.savedFeatures.length !== features.length
-        ) {
-          this.lastExtent = extent;
-          this.lastResolution = resolution;
-          this.savedFeatures = features.slice(0);
-          this.clearForReload();
-        }
-        if (this.optionStrategy) {
-          return this.optionStrategy.call(this, extent, resolution);
-        }
-        return [extent];
-      }
-    });
-
-    super(opt);
+      })
+    );
 
     this.optionLoader = options.loader;
     this.optionStrategy = options.strategy;
@@ -109,13 +108,13 @@ export class LocalFeature extends AbstractFeature {
     feature.getGeometry().on('change', this.handleChangeGeometry, this);
   }
 
-  private handleAddFeature(event: any) {
+  private handleAddFeature = (event: any) => {
     this.setOriginal(event.feature);
-  }
+  };
 
-  private handleChangeFeatureGeometry(event: any) {
+  private handleChangeFeatureGeometry = (event: any) => {
     this.setOriginal(event.feature);
-  }
+  };
 
   private handleChangeGeometry(event: any) {
     const geometry = event.target;

@@ -29,7 +29,10 @@ export declare class Overlay extends React.Component<IOverlayProps, IOverlayStat
         positioning: string;
         autoPan: boolean;
     };
-    static contextType: React.Context<import("../Map").IMapContext>;
+    static contextType: React.Context<{
+        olMap?: import("openlayers").Map;
+        olGroup?: import("openlayers").layer.Group;
+    }>;
     /**
      * Overlay div.
      */
@@ -42,7 +45,7 @@ export declare class Overlay extends React.Component<IOverlayProps, IOverlayStat
      * Old position Y.
      */
     private oldPositionY;
-    constructor(props: any);
+    constructor(props: IOverlayProps);
     componentDidMount(): void;
     componentDidUpdate(): void;
     componentWillUnmount(): void;

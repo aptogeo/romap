@@ -1,7 +1,7 @@
 import * as React from 'react';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
-import { mapContext } from './Map';
+import { mapContext } from './MapContext';
 
 export interface IViewProps {
   /**

@@ -11,4 +11,3 @@ import * as _net from './net';
 export declare const net: typeof _net;
 import * as _utils from './utils';
 export declare const utils: typeof _utils;
-import 'es6-promise/auto';

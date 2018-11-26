@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { getPointResolution } from 'ol/proj';
-import { mapContext } from '../Map';
+import { mapContext } from '../MapContext';
 
 const LEADING_DIGITS = [1, 2, 5];
 
@@ -56,6 +56,9 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
 
   public onResolutionChange = () => {
     const view = this.context.olMap.getView();
+    if (view == null) {
+      return;
+    }
     const projection = view.getProjection();
     const units = projection.getUnits();
     const center = view.getCenter();

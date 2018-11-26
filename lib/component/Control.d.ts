@@ -13,12 +13,15 @@ export interface IControlState {
     control: OlControl;
 }
 export declare class Control extends React.Component<IControlProps, IControlState> {
-    static contextType: React.Context<import("../Map").IMapContext>;
+    static contextType: React.Context<{
+        olMap?: import("openlayers").Map;
+        olGroup?: import("openlayers").layer.Group;
+    }>;
     /**
      * Control div.
      */
     private controlDiv;
-    constructor(props: any);
+    constructor(props: IControlProps);
     componentDidMount(): void;
     componentDidUpdate(): void;
     componentWillUnmount(): void;

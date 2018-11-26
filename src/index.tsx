@@ -16,5 +16,3 @@ export const net = _net;
 
 import * as _utils from './utils';
 export const utils = _utils;
-
-import 'es6-promise/auto';

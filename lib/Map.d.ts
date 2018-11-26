@@ -1,6 +1,4 @@
 import * as React from 'react';
-import OlMap from 'ol/Map';
-import GroupLayer from 'ol/layer/Group';
 export interface IMapProps {
     /**
      * Content.
@@ -15,17 +13,6 @@ export interface IMapProps {
      */
     keyboardEventTarget?: any;
 }
-export interface IMapContext {
-    /**
-     * OpenLayers map.
-     */
-    olMap?: OlMap;
-    /**
-     * OpenLayers group.
-     */
-    olGroup?: GroupLayer;
-}
-export declare const mapContext: React.Context<IMapContext>;
 export declare class Map extends React.Component<IMapProps, {}> {
     static defaultProps: {
         className: string;
@@ -42,9 +29,9 @@ export declare class Map extends React.Component<IMapProps, {}> {
      * Div.
      */
     private divMap;
-    constructor(props: any);
+    constructor(props: IMapProps);
     componentDidMount(): void;
-    increaseLoadingCounter(): void;
-    decreaseLoadingCounter(): void;
+    stopPropagationForComponents(): void;
+    stopEventPropagation(event: any): void;
     render(): any;
 }

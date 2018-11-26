@@ -30,7 +30,7 @@ export interface IProjectionProps {
 export class Projection extends React.Component<IProjectionProps, any> {
   public projectionInfo: ProjectionInfo;
 
-  constructor(props: any) {
+  constructor(props: IProjectionProps) {
     super(props);
     this.projectionInfo = new ProjectionInfo();
     this.projectionInfo.code = props.code;

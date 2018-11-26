@@ -2,7 +2,7 @@ import * as React from 'react';
 import BaseLayer from 'ol/layer/Base';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
-import { mapContext } from '../Map';
+import { mapContext } from '../MapContext';
 
 interface Data {
   [key: string]: any;
@@ -68,7 +68,7 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
 
   private olLayer: any = null;
 
-  constructor(props: any) {
+  constructor(props: P) {
     super(props);
     this.olLayer = this.createOlLayer();
     this.checkProps(props);
@@ -125,33 +125,11 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
   public internalRemoveEvents() {
     // Unwatch events on layer
     this.olLayer.un('propertychange', this.handleBaseLayerPropertychange);
-    this.olLayer.un('precompose', this.handleLoadstart);
-    this.olLayer.un('postcompose', this.handleLoadend);
-    if ('getSource' in this.olLayer && this.olLayer.getSource()) {
-      // Unwatch events on source
-      this.olLayer.getSource().un('tileloadstart', this.handleLoadstart);
-      this.olLayer.getSource().un('tileloadend', this.handleLoadend);
-      this.olLayer.getSource().un('tileloaderror', this.handleLoaderror);
-      this.olLayer.getSource().un('imageloadstart', this.handleLoadstart);
-      this.olLayer.getSource().un('imageloadend', this.handleLoadend);
-      this.olLayer.getSource().un('imageloaderror', this.handleLoaderror);
-    }
   }
 
   public internalAddEvents() {
     // Watch events on layer
     this.olLayer.on('propertychange', this.handleBaseLayerPropertychange);
-    this.olLayer.on('precompose', this.handleLoadstart);
-    this.olLayer.on('postcompose', this.handleLoadend);
-    if ('getSource' in this.olLayer && this.olLayer.getSource()) {
-      // Watch events on source
-      this.olLayer.getSource().on('tileloadstart', this.handleLoadstart);
-      this.olLayer.getSource().on('tileloadend', this.handleLoadend);
-      this.olLayer.getSource().on('tileloaderror', this.handleLoaderror);
-      this.olLayer.getSource().on('imageloadstart', this.handleLoadstart);
-      this.olLayer.getSource().on('imageloadend', this.handleLoadend);
-      this.olLayer.getSource().on('imageloaderror', this.handleLoaderror);
-    }
   }
 
   public getOlLayer(): any {
@@ -243,22 +221,6 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
     this.olLayer.setExtent(this.extent);
   }
 
-  public render(): any {
-    return null;
-  }
-
-  private handleLoadstart = () => {
-    this.context.olMap.increaseLoadingCounter();
-  };
-
-  private handleLoadend = () => {
-    this.context.olMap.decreaseLoadingCounter();
-  };
-
-  private handleLoaderror = () => {
-    this.context.olMap.decreaseLoadingCounter();
-  };
-
   private handleBaseLayerPropertychange = (event: any) => {
     const key = event.key;
     const value = event.target.get(key);
@@ -277,4 +239,8 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
       }
     }
   };
+
+  public render(): any {
+    return null;
+  }
 }

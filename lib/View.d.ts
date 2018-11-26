@@ -11,7 +11,10 @@ export interface IViewProps {
     projection?: OlProjection | string;
 }
 export declare class View extends React.Component<IViewProps, any> {
-    static contextType: React.Context<import("./Map").IMapContext>;
+    static contextType: React.Context<{
+        olMap?: import("openlayers").Map;
+        olGroup?: import("openlayers").layer.Group;
+    }>;
     componentDidMount(): void;
     render(): any;
 }

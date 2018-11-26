@@ -40,7 +40,10 @@ export declare class PanZoom extends React.Component<IPanZoomProps, any> {
         showOrigin: boolean;
         showRotation: boolean;
     };
-    static contextType: React.Context<import("../Map").IMapContext>;
+    static contextType: React.Context<{
+        olMap?: import("openlayers").Map;
+        olGroup?: import("openlayers").layer.Group;
+    }>;
     /**
      * Origin.
      */

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { mapContext } from '../Map';
+import { mapContext } from '../MapContext';
 
 export class MapResizer extends React.Component<{}, {}> {
   public static contextType = mapContext;
 
-  constructor(props: any) {
+  constructor(props: {}) {
     super(props);
     window.addEventListener('resize', this.updateSize.bind(this));
   }

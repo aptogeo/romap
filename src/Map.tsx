@@ -1,7 +1,7 @@
 import * as React from 'react';
 import OlMap from 'ol/Map';
-import GroupLayer from 'ol/layer/Group';
 import OlView from 'ol/View';
+import { mapContext } from './MapContext';
 
 export interface IMapProps {
   /**
@@ -17,20 +17,6 @@ export interface IMapProps {
    */
   keyboardEventTarget?: any;
 }
-
-export interface IMapContext {
-  /**
-   * OpenLayers map.
-   */
-  olMap?: OlMap;
-  /**
-   * OpenLayers group.
-   */
-  olGroup?: GroupLayer;
-}
-
-// Map context
-export const mapContext = React.createContext<IMapContext>({});
 
 export class Map extends React.Component<IMapProps, {}> {
   public static defaultProps = {
@@ -52,7 +38,7 @@ export class Map extends React.Component<IMapProps, {}> {
    */
   private divMap: any;
 
-  constructor(props: any) {
+  constructor(props: IMapProps) {
     super(props);
     this.olMap = new OlMap({
       controls: [],
@@ -63,68 +49,29 @@ export class Map extends React.Component<IMapProps, {}> {
       zoom: 2
     });
     this.olMap.setView(this.olView);
-    // Stop event propagation from Popup
-    this.olMap.on('click', (event: any) => {
-      const elem = event.originalEvent.target;
-      if (elem.nodeName !== 'CANVAS' && elem.className !== 'ol-unselectable') {
-        event.stopPropagation();
-      }
-    });
-    this.olMap.on('singleclick', (event: any) => {
-      const elem = event.originalEvent.target;
-      if (elem.nodeName !== 'CANVAS' && elem.className !== 'ol-unselectable') {
-        event.stopPropagation();
-      }
-    });
-    this.olMap.on('dblclick', (event: any) => {
-      const elem = event.originalEvent.target;
-      if (elem.nodeName !== 'CANVAS' && elem.className !== 'ol-unselectable') {
-        event.stopPropagation();
-      }
-    });
-    this.olMap.on('pointerdrag', (event: any) => {
-      const elem = event.originalEvent.target;
-      if (elem.nodeName !== 'CANVAS' && elem.className !== 'ol-unselectable') {
-        event.stopPropagation();
-      }
-    });
-    this.olMap.on('wheel', (event: any) => {
-      const elem = event.originalEvent.target;
-      if (elem.nodeName !== 'CANVAS' && elem.className !== 'ol-unselectable') {
-        event.stopPropagation();
-      }
-    });
-    // Loading counter
-    this.olMap.set('loadingCounter', 0);
-    this.olMap.increaseLoadingCounter = this.increaseLoadingCounter.bind(this);
-    this.olMap.decreaseLoadingCounter = this.decreaseLoadingCounter.bind(this);
+    this.stopPropagationForComponents();
   }
 
   public componentDidMount() {
     this.olMap.setTarget(this.divMap);
   }
 
-  public increaseLoadingCounter() {
-    const c = this.olMap.get('loadingCounter');
-    if (c <= 0) {
-      this.olMap.set('loadingCounter', 1, true);
-      this.olMap.dispatchEvent('loadstart');
-    } else {
-      this.olMap.set('loadingCounter', c + 1, true);
-    }
+  public stopPropagationForComponents() {
+    // Stop event propagation for components
+    this.olMap.on('click', this.stopEventPropagation);
+    this.olMap.on('singleclick', this.stopEventPropagation);
+    this.olMap.on('dblclick', this.stopEventPropagation);
+    this.olMap.on('pointerdrag', this.stopEventPropagation);
+    this.olMap.on('wheel', this.stopEventPropagation);
   }
 
-  public decreaseLoadingCounter() {
-    const c = this.olMap.get('loadingCounter');
-    if (c <= 1) {
-      this.olMap.set('loadingCounter', 0, true);
-      setTimeout(() => {
-        if (this.olMap.get('loadingCounter') === 0) {
-          this.olMap.dispatchEvent('loadend');
-        }
-      }, 200);
-    } else {
-      this.olMap.set('loadingCounter', c - 1, true);
+  public stopEventPropagation(event: any) {
+    if (event == null || event.originalEvent == null || event.originalEvent.target == null) {
+      return;
+    }
+    const elem = event.originalEvent.target;
+    if (elem.nodeName !== 'CANVAS' && elem.className !== 'ol-unselectable') {
+      event.stopPropagation();
     }
   }
 
@@ -137,7 +84,12 @@ export class Map extends React.Component<IMapProps, {}> {
           }}
           className={`${this.props.className}-olmap`}
         />
-        <mapContext.Provider value={{ olMap: this.olMap, olGroup: this.olMap.getLayerGroup() }}>
+        <mapContext.Provider
+          value={{
+            olMap: this.olMap,
+            olGroup: this.olMap.getLayerGroup()
+          }}
+        >
           {this.props.children}
         </mapContext.Provider>
       </div>
