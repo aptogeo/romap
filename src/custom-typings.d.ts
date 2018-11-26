@@ -553,8 +553,6 @@ declare module 'ol/easing' {
   export function upAndDown(t: number): number;
 }
 
-
-
 declare module 'ol/sphere' {
   export function getArea(geometry: ol.geom.Geometry, opt_options: any): number;
   export function getDistance(c1: ol.Coordinate[], c2: ol.Coordinate[], opt_radius: number): number;
