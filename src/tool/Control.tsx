@@ -1,12 +1,13 @@
 import * as React from 'react';
 import OlControl from 'ol/control/Control';
 import { mapContext } from '../MapContext';
+import { BaseTool, IBaseToolProps } from './BaseTool';
 
-export interface IControlProps {
+export interface IControlProps extends IBaseToolProps {
   /**
    * Content.
    */
-  children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
+  children?: React.ReactElement<BaseTool<any, any>> | Array<React.ReactElement<BaseTool<any, any>>>;
 }
 
 export interface IControlState {
@@ -16,7 +17,7 @@ export interface IControlState {
   control: OlControl;
 }
 
-export class Control extends React.Component<IControlProps, IControlState> {
+export class Control extends BaseTool<IControlProps, IControlState> {
   public static contextType = mapContext;
 
   /**
@@ -57,9 +58,9 @@ export class Control extends React.Component<IControlProps, IControlState> {
   }
 
   public render(): any {
-    let children = null;
+    let children: React.ReactNodeArray = [];
     if (this.state.control != null) {
-      children = this.props.children;
+      children = this.getChildren();
     }
     return (
       <div style={{ display: 'none' }}>

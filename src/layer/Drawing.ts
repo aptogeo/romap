@@ -1,20 +1,20 @@
 import * as React from 'react';
-import BaseLayer from 'ol/layer/Base';
+import OlBaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
 import { LocalFeature } from '../source/LocalFeature';
-import { Base, IBaseProps } from './Base';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 
-export interface IDrawingProps extends IBaseProps {
+export interface IDrawingProps extends IBaseLayerProps {
   /**
    * Style.
    */
   style?: any;
 }
 
-export class Drawing extends Base<IDrawingProps, any> {
+export class Drawing extends BaseLayer<IDrawingProps, any> {
   public style: any;
 
-  public createOlLayer(): BaseLayer {
+  public createOlLayer(): OlBaseLayer {
     return new VectorLayer({
       source: new LocalFeature({
         wrapX: false

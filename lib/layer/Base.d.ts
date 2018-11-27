@@ -52,7 +52,6 @@ export declare class Base<P extends IBaseProps, S> extends React.Component<P, S>
     order: number;
     zIndex: number;
     private olLayer;
-    constructor(props: P);
     componentDidMount(): void;
     shouldComponentUpdate(nextProps: P): boolean;
     componentWillUnmount(): void;

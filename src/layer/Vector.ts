@@ -1,25 +1,25 @@
 import * as React from 'react';
-import BaseLayer from 'ol/layer/Base';
+import OlBaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
-import { Base, IBaseProps } from './Base';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 
-export interface IVectorProps extends IBaseProps {
+export interface IVectorProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: any;
+  source: ol.source.Vector;
   /**
    * Style.
    */
   style?: any;
 }
 
-export class Vector extends Base<IVectorProps, any> {
-  public source: any;
+export class Vector extends BaseLayer<IVectorProps, any> {
+  public source: ol.source.Vector;
 
   public style: any;
 
-  public createOlLayer(): BaseLayer {
+  public createOlLayer(): OlBaseLayer {
     return new VectorLayer();
   }
 

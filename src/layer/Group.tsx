@@ -1,20 +1,20 @@
 import * as React from 'react';
 import GroupLayer from 'ol/layer/Group';
-import BaseLayer from 'ol/layer/Base';
-import { Base, IBaseProps } from './Base';
+import OlBaseLayer from 'ol/layer/Base';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 import { mapContext } from '../MapContext';
 
-export interface IGroupProps extends IBaseProps {
+export interface IGroupProps extends IBaseLayerProps {
   /**
    * Content.
    */
   children: React.ReactElement<any> | Array<React.ReactElement<any>>;
 }
 
-export class Group extends Base<IGroupProps, any> {
+export class Group extends BaseLayer<IGroupProps, any> {
   public static contextType = mapContext;
 
-  public createOlLayer(): BaseLayer {
+  public createOlLayer(): OlBaseLayer {
     return new GroupLayer();
   }
 

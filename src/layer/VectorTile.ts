@@ -1,25 +1,25 @@
 import * as React from 'react';
-import BaseLayer from 'ol/layer/Base';
+import OlBaseLayer from 'ol/layer/Base';
 import VectorTileLayer from 'ol/layer/VectorTile';
-import { Base, IBaseProps } from './Base';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 
-export interface IVectorTileProps extends IBaseProps {
+export interface IVectorTileProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: any;
+  source: ol.source.VectorTile;
   /**
    * Style.
    */
   style?: any;
 }
 
-export class VectorTile extends Base<IVectorTileProps, any> {
-  public source: any;
+export class VectorTile extends BaseLayer<IVectorTileProps, any> {
+  public source: ol.source.VectorTile;
 
   public style: any;
 
-  public createOlLayer(): BaseLayer {
+  public createOlLayer(): OlBaseLayer {
     return new VectorTileLayer();
   }
 

@@ -1,8 +1,10 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
 import { mapContext } from '../MapContext';
+import { BaseTool, IBaseToolProps } from './BaseTool';
 
-export interface IOverlayProps {
+
+export interface IOverlayProps extends IBaseToolProps {
   /**
    * Content.
    */
@@ -28,7 +30,7 @@ export interface IOverlayState {
   overlay: OlOverlay;
 }
 
-export class Overlay extends React.Component<IOverlayProps, IOverlayState> {
+export class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
   public static defaultProps = {
     positioning: 'top-left',
     autoPan: false
@@ -119,9 +121,9 @@ export class Overlay extends React.Component<IOverlayProps, IOverlayState> {
   }
 
   public render(): any {
-    let children = null;
+    let children: React.ReactNodeArray = [];
     if (this.state.overlay != null) {
-      children = this.props.children;
+      children = this.getChildren();
     }
     return (
       <div style={{ display: 'none' }}>

@@ -8,8 +8,8 @@ export const layer = _layer;
 import * as _source from './source';
 export const source = _source;
 
-import * as _component from './component';
-export const component = _component;
+import * as _tool from './tool';
+export const tool = _tool;
 
 import * as _net from './net';
 export const net = _net;

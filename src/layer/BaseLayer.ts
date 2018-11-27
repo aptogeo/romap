@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BaseLayer from 'ol/layer/Base';
+import OlBaseLayer from 'ol/layer/Base';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
 import { mapContext } from '../MapContext';
@@ -10,7 +10,7 @@ interface Data {
 
 let globalOrder = 0;
 
-export interface IBaseProps {
+export interface IBaseLayerProps {
   /**
    * Id.
    */
@@ -45,7 +45,7 @@ export interface IBaseProps {
   opacity?: number;
 }
 
-export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
+export class BaseLayer<P extends IBaseLayerProps, S> extends React.Component<P, S> {
   public static contextType = mapContext;
 
   public id: string;
@@ -68,13 +68,9 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
 
   private olLayer: any = null;
 
-  constructor(props: P) {
-    super(props);
-    this.olLayer = this.createOlLayer();
-    this.checkProps(props);
-  }
-
   public componentDidMount() {
+    this.olLayer = this.createOlLayer();
+    this.checkProps(this.props);
     // Add OlLayer to map
     if (this.type === 'BASE') {
       this.context.olMap.addLayer(this.olLayer);
@@ -107,8 +103,8 @@ export class Base<P extends IBaseProps, S> extends React.Component<P, S> {
     this.context.olMap.removeLayer(this.olLayer);
   }
 
-  public createOlLayer(): BaseLayer {
-    return new BaseLayer({});
+  public createOlLayer(): OlBaseLayer {
+    return new OlBaseLayer({});
   }
 
   public checkProps(props: P) {

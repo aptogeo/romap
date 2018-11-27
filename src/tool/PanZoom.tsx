@@ -3,8 +3,10 @@ import OlView from 'ol/View';
 import { inAndOut } from 'ol/easing';
 import { cloneView } from '../utils';
 import { mapContext } from '../MapContext';
+import { BaseTool, IBaseToolProps } from './BaseTool';
 
-export interface IPanZoomProps {
+
+export interface IPanZoomProps extends IBaseToolProps {
   /**
    * Class name.
    */
@@ -35,7 +37,7 @@ export interface IPanZoomProps {
   i18n?: { [key: string]: string };
 }
 
-export class PanZoom extends React.Component<IPanZoomProps, any> {
+export class PanZoom extends BaseTool<IPanZoomProps, any> {
   public static defaultProps = {
     className: 'panzoom',
     showZoom: true,
@@ -287,6 +289,9 @@ export class PanZoom extends React.Component<IPanZoomProps, any> {
   }
 
   public render(): any {
+    if (this.props.disable === true) {
+      return null;
+    }
     return (
       <div className={`${this.props.className} ol-unselectable ol-control`}>
         {this.renderPan()}

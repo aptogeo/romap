@@ -60,12 +60,12 @@ class Maps extends React.Component {
           <romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
           <romap.layer.Tile source={world2D} name="World 2D" />
           <romap.layer.Image source={britishNationalGrid} name="British National Grid" />
-          <romap.component.Control>
-            <romap.component.PanZoom />
-          </romap.component.Control>
-          <romap.component.Control>
-            <romap.component.ScaleLine />
-          </romap.component.Control>
+          <romap.tool.Control>
+            <romap.tool.PanZoom />
+          </romap.tool.Control>
+          <romap.tool.Control>
+            <romap.tool.ScaleLine />
+          </romap.tool.Control>
         </romap.Map>
         <romap.Map keyboardEventTarget={document}>
           <romap.View center={[508000, 6000000]} zoom={5} />
@@ -82,12 +82,12 @@ class Maps extends React.Component {
             }
             name="States Provinces Lines"
           />
-          <romap.component.Control>
-            <romap.component.PanZoom showZoomSlider={false} showOrigin={false} />
-          </romap.component.Control>
-          <romap.component.Control>
-            <romap.component.ScaleLine />
-          </romap.component.Control>
+          <romap.tool.Control>
+            <romap.tool.PanZoom showZoomSlider={false} showOrigin={false} />
+          </romap.tool.Control>
+          <romap.tool.Control>
+            <romap.tool.ScaleLine />
+          </romap.tool.Control>
         </romap.Map>
       </div>
     );

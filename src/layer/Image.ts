@@ -1,19 +1,19 @@
 import * as React from 'react';
-import BaseLayer from 'ol/layer/Base';
+import OlBaseLayer from 'ol/layer/Base';
 import ImageLayer from 'ol/layer/Image';
-import { Base, IBaseProps } from './Base';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 
-export interface IImageProps extends IBaseProps {
+export interface IImageProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: any;
+  source: ol.source.Image;
 }
 
-export class Image extends Base<IImageProps, any> {
-  public source: any;
+export class Image extends BaseLayer<IImageProps, any> {
+  public source: ol.source.Image;
 
-  public createOlLayer(): BaseLayer {
+  public createOlLayer(): OlBaseLayer {
     return new ImageLayer();
   }
 

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { getPointResolution } from 'ol/proj';
 import { mapContext } from '../MapContext';
+import { BaseTool, IBaseToolProps } from './BaseTool';
+
 
 const LEADING_DIGITS = [1, 2, 5];
 
-export interface IScaleLineProps {
+export interface IScaleLineProps extends IBaseToolProps {
   /**
    * Class name.
    */
@@ -19,7 +21,7 @@ export interface IScaleLineProps {
   i18n?: { [key: string]: string };
 }
 
-export class ScaleLine extends React.Component<IScaleLineProps, any> {
+export class ScaleLine extends BaseTool<IScaleLineProps, any> {
   public static defaultProps = {
     className: 'scaleline',
     minWidth: 64
@@ -128,6 +130,9 @@ export class ScaleLine extends React.Component<IScaleLineProps, any> {
   }
 
   public render(): any {
+    if (this.props.disable === true) {
+      return null;
+    }
     const { i18n } = this.props;
     const scanlineTitle = i18n && i18n.scanlineTitle ? i18n.scanlineTitle : 'Diagonal distance in map center';
     return (

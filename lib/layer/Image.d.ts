@@ -4,10 +4,10 @@ export interface IImageProps extends IBaseProps {
     /**
      * Source.
      */
-    source: any;
+    source: ol.source.Image;
 }
 export declare class Image extends Base<IImageProps, any> {
-    source: any;
+    source: ol.source.Image;
     createOlLayer(): BaseLayer;
     checkProps(props: IImageProps): void;
     setSource(source: any): void;

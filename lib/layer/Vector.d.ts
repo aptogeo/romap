@@ -4,14 +4,14 @@ export interface IVectorProps extends IBaseProps {
     /**
      * Source.
      */
-    source: any;
+    source: ol.source.Vector;
     /**
      * Style.
      */
     style?: any;
 }
 export declare class Vector extends Base<IVectorProps, any> {
-    source: any;
+    source: ol.source.Vector;
     style: any;
     createOlLayer(): BaseLayer;
     checkProps(props: IVectorProps): void;

@@ -1,19 +1,19 @@
 import * as React from 'react';
-import BaseLayer from 'ol/layer/Base';
+import OlBaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
-import { Base, IBaseProps } from './Base';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 
-export interface ITileProps extends IBaseProps {
+export interface ITileProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: any;
+  source: ol.source.Tile;
 }
 
-export class Tile extends Base<ITileProps, any> {
-  public source: any;
+export class Tile extends BaseLayer<ITileProps, any> {
+  public source: ol.source.Tile;
 
-  public createOlLayer(): BaseLayer {
+  public createOlLayer(): OlBaseLayer {
     return new TileLayer();
   }
 

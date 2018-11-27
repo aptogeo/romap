@@ -4,14 +4,14 @@ export interface IVectorTileProps extends IBaseProps {
     /**
      * Source.
      */
-    source: any;
+    source: ol.source.VectorTile;
     /**
      * Style.
      */
     style?: any;
 }
 export declare class VectorTile extends Base<IVectorTileProps, any> {
-    source: any;
+    source: ol.source.VectorTile;
     style: any;
     createOlLayer(): BaseLayer;
     checkProps(props: IVectorTileProps): void;

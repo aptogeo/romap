@@ -4,10 +4,10 @@ export interface ITileProps extends IBaseProps {
     /**
      * Source.
      */
-    source: any;
+    source: ol.source.Tile;
 }
 export declare class Tile extends Base<ITileProps, any> {
-    source: any;
+    source: ol.source.Tile;
     createOlLayer(): BaseLayer;
     checkProps(props: ITileProps): void;
     setSource(source: any): void;
