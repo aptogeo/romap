@@ -8,7 +8,10 @@ import OlView from 'ol/View';
  * @param  {OlMap | LayerGroup} map or group
  * @param  {Function} fn callback function
  */
-export function walk(top: OlMap | OlGroupLayer, fn: (layer: OlBaseLayer, idx: number, parent: OlGroupLayer) => boolean) {
+export function walk(
+  top: OlMap | OlGroupLayer,
+  fn: (layer: OlBaseLayer, idx: number, parent: OlGroupLayer) => boolean
+) {
   const group = top instanceof OlMap ? top.getLayerGroup() : top;
   group.getLayers().forEach((layer: OlBaseLayer, idx: number) => {
     if (layer) {

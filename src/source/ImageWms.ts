@@ -23,7 +23,7 @@ export class ImageWms extends OlImageWMS implements IExtended {
     tocElements.push({
       name: this.label,
       tocElements: null,
-      tocLegendElements: null    
+      tocLegendElements: null
     });
     return Promise.resolve<IToc>({ tocElements });
   }

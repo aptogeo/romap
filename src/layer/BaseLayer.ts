@@ -46,7 +46,12 @@ export interface IBaseLayerProps {
   opacity?: number;
 }
 
-export class BaseLayer<P extends IBaseLayerProps, S, L extends OlBaseLayer, SC extends OlSource> extends React.Component<P, S> {
+export class BaseLayer<
+  P extends IBaseLayerProps,
+  S,
+  L extends OlBaseLayer,
+  SC extends OlSource
+> extends React.Component<P, S> {
   public static contextType = mapContext;
 
   public id: string;

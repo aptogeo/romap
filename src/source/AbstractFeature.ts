@@ -8,7 +8,7 @@ export abstract class AbstractFeature extends OlVector implements IExtended {
 
   constructor(options?: any) {
     super(options);
-    this.constructor.name
+    this.constructor.name;
     this.label = options.label ? options.label : this.constructor.name;
   }
 
@@ -38,7 +38,7 @@ export abstract class AbstractFeature extends OlVector implements IExtended {
     tocElements.push({
       name: this.label,
       tocElements: null,
-      tocLegendElements: null    
+      tocLegendElements: null
     });
     return Promise.resolve<IToc>({ tocElements });
   }

@@ -23,7 +23,7 @@ export class TileWms extends OlTileWMS implements IExtended {
     tocElements.push({
       name: this.label,
       tocElements: null,
-      tocLegendElements: null    
+      tocLegendElements: null
     });
     return Promise.resolve<IToc>({ tocElements });
   }
