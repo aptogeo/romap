@@ -1,5 +1,6 @@
 import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
+import OlSource from 'ol/source/Source';
 import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
 import { walk } from '../utils';
 import { mapContext } from '../MapContext';
@@ -30,7 +31,7 @@ export interface IBaseLayerProps {
   /**
    * Extent.
    */
-  extent?: number[];
+  extent?: [number, number, number, number];
   /**
    * Order position.
    */
@@ -45,7 +46,7 @@ export interface IBaseLayerProps {
   opacity?: number;
 }
 
-export class BaseLayer<P extends IBaseLayerProps, S> extends React.Component<P, S> {
+export class BaseLayer<P extends IBaseLayerProps, S, L extends OlBaseLayer, SC extends OlSource> extends React.Component<P, S> {
   public static contextType = mapContext;
 
   public id: string;
@@ -60,13 +61,13 @@ export class BaseLayer<P extends IBaseLayerProps, S> extends React.Component<P, 
 
   public opacity: number;
 
-  public extent: number[];
+  public extent: [number, number, number, number];
 
   public order: number;
 
   public zIndex: number;
 
-  private olLayer: any = null;
+  private olLayer: L = null;
 
   public componentDidMount() {
     this.olLayer = this.createOlLayer();
@@ -103,8 +104,8 @@ export class BaseLayer<P extends IBaseLayerProps, S> extends React.Component<P, 
     this.context.olMap.removeLayer(this.olLayer);
   }
 
-  public createOlLayer(): OlBaseLayer {
-    return new OlBaseLayer({});
+  public createOlLayer(): L {
+    return null;
   }
 
   public checkProps(props: P) {
@@ -128,20 +129,20 @@ export class BaseLayer<P extends IBaseLayerProps, S> extends React.Component<P, 
     this.olLayer.on('propertychange', this.handleBaseLayerPropertychange);
   }
 
-  public getOlLayer(): any {
+  public getOlLayer(): L {
     return this.olLayer;
   }
 
-  public getOlSource(): any {
+  public getOlSource(): SC {
     if ('getSource' in this.olLayer) {
-      return this.olLayer.getSource();
+      return (this.olLayer as any).getSource();
     }
     return null;
   }
 
   public setOlSource(olSource: any): any {
-    if ('getSource' in this.olLayer) {
-      return this.olLayer.setSource(olSource);
+    if ('setSource' in this.olLayer) {
+      return (this.olLayer as any).setSource(olSource);
     }
   }
 
@@ -150,7 +151,7 @@ export class BaseLayer<P extends IBaseLayerProps, S> extends React.Component<P, 
     this.olLayer.set('id', this.id);
   }
 
-  public setName(name: any) {
+  public setName(name: string) {
     this.name = name;
     this.olLayer.set('name', this.name);
   }
@@ -209,7 +210,7 @@ export class BaseLayer<P extends IBaseLayerProps, S> extends React.Component<P, 
     this.olLayer.setVisible(this.visible);
   }
 
-  public setExtent(extent: number[]) {
+  public setExtent(extent: [number, number, number, number]) {
     this.extent = extent;
     if (this.extent == null) {
       this.extent = undefined;

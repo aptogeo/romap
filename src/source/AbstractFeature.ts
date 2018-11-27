@@ -1,19 +1,27 @@
-import Layer from 'ol/layer/Layer';
-import Vector from 'ol/source/Vector';
-import Feature from 'ol/Feature';
-import { IExtended, IIdentifyRequest, IIdentifyResponse, IToc } from './IExtended';
+import OlLayer from 'ol/layer/Layer';
+import OlVector from 'ol/source/Vector';
+import OlFeature from 'ol/Feature';
+import { IExtended, IIdentifyRequest, IIdentifyResponse, IToc, ITocElement } from './IExtended';
 
-export abstract class AbstractFeature extends Vector implements IExtended {
+export abstract class AbstractFeature extends OlVector implements IExtended {
+  protected label: string;
+
+  constructor(options?: any) {
+    super(options);
+    this.constructor.name
+    this.label = options.label ? options.label : this.constructor.name;
+  }
+
   identify(request: IIdentifyRequest): Promise<IIdentifyResponse> {
     const { olMap, layer, pixel, pixelTolerance, limit } = request;
-    const features = [] as Feature[];
+    const features = [] as OlFeature[];
     olMap.forEachFeatureAtPixel(
       pixel,
-      (feature: Feature) => {
+      (feature: OlFeature) => {
         features.push(feature);
       },
       {
-        layerFilter: (l: Layer) => {
+        layerFilter: (l: OlLayer) => {
           return layer === l;
         },
         hitTolerance: pixelTolerance
@@ -26,8 +34,12 @@ export abstract class AbstractFeature extends Vector implements IExtended {
   }
 
   getToc(): Promise<IToc> {
-    return Promise.resolve({
-      tocElement: []
+    const tocElements: ITocElement[] = [];
+    tocElements.push({
+      name: this.label,
+      tocElements: null,
+      tocLegendElements: null    
     });
+    return Promise.resolve<IToc>({ tocElements });
   }
 }

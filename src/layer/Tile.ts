@@ -1,20 +1,21 @@
 import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
-import TileLayer from 'ol/layer/Tile';
+import OlTileLayer from 'ol/layer/Tile';
+import OlTileSource from 'ol/source/Tile';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 
 export interface ITileProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: ol.source.Tile;
+  source: OlTileSource;
 }
 
-export class Tile extends BaseLayer<ITileProps, any> {
-  public source: ol.source.Tile;
+export class Tile extends BaseLayer<ITileProps, {}, OlTileLayer, OlTileSource> {
+  public source: OlTileSource;
 
-  public createOlLayer(): OlBaseLayer {
-    return new TileLayer();
+  public createOlLayer(): OlTileLayer {
+    return new OlTileLayer();
   }
 
   public checkProps(props: ITileProps) {
@@ -22,7 +23,7 @@ export class Tile extends BaseLayer<ITileProps, any> {
     this.setSource(props.source);
   }
 
-  public setSource(source: any) {
+  public setSource(source: OlTileSource) {
     this.source = source;
     if (this.source == null) {
       this.source = undefined;

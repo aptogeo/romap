@@ -1,16 +1,16 @@
-import EsriJSON from 'ol/format/EsriJSON';
+import OlEsriJSON from 'ol/format/EsriJSON';
 import { send, IResponse } from '../net';
 import { AbstractExternalFeature } from './AbstractExternalFeature';
 
 export class QueryArcGISRest extends AbstractExternalFeature {
-  private where: string;
+  protected where: string;
 
-  private format: any;
+  protected format: any;
 
   constructor(options?: any) {
     super(options);
     this.where = options.where;
-    this.format = new EsriJSON();
+    this.format = new OlEsriJSON();
   }
 
   public load(extent: any, projectionCode: string) {

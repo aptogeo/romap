@@ -44,7 +44,11 @@ declare module 'ol/layer/Group' {
 }
 
 declare module 'ol/layer/Heatmap' {
-  export default ol.layer.Heatmap;
+  export default class extends ol.layer.Heatmap {
+    public setShadow(shadow: number): void;
+    public setWeight(weight: string): void;
+    public setRenderMode(renderMode: string): void;
+  }
 }
 
 declare module 'ol/layer/Image' {

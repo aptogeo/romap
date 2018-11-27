@@ -1,5 +1,5 @@
 import * as React from 'react';
-import GroupLayer from 'ol/layer/Group';
+import OlGroupLayer from 'ol/layer/Group';
 import OlBaseLayer from 'ol/layer/Base';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 import { mapContext } from '../MapContext';
@@ -11,11 +11,11 @@ export interface IGroupProps extends IBaseLayerProps {
   children: React.ReactElement<any> | Array<React.ReactElement<any>>;
 }
 
-export class Group extends BaseLayer<IGroupProps, any> {
+export class Group extends BaseLayer<IGroupProps, {}, OlGroupLayer, null> {
   public static contextType = mapContext;
 
-  public createOlLayer(): OlBaseLayer {
-    return new GroupLayer();
+  public createOlLayer(): OlGroupLayer {
+    return new OlGroupLayer();
   }
 
   public render(): any {

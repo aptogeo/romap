@@ -1,21 +1,21 @@
 import { isEqual, assign } from 'lodash';
-import Projection from 'ol/proj/Projection';
+import OlProjection from 'ol/proj/Projection';
 import { AbstractFeature } from './AbstractFeature';
 
 export class LocalFeature extends AbstractFeature {
-  private savedFeatures: any;
+  protected savedFeatures: any;
 
-  private oldViewProjection: any;
+  protected oldViewProjection: any;
 
-  private viewProjection: any;
+  protected viewProjection: any;
 
-  private lastExtent: any;
+  protected lastExtent: any;
 
-  private lastResolution: any;
+  protected lastResolution: any;
 
-  private optionLoader: any;
+  protected optionLoader: any;
 
-  private optionStrategy: any;
+  protected optionStrategy: any;
 
   constructor(options?: any) {
     super(
@@ -52,7 +52,6 @@ export class LocalFeature extends AbstractFeature {
         }
       })
     );
-
     this.optionLoader = options.loader;
     this.optionStrategy = options.strategy;
     this.on('addfeature', this.handleAddFeature, this);
@@ -101,7 +100,7 @@ export class LocalFeature extends AbstractFeature {
     }
     feature.un('change:geometry', this.handleChangeFeatureGeometry, this);
     feature.getGeometry().un('change', this.handleChangeGeometry, this);
-    feature.set('originalProjection', new Projection({ code: this.viewProjection.getCode() }));
+    feature.set('originalProjection', new OlProjection({ code: this.viewProjection.getCode() }));
     feature.set('originalGeometry', feature.getGeometry());
     feature.on('change:geometry', this.handleChangeFeatureGeometry, this);
     feature.getGeometry().set('feature', feature);

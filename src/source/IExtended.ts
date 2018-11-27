@@ -1,16 +1,16 @@
 import OlMap from 'ol/Map';
-import Layer from 'ol/layer/Layer';
-import Source from 'ol/source/Source';
-import Feature from 'ol/Feature';
+import OlLayer from 'ol/layer/Layer';
+import OlSource from 'ol/source/Source';
+import OlFeature from 'ol/Feature';
 
-export interface IExtended extends Source {
+export interface IExtended extends OlSource {
   identify(identifyRequest: IIdentifyRequest): Promise<IIdentifyResponse>;
   getToc(): Promise<IToc>;
 }
 
 export interface IIdentifyRequest {
   olMap: OlMap;
-  layer: Layer;
+  layer: OlLayer;
   pixel: [number, number];
   pixelTolerance: number;
   limit: number;
@@ -18,20 +18,20 @@ export interface IIdentifyRequest {
 
 export interface IIdentifyResponse {
   request: IIdentifyRequest;
-  features: Feature[];
+  features: OlFeature[];
 }
 
 export interface IToc {
-  tocElement: ITocElement[];
+  tocElements: ITocElement[];
 }
 
 export interface ITocElement {
   name: string;
-  tocElemenLegend: ITocElementLegend[];
-  tocElement: ITocElement[];
+  tocLegendElements?: ITocLegendElement[];
+  tocElements?: ITocElement[];
 }
 
-export interface ITocElementLegend {
+export interface ITocLegendElement {
   image: string;
   label: string;
 }

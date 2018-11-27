@@ -1,11 +1,11 @@
 import { isEqual, assign } from 'lodash';
-import Feature from 'ol/Feature';
+import OlFeature from 'ol/Feature';
 import { AbstractFeature } from './AbstractFeature';
 
 export class AbstractExternalFeature extends AbstractFeature {
   private projectionCode: string;
 
-  private loadedFeatures: Feature[];
+  private loadedFeatures: OlFeature[];
 
   private extent: number[];
 
@@ -46,14 +46,12 @@ export class AbstractExternalFeature extends AbstractFeature {
         return [extent];
       }
     });
-
     super(opt);
-
     this.projectionCode = null;
     this.loadedFeatures = null;
   }
 
-  public load(extent: number[], projectionCode: string): Promise<Feature[]> {
+  public load(extent: number[], projectionCode: string): Promise<OlFeature[]> {
     return Promise.resolve([]);
   }
 

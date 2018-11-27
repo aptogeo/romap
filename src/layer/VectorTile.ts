@@ -1,26 +1,27 @@
 import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
-import VectorTileLayer from 'ol/layer/VectorTile';
+import OlVectorTileLayer from 'ol/layer/VectorTile';
+import OlVectorTileSource from 'ol/source/VectorTile';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 
 export interface IVectorTileProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: ol.source.VectorTile;
+  source: OlVectorTileSource;
   /**
    * Style.
    */
   style?: any;
 }
 
-export class VectorTile extends BaseLayer<IVectorTileProps, any> {
-  public source: ol.source.VectorTile;
+export class VectorTile extends BaseLayer<IVectorTileProps, {}, OlVectorTileLayer, OlVectorTileSource> {
+  public source: OlVectorTileSource;
 
   public style: any;
 
-  public createOlLayer(): OlBaseLayer {
-    return new VectorTileLayer();
+  public createOlLayer(): OlVectorTileLayer {
+    return new OlVectorTileLayer();
   }
 
   public checkProps(props: IVectorTileProps) {
@@ -29,7 +30,7 @@ export class VectorTile extends BaseLayer<IVectorTileProps, any> {
     this.setStyle(props.style);
   }
 
-  public setSource(source: any) {
+  public setSource(source: OlVectorTileSource) {
     this.source = source;
     if (this.source == null) {
       this.source = undefined;

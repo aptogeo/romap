@@ -1,6 +1,6 @@
 import * as React from 'react';
 import OlMap from 'ol/Map';
-import GroupLayer from 'ol/layer/Group';
+import OlGroupLayer from 'ol/layer/Group';
 
 // Map context
 export const mapContext = React.createContext<{
@@ -11,5 +11,5 @@ export const mapContext = React.createContext<{
   /**
    * OpenLayers group.
    */
-  olGroup?: GroupLayer;
+  olGroup?: OlGroupLayer;
 }>({});

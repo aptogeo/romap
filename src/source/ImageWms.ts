@@ -1,8 +1,8 @@
-import OlImageArcGISRest from 'ol/source/ImageArcGISRest';
+import OlImageWMS from 'ol/source/ImageWMS';
 import OlFeature from 'ol/Feature';
 import { IExtended, IIdentifyRequest, IIdentifyResponse, IToc, ITocElement } from './IExtended';
 
-export class ImageArcGISRest extends OlImageArcGISRest implements IExtended {
+export class ImageWms extends OlImageWMS implements IExtended {
   protected label: string;
 
   constructor(options?: any) {

@@ -1,4 +1,4 @@
-import GeoJSON from 'ol/format/GeoJSON';
+import OlGeoJSON from 'ol/format/GeoJSON';
 import { send, IResponse } from '../net';
 import { AbstractExternalFeature } from './AbstractExternalFeature';
 
@@ -10,7 +10,7 @@ export class Wfs extends AbstractExternalFeature {
   constructor(options?: any) {
     super(options);
     this.typename = options.typename;
-    this.format = new GeoJSON();
+    this.format = new OlGeoJSON();
   }
 
   public load(extent: number[], projectionCode: string) {

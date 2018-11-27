@@ -1,6 +1,6 @@
 import OlMap from 'ol/Map';
-import GroupLayer from 'ol/layer/Group';
-import BaseLayer from 'ol/layer/Base';
+import OlGroupLayer from 'ol/layer/Group';
+import OlBaseLayer from 'ol/layer/Base';
 import OlView from 'ol/View';
 
 /**
@@ -8,18 +8,16 @@ import OlView from 'ol/View';
  * @param  {OlMap | LayerGroup} map or group
  * @param  {Function} fn callback function
  */
-export function walk(top: OlMap | GroupLayer, fn: (layer: BaseLayer, idx: number, parent: GroupLayer) => boolean) {
-  const group = 'getLayerGroup' in top ? top.getLayerGroup() : top;
-  if (group && 'getLayers' in group) {
-    group.getLayers().forEach((layer: any, idx: number) => {
-      if (layer) {
-        const cont = fn(layer, idx, group);
-        if (cont !== false && 'getLayers' in layer) {
-          walk(layer, fn);
-        }
+export function walk(top: OlMap | OlGroupLayer, fn: (layer: OlBaseLayer, idx: number, parent: OlGroupLayer) => boolean) {
+  const group = top instanceof OlMap ? top.getLayerGroup() : top;
+  group.getLayers().forEach((layer: OlBaseLayer, idx: number) => {
+    if (layer) {
+      const cont = fn(layer, idx, group);
+      if (cont !== false && layer instanceof OlGroupLayer) {
+        walk(layer, fn);
       }
-    });
-  }
+    }
+  });
 }
 
 /**
