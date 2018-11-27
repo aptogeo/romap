@@ -3,7 +3,6 @@ import { getPointResolution } from 'ol/proj';
 import { mapContext } from '../MapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
-
 const LEADING_DIGITS = [1, 2, 5];
 
 export interface IScaleLineProps extends IBaseToolProps {

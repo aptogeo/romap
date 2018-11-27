@@ -6,7 +6,6 @@ export interface IBaseToolProps {
 }
 
 export class BaseTool<P extends IBaseToolProps, S> extends React.Component<P, S> {
-
   public getChildren(): React.ReactNodeArray {
     let children: React.ReactNodeArray = [];
     if (this.props.children) {

@@ -3,7 +3,6 @@ import OlOverlay from 'ol/Overlay';
 import { mapContext } from '../MapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
-
 export interface IOverlayProps extends IBaseToolProps {
   /**
    * Content.

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { mapContext } from '../MapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
-
 export class MapResizer extends BaseTool<IBaseToolProps, {}> {
   public static contextType = mapContext;
 
@@ -25,7 +24,7 @@ export class MapResizer extends BaseTool<IBaseToolProps, {}> {
       targetElement.style.height = `${h}px`;
       olMap.setSize([w, h]);
     }
-  }
+  };
 
   public render(): any {
     return null;

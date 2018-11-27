@@ -5,7 +5,6 @@ import { cloneView } from '../utils';
 import { mapContext } from '../MapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
-
 export interface IPanZoomProps extends IBaseToolProps {
   /**
    * Class name.
