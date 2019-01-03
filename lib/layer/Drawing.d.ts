@@ -1,14 +1,14 @@
-import BaseLayer from 'ol/layer/Base';
-import { Base, IBaseProps } from './Base';
-export interface IDrawingProps extends IBaseProps {
+import OlVectorLayer from 'ol/layer/Vector';
+import { LocalFeature } from '../source/LocalFeature';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+export interface IDrawingProps extends IBaseLayerProps {
     /**
      * Style.
      */
     style?: any;
 }
-export declare class Drawing extends Base<IDrawingProps, any> {
-    style: any;
-    createOlLayer(): BaseLayer;
-    checkProps(props: IDrawingProps): void;
+export declare class Drawing extends BaseLayer<IDrawingProps, {}, OlVectorLayer, LocalFeature> {
+    createOlLayer(): OlVectorLayer;
+    updateProps(prevProps: IDrawingProps, nextProps: IDrawingProps): void;
     setStyle(style: any): void;
 }

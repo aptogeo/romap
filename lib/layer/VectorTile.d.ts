@@ -1,20 +1,19 @@
-import BaseLayer from 'ol/layer/Base';
-import { Base, IBaseProps } from './Base';
-export interface IVectorTileProps extends IBaseProps {
+import OlVectorTileLayer from 'ol/layer/VectorTile';
+import OlVectorTileSource from 'ol/source/VectorTile';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+export interface IVectorTileProps extends IBaseLayerProps {
     /**
      * Source.
      */
-    source: ol.source.VectorTile;
+    source: OlVectorTileSource;
     /**
      * Style.
      */
     style?: any;
 }
-export declare class VectorTile extends Base<IVectorTileProps, any> {
-    source: ol.source.VectorTile;
-    style: any;
-    createOlLayer(): BaseLayer;
-    checkProps(props: IVectorTileProps): void;
-    setSource(source: any): void;
+export declare class VectorTile extends BaseLayer<IVectorTileProps, {}, OlVectorTileLayer, OlVectorTileSource> {
+    createOlLayer(): OlVectorTileLayer;
+    updateProps(prevProps: IVectorTileProps, nextProps: IVectorTileProps): void;
+    setSource(source: OlVectorTileSource): void;
     setStyle(style: any): void;
 }

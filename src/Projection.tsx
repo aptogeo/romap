@@ -49,7 +49,7 @@ export class Projection extends React.Component<IProjectionProps, any> {
     projMap.set(this.projectionInfo.code, this.projectionInfo);
   }
 
-  public render(): any {
+  public render(): React.ReactNode {
     return null;
   }
 }

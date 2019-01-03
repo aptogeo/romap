@@ -5,22 +5,29 @@ import { AbstractFeature } from './AbstractFeature';
 export class LocalFeature extends AbstractFeature {
   protected savedFeatures: any;
 
-  protected oldViewProjection: any;
+  protected oldViewProjection: OlProjection;
 
-  protected viewProjection: any;
+  protected viewProjection: OlProjection;
 
-  protected lastExtent: any;
+  protected lastExtent: [number, number, number, number];
 
-  protected lastResolution: any;
+  protected lastResolution: number;
 
-  protected optionLoader: any;
+  protected optionLoader: (
+    extent: [number, number, number, number],
+    resolution: number,
+    projection: OlProjection
+  ) => void;
 
-  protected optionStrategy: any;
+  protected optionStrategy: (
+    extent: [number, number, number, number],
+    resolution: number
+  ) => [number, number, number, number];
 
   constructor(options?: any) {
     super(
       assign({}, options, {
-        loader: (extent: any, resolution: any, projection: any) => {
+        loader: (extent: [number, number, number, number], resolution: number, projection: OlProjection) => {
           if (!isEqual(projection, this.viewProjection)) {
             this.oldViewProjection = this.viewProjection;
             this.viewProjection = projection;
@@ -32,7 +39,10 @@ export class LocalFeature extends AbstractFeature {
             this.optionLoader.call(this, extent, resolution, projection);
           }
         },
-        strategy: (extent: any, resolution: any) => {
+        strategy: (
+          extent: [number, number, number, number],
+          resolution: number
+        ): [[number, number, number, number]] => {
           const features = this.getFeatures();
           if (
             !isEqual(this.lastExtent, extent) ||

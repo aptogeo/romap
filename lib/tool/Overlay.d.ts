@@ -1,10 +1,11 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
-export interface IOverlayProps {
+import { BaseTool, IBaseToolProps } from './BaseTool';
+export interface IOverlayProps extends IBaseToolProps {
     /**
      * Content.
      */
-    children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
+    children?: React.ReactNode;
     /**
      * Positioning.
      */
@@ -24,15 +25,12 @@ export interface IOverlayState {
      */
     overlay: OlOverlay;
 }
-export declare class Overlay extends React.Component<IOverlayProps, IOverlayState> {
+export declare class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
     static defaultProps: {
         positioning: string;
         autoPan: boolean;
     };
-    static contextType: React.Context<{
-        olMap?: import("openlayers").Map;
-        olGroup?: import("openlayers").layer.Group;
-    }>;
+    static contextType: React.Context<import("../MapContext").IMapContext>;
     /**
      * Overlay div.
      */
@@ -51,5 +49,5 @@ export declare class Overlay extends React.Component<IOverlayProps, IOverlayStat
     componentWillUnmount(): void;
     createOverlay(): void;
     computePosition(): void;
-    render(): any;
+    render(): React.ReactNode;
 }

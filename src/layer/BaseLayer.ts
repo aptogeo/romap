@@ -1,13 +1,9 @@
 import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
 import OlSource from 'ol/source/Source';
-import { isBoolean, isFinite, isInteger, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import { walk } from '../utils';
-import { mapContext } from '../MapContext';
-
-interface Data {
-  [key: string]: any;
-}
+import { mapContext, IMapContext } from '../MapContext';
 
 let globalOrder = 0;
 
@@ -21,10 +17,6 @@ export interface IBaseLayerProps {
    */
   name?: string;
   /**
-   * Additional data.
-   */
-  data?: Data;
-  /**
    * type: BASE or OVERLAY.
    */
   type?: string;
@@ -37,11 +29,11 @@ export interface IBaseLayerProps {
    */
   order?: number;
   /**
-   * Default visible.
+   * Visible.
    */
   visible?: boolean;
   /**
-   * Default opacity.
+   * Opacity.
    */
   opacity?: number;
 }
@@ -49,36 +41,20 @@ export interface IBaseLayerProps {
 export class BaseLayer<
   P extends IBaseLayerProps,
   S,
-  L extends OlBaseLayer,
-  SC extends OlSource
+  OLL extends OlBaseLayer,
+  OLS extends OlSource
 > extends React.Component<P, S> {
-  public static contextType = mapContext;
+  public static contextType: React.Context<IMapContext> = mapContext;
 
-  public id: string;
+  public context: IMapContext;
 
-  public name: string;
-
-  public data: Data;
-
-  public type: string;
-
-  public visible: boolean;
-
-  public opacity: number;
-
-  public extent: [number, number, number, number];
-
-  public order: number;
-
-  public zIndex: number;
-
-  private olLayer: L = null;
+  private olLayer: OLL = null;
 
   public componentDidMount() {
     this.olLayer = this.createOlLayer();
-    this.checkProps(this.props);
+    this.updateProps({} as P, this.props);
     // Add OlLayer to map
-    if (this.type === 'BASE') {
+    if (this.props.type === 'BASE') {
       this.context.olMap.addLayer(this.olLayer);
     } else {
       this.context.olGroup.getLayers().push(this.olLayer);
@@ -87,13 +63,8 @@ export class BaseLayer<
     this.internalAddEvents();
   }
 
-  public shouldComponentUpdate(nextProps: P) {
-    // Optimisation: check if props are changed
-    if (isEqual(nextProps, this.props)) {
-      return false;
-    }
-    this.checkProps(nextProps);
-    return true;
+  public componentDidUpdate(prevProps: P) {
+    this.updateProps(prevProps, this.props);
   }
 
   public componentWillUnmount() {
@@ -109,19 +80,33 @@ export class BaseLayer<
     this.context.olMap.removeLayer(this.olLayer);
   }
 
-  public createOlLayer(): L {
+  public createOlLayer(): OLL {
     return null;
   }
 
-  public checkProps(props: P) {
-    this.setId(props.id);
-    this.setName(props.name);
-    this.setData(props.data);
-    this.setType(props.type);
-    this.setVisible(props.visible);
-    this.setOpacity(props.opacity);
-    this.setExtent(props.extent);
-    this.setOrder(props.order);
+  public updateProps(prevProps: P, nextProps: P) {
+    if (prevProps.id !== nextProps.id) {
+      this.setId(nextProps.id);
+    }
+    if (prevProps.name !== nextProps.name) {
+      this.setName(nextProps.name);
+    }
+    if (prevProps.type !== nextProps.type) {
+      this.setType(nextProps.type);
+    }
+    if (prevProps.visible !== nextProps.visible) {
+      this.setVisible(nextProps.visible);
+    }
+    if (prevProps.opacity !== nextProps.opacity) {
+      this.setOpacity(nextProps.opacity);
+    }
+    if (!isEqual(prevProps.extent, nextProps.extent)) {
+      this.setExtent(nextProps.extent);
+    }
+    if (prevProps.order !== nextProps.order || prevProps.type !== nextProps.type) {
+      this.setOrder(nextProps.order, nextProps.type);
+    }
+    this.setProps(nextProps);
   }
 
   public internalRemoveEvents() {
@@ -134,11 +119,11 @@ export class BaseLayer<
     this.olLayer.on('propertychange', this.handleBaseLayerPropertychange);
   }
 
-  public getOlLayer(): L {
+  public getOlLayer(): OLL {
     return this.olLayer;
   }
 
-  public getOlSource(): SC {
+  public getOlSource(): OLS {
     if ('getSource' in this.olLayer) {
       return (this.olLayer as any).getSource();
     }
@@ -152,97 +137,78 @@ export class BaseLayer<
   }
 
   public setId(id: string) {
-    this.id = id;
-    this.olLayer.set('id', this.id);
+    this.olLayer.set('id', id);
   }
 
   public setName(name: string) {
-    this.name = name;
-    this.olLayer.set('name', this.name);
-  }
-
-  public setData(data: any) {
-    this.data = data;
-    this.olLayer.set('data', this.data);
+    this.olLayer.set('name', name);
   }
 
   public setType(type: string) {
-    this.type = type;
-    if (this.type == null || (this.type !== 'BASE' && this.type !== 'OVERLAY')) {
-      this.type = 'OVERLAY';
+    if (type == null || (type !== 'BASE' && type !== 'OVERLAY')) {
+      type = 'OVERLAY';
     }
-    this.olLayer.set('type', this.type);
+    this.olLayer.set('type', type);
   }
 
-  public setOrder(order: number) {
-    this.order = null;
-    if (isInteger(order)) {
-      this.order = order;
+  public setOrder(order: number, type: string) {
+    order = +order;
+    if (order == null || order < 0) {
+      order = globalOrder + 1;
     }
-    if (this.order == null || this.order < 0) {
-      this.order = globalOrder + 1;
+    if (order > globalOrder) {
+      globalOrder = order;
     }
-    if (this.order > globalOrder) {
-      globalOrder = this.order;
+    let zIndex = order;
+    if (type === 'OVERLAY') {
+      zIndex += 10000;
     }
-    this.zIndex = this.order;
-    if (this.type === 'OVERLAY') {
-      this.zIndex += 10000;
-    }
-    this.olLayer.set('order', this.order);
-    this.olLayer.setZIndex(this.zIndex);
+    this.olLayer.set('order', order);
+    this.olLayer.setZIndex(zIndex);
   }
 
   public setOpacity(opacity: number) {
-    this.opacity = null;
-    if (isFinite(opacity)) {
-      this.opacity = opacity;
+    if (opacity !== +opacity) {
+      opacity = 1;
     }
-    if (this.opacity == null || (this.opacity < 0 && this.opacity > 1)) {
-      this.opacity = 1;
+    if (opacity < 0 && opacity > 1) {
+      opacity = 1;
     }
-    this.olLayer.setOpacity(this.opacity);
+    this.olLayer.setOpacity(opacity);
   }
 
   public setVisible(visible: boolean) {
-    this.visible = null;
-    if (isBoolean(visible)) {
-      this.visible = visible;
+    if (visible !== false) {
+      visible = true;
     }
-    if (this.visible == null) {
-      this.visible = true;
-    }
-    this.olLayer.setVisible(this.visible);
+    this.olLayer.setVisible(visible);
   }
 
   public setExtent(extent: [number, number, number, number]) {
-    this.extent = extent;
-    if (this.extent == null) {
-      this.extent = undefined;
+    if (extent == null) {
+      extent = undefined;
     }
-    this.olLayer.setExtent(this.extent);
+    this.olLayer.setExtent(extent);
+  }
+
+  public setProps(props: P) {
+    this.olLayer.set('props', props, false);
   }
 
   private handleBaseLayerPropertychange = (event: any) => {
     const key = event.key;
     const value = event.target.get(key);
-    const obj: any = this;
-    if (key !== 'zIndex') {
-      obj[key] = value;
-    }
-    if (key === 'visible') {
-      if (value === true && this.type === 'BASE') {
-        walk(this.context.olMap, (currentOlLayer: any) => {
-          if (currentOlLayer.get('type') === 'BASE' && currentOlLayer !== this.olLayer) {
-            currentOlLayer.setVisible(false);
-          }
-          return true;
-        });
-      }
+    if (key === 'visible' && value === true && this.props.type === 'BASE') {
+      walk(this.context.olMap, (currentOlLayer: any) => {
+        if (currentOlLayer.get('type') === 'BASE' && currentOlLayer !== this.olLayer) {
+          currentOlLayer.setVisible(false);
+        }
+        return true;
+      });
     }
   };
 
-  public render(): any {
+  public render(): React.ReactNode {
     return null;
   }
 }

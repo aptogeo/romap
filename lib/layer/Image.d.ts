@@ -1,14 +1,14 @@
-import BaseLayer from 'ol/layer/Base';
-import { Base, IBaseProps } from './Base';
-export interface IImageProps extends IBaseProps {
+import OlImageLayer from 'ol/layer/Image';
+import OlImageSource from 'ol/source/Image';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+export interface IImageProps extends IBaseLayerProps {
     /**
      * Source.
      */
-    source: ol.source.Image;
+    source: OlImageSource;
 }
-export declare class Image extends Base<IImageProps, any> {
-    source: ol.source.Image;
-    createOlLayer(): BaseLayer;
-    checkProps(props: IImageProps): void;
-    setSource(source: any): void;
+export declare class Image extends BaseLayer<IImageProps, {}, OlImageLayer, OlImageSource> {
+    createOlLayer(): OlImageLayer;
+    updateProps(prevProps: IImageProps, nextProps: IImageProps): void;
+    setSource(source: OlImageSource): void;
 }

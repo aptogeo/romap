@@ -2,14 +2,17 @@ import * as React from 'react';
 import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
 
-// Map context
-export const mapContext = React.createContext<{
+// Map context interface
+export interface IMapContext {
   /**
    * OpenLayers map.
    */
-  olMap?: OlMap;
+  olMap: OlMap;
   /**
    * OpenLayers group.
    */
-  olGroup?: OlGroupLayer;
-}>({});
+  olGroup: OlGroupLayer;
+}
+
+// Map context
+export const mapContext = React.createContext<IMapContext>({ olMap: null, olGroup: null });

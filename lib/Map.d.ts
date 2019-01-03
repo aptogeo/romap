@@ -1,9 +1,9 @@
 import * as React from 'react';
 export interface IMapProps {
     /**
-     * Content.
+     * Children.
      */
-    children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
+    children?: React.ReactNode;
     /**
      * Class name.
      */
@@ -33,5 +33,5 @@ export declare class Map extends React.Component<IMapProps, {}> {
     componentDidMount(): void;
     stopPropagationForComponents(): void;
     stopEventPropagation(event: any): void;
-    render(): any;
+    render(): React.ReactNode;
 }

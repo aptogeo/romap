@@ -19,5 +19,5 @@ export interface IProjectionProps {
 export declare class Projection extends React.Component<IProjectionProps, any> {
     projectionInfo: ProjectionInfo;
     constructor(props: IProjectionProps);
-    render(): any;
+    render(): React.ReactNode;
 }

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import OlBaseLayer from 'ol/layer/Base';
 import OlVectorTileLayer from 'ol/layer/VectorTile';
 import OlVectorTileSource from 'ol/source/VectorTile';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
@@ -16,32 +15,30 @@ export interface IVectorTileProps extends IBaseLayerProps {
 }
 
 export class VectorTile extends BaseLayer<IVectorTileProps, {}, OlVectorTileLayer, OlVectorTileSource> {
-  public source: OlVectorTileSource;
-
-  public style: any;
-
   public createOlLayer(): OlVectorTileLayer {
     return new OlVectorTileLayer();
   }
 
-  public checkProps(props: IVectorTileProps) {
-    super.checkProps(props);
-    this.setSource(props.source);
-    this.setStyle(props.style);
+  public updateProps(prevProps: IVectorTileProps, nextProps: IVectorTileProps) {
+    super.updateProps(prevProps, nextProps);
+    if (prevProps.source !== nextProps.source) {
+      this.setSource(nextProps.source);
+    }
+    if (prevProps.style != nextProps.style) {
+      this.setStyle(nextProps.style);
+    }
   }
 
   public setSource(source: OlVectorTileSource) {
-    this.source = source;
-    if (this.source == null) {
-      this.source = undefined;
+    if (source == null) {
+      source = undefined;
     }
     this.getOlLayer().setSource(source);
   }
 
   public setStyle(style: any) {
-    this.style = style;
-    if (this.style == null) {
-      this.style = undefined;
+    if (style == null) {
+      style = undefined;
     }
     this.getOlLayer().setStyle(style);
   }

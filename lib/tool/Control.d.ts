@@ -1,10 +1,11 @@
 import * as React from 'react';
 import OlControl from 'ol/control/Control';
-export interface IControlProps {
+import { BaseTool, IBaseToolProps } from './BaseTool';
+export interface IControlProps extends IBaseToolProps {
     /**
      * Content.
      */
-    children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
+    children?: React.ReactNode;
 }
 export interface IControlState {
     /**
@@ -12,11 +13,8 @@ export interface IControlState {
      */
     control: OlControl;
 }
-export declare class Control extends React.Component<IControlProps, IControlState> {
-    static contextType: React.Context<{
-        olMap?: import("openlayers").Map;
-        olGroup?: import("openlayers").layer.Group;
-    }>;
+export declare class Control extends BaseTool<IControlProps, IControlState> {
+    static contextType: React.Context<import("../MapContext").IMapContext>;
     /**
      * Control div.
      */
@@ -26,5 +24,5 @@ export declare class Control extends React.Component<IControlProps, IControlStat
     componentDidUpdate(): void;
     componentWillUnmount(): void;
     createControl(): void;
-    render(): any;
+    render(): React.ReactNode;
 }

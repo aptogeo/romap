@@ -1,14 +1,14 @@
-import BaseLayer from 'ol/layer/Base';
-import { Base, IBaseProps } from './Base';
-export interface ITileProps extends IBaseProps {
+import OlTileLayer from 'ol/layer/Tile';
+import OlTileSource from 'ol/source/Tile';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+export interface ITileProps extends IBaseLayerProps {
     /**
      * Source.
      */
-    source: ol.source.Tile;
+    source: OlTileSource;
 }
-export declare class Tile extends Base<ITileProps, any> {
-    source: ol.source.Tile;
-    createOlLayer(): BaseLayer;
-    checkProps(props: ITileProps): void;
-    setSource(source: any): void;
+export declare class Tile extends BaseLayer<ITileProps, {}, OlTileLayer, OlTileSource> {
+    createOlLayer(): OlTileLayer;
+    updateProps(prevProps: ITileProps, nextProps: ITileProps): void;
+    setSource(source: OlTileSource): void;
 }

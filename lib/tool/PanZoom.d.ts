@@ -1,5 +1,6 @@
 import * as React from 'react';
-export interface IPanZoomProps {
+import { BaseTool, IBaseToolProps } from './BaseTool';
+export interface IPanZoomProps extends IBaseToolProps {
     /**
      * Class name.
      */
@@ -31,7 +32,7 @@ export interface IPanZoomProps {
         [key: string]: string;
     };
 }
-export declare class PanZoom extends React.Component<IPanZoomProps, any> {
+export declare class PanZoom extends BaseTool<IPanZoomProps, any> {
     static defaultProps: {
         className: string;
         showZoom: boolean;
@@ -40,10 +41,7 @@ export declare class PanZoom extends React.Component<IPanZoomProps, any> {
         showOrigin: boolean;
         showRotation: boolean;
     };
-    static contextType: React.Context<{
-        olMap?: import("openlayers").Map;
-        olGroup?: import("openlayers").layer.Group;
-    }>;
+    static contextType: React.Context<import("../MapContext").IMapContext>;
     /**
      * Origin.
      */
@@ -80,5 +78,5 @@ export declare class PanZoom extends React.Component<IPanZoomProps, any> {
     renderPan(): any;
     renderZoom(): any;
     renderRotation(): any;
-    render(): any;
+    render(): React.ReactNode;
 }

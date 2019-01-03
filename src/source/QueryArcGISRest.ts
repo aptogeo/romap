@@ -1,19 +1,18 @@
 import OlEsriJSON from 'ol/format/EsriJSON';
-import { send, IResponse } from '../net';
+import { send, IResponse } from 'bhreq';
 import { AbstractExternalFeature } from './AbstractExternalFeature';
 
 export class QueryArcGISRest extends AbstractExternalFeature {
   protected where: string;
 
-  protected format: any;
+  private esriJSONFormat = new OlEsriJSON();
 
   constructor(options?: any) {
     super(options);
     this.where = options.where;
-    this.format = new OlEsriJSON();
   }
 
-  public load(extent: any, projectionCode: string) {
+  public load(extent: [number, number, number, number], projectionCode: string) {
     const srid = projectionCode.split(':').pop();
     const geometry = encodeURIComponent(
       `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${
@@ -25,7 +24,7 @@ export class QueryArcGISRest extends AbstractExternalFeature {
       url += `&where=${this.where}`;
     }
     return send({ url, contentType: 'application/json' }).then(
-      (response: IResponse) => this.format.readFeatures(response.body),
+      (response: IResponse) => this.esriJSONFormat.readFeatures(response.body),
       () => {
         console.error(`Request error ${url}`);
       }

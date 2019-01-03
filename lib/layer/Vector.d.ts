@@ -1,20 +1,19 @@
-import BaseLayer from 'ol/layer/Base';
-import { Base, IBaseProps } from './Base';
-export interface IVectorProps extends IBaseProps {
+import OlVectorLayer from 'ol/layer/Vector';
+import OlVectorSource from 'ol/source/Vector';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+export interface IVectorProps extends IBaseLayerProps {
     /**
      * Source.
      */
-    source: ol.source.Vector;
+    source: OlVectorSource;
     /**
      * Style.
      */
     style?: any;
 }
-export declare class Vector extends Base<IVectorProps, any> {
-    source: ol.source.Vector;
-    style: any;
-    createOlLayer(): BaseLayer;
-    checkProps(props: IVectorProps): void;
-    setSource(source: any): void;
+export declare class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, OlVectorSource> {
+    createOlLayer(): OlVectorLayer;
+    updateProps(prevProps: IVectorProps, nextProps: IVectorProps): void;
+    setSource(source: OlVectorSource): void;
     setStyle(style: any): void;
 }

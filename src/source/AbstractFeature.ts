@@ -1,10 +1,14 @@
-import OlLayer from 'ol/layer/Layer';
 import OlVector from 'ol/source/Vector';
 import OlFeature from 'ol/Feature';
-import { IExtended, IIdentifyRequest, IIdentifyResponse, IToc, ITocElement } from './IExtended';
+import OlGeoJSON from 'ol/format/GeoJSON';
+import booleanDisjoint from '@turf/boolean-disjoint';
+import { Geometry } from '@turf/helpers/lib/geojson';
+import { IExtended, IQueryRequest, IQueryResponse, IToc, ITocElement } from './IExtended';
 
 export abstract class AbstractFeature extends OlVector implements IExtended {
   protected label: string;
+
+  private queryGeoJSONFormat = new OlGeoJSON();
 
   constructor(options?: any) {
     super(options);
@@ -12,21 +16,20 @@ export abstract class AbstractFeature extends OlVector implements IExtended {
     this.label = options.label ? options.label : this.constructor.name;
   }
 
-  identify(request: IIdentifyRequest): Promise<IIdentifyResponse> {
-    const { olMap, layer, pixel, pixelTolerance, limit } = request;
+  query(request: IQueryRequest): Promise<IQueryResponse> {
+    const { olMap, geometry, geometryProjection, limit } = request;
     const features = [] as OlFeature[];
-    olMap.forEachFeatureAtPixel(
-      pixel,
-      (feature: OlFeature) => {
-        features.push(feature);
-      },
-      {
-        layerFilter: (l: OlLayer) => {
-          return layer === l;
-        },
-        hitTolerance: pixelTolerance
+    const destGeometry = geometry.transform(geometryProjection, olMap.getView().getProjection());
+    const extent = destGeometry.getExtent();
+    const jsonGeom = (this.queryGeoJSONFormat.writeGeometryObject(destGeometry) as any) as Geometry;
+    this.forEachFeatureIntersectingExtent(extent, (feature: OlFeature) => {
+      if (features.length < limit) {
+        const jsonResGeom = (this.queryGeoJSONFormat.writeGeometryObject(feature.getGeometry()) as any) as Geometry;
+        if (!booleanDisjoint(jsonResGeom, jsonGeom)) {
+          features.push(feature);
+        }
       }
-    );
+    });
     return Promise.resolve({
       request,
       features

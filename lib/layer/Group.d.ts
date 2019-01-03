@@ -1,18 +1,23 @@
 import * as React from 'react';
-import GroupLayer from 'ol/layer/Group';
-import BaseLayer from 'ol/layer/Base';
-import { Base, IBaseProps } from './Base';
-export interface IGroupProps extends IBaseProps {
+import OlGroupLayer from 'ol/layer/Group';
+import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+import { IMapContext } from '../MapContext';
+export interface IGroupProps extends IBaseLayerProps {
     /**
      * Content.
      */
     children: React.ReactElement<any> | Array<React.ReactElement<any>>;
 }
-export declare class Group extends Base<IGroupProps, any> {
-    static contextType: React.Context<{
-        olMap?: import("openlayers").Map;
-        olGroup?: GroupLayer;
-    }>;
-    createOlLayer(): BaseLayer;
-    render(): any;
+export interface IGroupState {
+    /**
+     * Group is ready ?.
+     */
+    readyGroup: boolean;
+}
+export declare class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, null> {
+    static contextType: React.Context<IMapContext>;
+    context: IMapContext;
+    constructor(props: IGroupProps);
+    createOlLayer(): OlGroupLayer;
+    render(): React.ReactNode;
 }

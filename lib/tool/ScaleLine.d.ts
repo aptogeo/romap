@@ -1,5 +1,6 @@
 import * as React from 'react';
-export interface IScaleLineProps {
+import { BaseTool, IBaseToolProps } from './BaseTool';
+export interface IScaleLineProps extends IBaseToolProps {
     /**
      * Class name.
      */
@@ -15,15 +16,12 @@ export interface IScaleLineProps {
         [key: string]: string;
     };
 }
-export declare class ScaleLine extends React.Component<IScaleLineProps, any> {
+export declare class ScaleLine extends BaseTool<IScaleLineProps, any> {
     static defaultProps: {
         className: string;
         minWidth: number;
     };
-    static contextType: React.Context<{
-        olMap?: import("openlayers").Map;
-        olGroup?: import("openlayers").layer.Group;
-    }>;
+    static contextType: React.Context<import("../MapContext").IMapContext>;
     /**
      * Div ScaleLine.
      */
@@ -40,5 +38,5 @@ export declare class ScaleLine extends React.Component<IScaleLineProps, any> {
     onViewChange: () => void;
     onResolutionChange: () => void;
     componentWillUnmount(): void;
-    render(): any;
+    render(): React.ReactNode;
 }

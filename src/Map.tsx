@@ -5,9 +5,9 @@ import { mapContext } from './MapContext';
 
 export interface IMapProps {
   /**
-   * Content.
+   * Children.
    */
-  children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
+  children?: React.ReactNode;
   /**
    * Class name.
    */
@@ -75,7 +75,7 @@ export class Map extends React.Component<IMapProps, {}> {
     }
   }
 
-  public render(): any {
+  public render(): React.ReactNode {
     return (
       <div className={this.props.className}>
         <div

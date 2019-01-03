@@ -12,21 +12,20 @@ export interface IImageProps extends IBaseLayerProps {
 }
 
 export class Image extends BaseLayer<IImageProps, {}, OlImageLayer, OlImageSource> {
-  public source: OlImageSource;
-
   public createOlLayer(): OlImageLayer {
     return new OlImageLayer();
   }
 
-  public checkProps(props: IImageProps) {
-    super.checkProps(props);
-    this.setSource(props.source);
+  public updateProps(prevProps: IImageProps, nextProps: IImageProps) {
+    super.updateProps(prevProps, nextProps);
+    if (prevProps.source !== nextProps.source) {
+      this.setSource(nextProps.source);
+    }
   }
 
   public setSource(source: OlImageSource) {
-    this.source = source;
-    if (this.source == null) {
-      this.source = undefined;
+    if (source == null) {
+      source = undefined;
     }
     this.getOlLayer().setSource(source);
   }

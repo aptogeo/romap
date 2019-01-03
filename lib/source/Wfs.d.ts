@@ -1,7 +1,7 @@
 import { AbstractExternalFeature } from './AbstractExternalFeature';
 export declare class Wfs extends AbstractExternalFeature {
     private typename;
-    private format;
+    private geoJSONFormat;
     constructor(options?: any);
-    load(extent: number[], projectionCode: string): Promise<any>;
+    load(extent: [number, number, number, number], projectionCode: string): Promise<void | import("openlayers").Feature[]>;
 }

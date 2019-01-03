@@ -287,7 +287,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     );
   }
 
-  public render(): any {
+  public render(): React.ReactNode {
     if (this.props.disable === true) {
       return null;
     }

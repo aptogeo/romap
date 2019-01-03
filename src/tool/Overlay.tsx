@@ -7,7 +7,7 @@ export interface IOverlayProps extends IBaseToolProps {
   /**
    * Content.
    */
-  children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
+  children?: React.ReactNode;
   /**
    * Positioning.
    */
@@ -119,7 +119,7 @@ export class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
     this.oldPositionY = this.props.position[1];
   }
 
-  public render(): any {
+  public render(): React.ReactNode {
     let children: React.ReactNodeArray = [];
     if (this.state.overlay != null) {
       children = this.getChildren();

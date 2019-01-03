@@ -17,11 +17,7 @@ declare module 'ol/Overlay' {
 }
 
 declare module 'ol/Feature' {
-  export default class extends ol.Feature {
-    public layerName: string;
-    public layerId: number;
-    public displayFieldName: string;
-  }
+  export default ol.Feature;
 }
 
 declare module 'ol/Observable' {
@@ -514,6 +510,9 @@ declare module 'ol/geom/Point' {
 
 declare module 'ol/geom/Polygon' {
   export default ol.geom.Polygon;
+  export function circular(sphere: ol.Sphere, center: ol.Coordinate, radius: number, opt_n?: number): ol.geom.Polygon;
+  export function fromExtent(extent: ol.Extent): ol.geom.Polygon;
+  export function fromCircle(circle: ol.geom.Circle, opt_sides?: number, opt_angle?: number): ol.geom.Polygon;
 }
 
 declare module 'ol/geom/SimpleGeometry' {
@@ -562,3 +561,5 @@ declare module 'ol/sphere' {
   export function getDistance(c1: ol.Coordinate[], c2: ol.Coordinate[], opt_radius: number): number;
   export function getLength(geometry: ol.geom.Geometry, opt_options: any): number;
 }
+
+declare module 'ol/extent';

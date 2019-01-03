@@ -1,31 +1,33 @@
 import OlMap from 'ol/Map';
-import Layer from 'ol/layer/Layer';
-import Source from 'ol/source/Source';
-import Feature from 'ol/Feature';
-export interface IExtended extends Source {
-    identify(identifyRequest: IIdentifyRequest): Promise<IIdentifyResponse>;
+import OlLayer from 'ol/layer/Layer';
+import OlSource from 'ol/source/Source';
+import OlFeature from 'ol/Feature';
+import OlGeometry from 'ol/geom/Geometry';
+import OlProjection from 'ol/proj/Projection';
+export interface IExtended extends OlSource {
+    query(identifyRequest: IQueryRequest): Promise<IQueryResponse>;
     getToc(): Promise<IToc>;
 }
-export interface IIdentifyRequest {
+export interface IQueryRequest {
     olMap: OlMap;
-    layer: Layer;
-    pixel: [number, number];
-    pixelTolerance: number;
+    layer: OlLayer;
+    geometry: OlGeometry;
+    geometryProjection: OlProjection;
     limit: number;
 }
-export interface IIdentifyResponse {
-    request: IIdentifyRequest;
-    features: Feature[];
+export interface IQueryResponse {
+    request: IQueryRequest;
+    features: OlFeature[];
 }
 export interface IToc {
-    tocElement: ITocElement[];
+    tocElements: ITocElement[];
 }
 export interface ITocElement {
     name: string;
-    tocElemenLegend: ITocElementLegend[];
-    tocElement: ITocElement[];
+    tocLegendElements?: ITocLegendElement[];
+    tocElements?: ITocElement[];
 }
-export interface ITocElementLegend {
+export interface ITocLegendElement {
     image: string;
     label: string;
 }

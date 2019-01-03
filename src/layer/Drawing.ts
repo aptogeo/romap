@@ -1,5 +1,4 @@
 import * as React from 'react';
-import OlBaseLayer from 'ol/layer/Base';
 import OlVectorLayer from 'ol/layer/Vector';
 import { LocalFeature } from '../source/LocalFeature';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
@@ -12,8 +11,6 @@ export interface IDrawingProps extends IBaseLayerProps {
 }
 
 export class Drawing extends BaseLayer<IDrawingProps, {}, OlVectorLayer, LocalFeature> {
-  public style: any;
-
   public createOlLayer(): OlVectorLayer {
     return new OlVectorLayer({
       source: new LocalFeature({
@@ -22,15 +19,16 @@ export class Drawing extends BaseLayer<IDrawingProps, {}, OlVectorLayer, LocalFe
     });
   }
 
-  public checkProps(props: IDrawingProps) {
-    super.checkProps(props);
-    this.setStyle(props.style);
+  public updateProps(prevProps: IDrawingProps, nextProps: IDrawingProps) {
+    super.updateProps(prevProps, nextProps);
+    if (prevProps.style != nextProps.style) {
+      this.setStyle(nextProps.style);
+    }
   }
 
   public setStyle(style: any) {
-    this.style = style;
-    if (this.style == null) {
-      this.style = undefined;
+    if (style == null) {
+      style = undefined;
     }
     this.getOlLayer().setStyle(style);
   }

@@ -128,7 +128,7 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
     this.context.olMap.un('change:view', this.onViewChange);
   }
 
-  public render(): any {
+  public render(): React.ReactNode {
     if (this.props.disable === true) {
       return null;
     }

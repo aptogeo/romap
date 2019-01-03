@@ -1,6 +1,6 @@
 import OlImageWMS from 'ol/source/ImageWMS';
 import OlFeature from 'ol/Feature';
-import { IExtended, IIdentifyRequest, IIdentifyResponse, IToc, ITocElement } from './IExtended';
+import { IExtended, IQueryRequest, IQueryResponse, IToc, ITocElement } from './IExtended';
 
 export class ImageWms extends OlImageWMS implements IExtended {
   protected label: string;
@@ -10,7 +10,7 @@ export class ImageWms extends OlImageWMS implements IExtended {
     this.label = options.label ? options.label : this.constructor.name;
   }
 
-  identify(request: IIdentifyRequest): Promise<IIdentifyResponse> {
+  query(request: IQueryRequest): Promise<IQueryResponse> {
     const features = [] as OlFeature[];
     return Promise.resolve({
       request,

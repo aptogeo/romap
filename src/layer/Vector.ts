@@ -16,32 +16,30 @@ export interface IVectorProps extends IBaseLayerProps {
 }
 
 export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, OlVectorSource> {
-  public source: OlVectorSource;
-
-  public style: any;
-
   public createOlLayer(): OlVectorLayer {
     return new OlVectorLayer();
   }
 
-  public checkProps(props: IVectorProps) {
-    super.checkProps(props);
-    this.setSource(props.source);
-    this.setStyle(props.style);
+  public updateProps(prevProps: IVectorProps, nextProps: IVectorProps) {
+    super.updateProps(prevProps, nextProps);
+    if (prevProps.source !== nextProps.source) {
+      this.setSource(nextProps.source);
+    }
+    if (prevProps.style != nextProps.style) {
+      this.setStyle(nextProps.style);
+    }
   }
 
   public setSource(source: OlVectorSource) {
-    this.source = source;
-    if (this.source == null) {
-      this.source = undefined;
+    if (source == null) {
+      source = undefined;
     }
     this.getOlLayer().setSource(source);
   }
 
   public setStyle(style: any) {
-    this.style = style;
-    if (this.style == null) {
-      this.style = undefined;
+    if (style == null) {
+      style = undefined;
     }
     this.getOlLayer().setStyle(style);
   }

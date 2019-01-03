@@ -1,12 +1,13 @@
+import OlProjection from 'ol/proj/Projection';
 import { AbstractFeature } from './AbstractFeature';
 export declare class LocalFeature extends AbstractFeature {
-    private savedFeatures;
-    private oldViewProjection;
-    private viewProjection;
-    private lastExtent;
-    private lastResolution;
-    private optionLoader;
-    private optionStrategy;
+    protected savedFeatures: any;
+    protected oldViewProjection: OlProjection;
+    protected viewProjection: OlProjection;
+    protected lastExtent: [number, number, number, number];
+    protected lastResolution: number;
+    protected optionLoader: (extent: [number, number, number, number], resolution: number, projection: OlProjection) => void;
+    protected optionStrategy: (extent: [number, number, number, number], resolution: number) => [number, number, number, number];
     constructor(options?: any);
     clearForReload(): void;
     clear(fast?: boolean): void;

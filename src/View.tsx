@@ -40,7 +40,7 @@ export class View extends React.Component<IViewProps, any> {
     this.context.olMap.setView(view);
   }
 
-  public render(): any {
+  public render(): React.ReactNode {
     return null;
   }
 }

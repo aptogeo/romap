@@ -11,8 +11,5 @@ export const source = _source;
 import * as _tool from './tool';
 export const tool = _tool;
 
-import * as _net from './net';
-export const net = _net;
-
 import * as _utils from './utils';
 export const utils = _utils;

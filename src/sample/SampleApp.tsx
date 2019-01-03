@@ -9,7 +9,7 @@ import './panzoom.css';
 import './scaleline.css';
 
 export class SampleApp extends React.Component {
-  public render(): any {
+  public render(): React.ReactNode {
     const wkt2154 =
       'PROJCS["RGF93 / Lambert-93",GEOGCS["RGF93",DATUM["Reseau_Geodesique_Francais_1993",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY["EPSG","6171"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4171"]],UNIT["metre",1,AUTHORITY["EPSG","9001"]],PROJECTION["Lambert_Conformal_Conic_2SP"],PARAMETER["standard_parallel_1",49],PARAMETER["standard_parallel_2",44],PARAMETER["latitude_of_origin",46.5],PARAMETER["central_meridian",3],PARAMETER["false_easting",700000],PARAMETER["false_northing",6600000],AUTHORITY["EPSG","2154"],AXIS["X",EAST],AXIS["Y",NORTH]]';
     const wkt27700 =
@@ -26,7 +26,7 @@ export class SampleApp extends React.Component {
 }
 
 class Maps extends React.Component {
-  public render(): any {
+  public render(): React.ReactNode {
     const world2D = new romap.source.TileArcGISRest({
       url: 'https://services.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer',
       projection: 'EPSG:3857'
@@ -59,7 +59,9 @@ class Maps extends React.Component {
         <romap.Map keyboardEventTarget={document}>
           <romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
           <romap.layer.Tile source={world2D} name="World 2D" />
-          <romap.layer.Image source={britishNationalGrid} name="British National Grid" />
+          <romap.layer.Group>
+            <romap.layer.Image source={britishNationalGrid} name="British National Grid" />
+          </romap.layer.Group>
           <romap.tool.Control>
             <romap.tool.PanZoom />
           </romap.tool.Control>

@@ -26,7 +26,7 @@ export class MapResizer extends BaseTool<IBaseToolProps, {}> {
     }
   };
 
-  public render(): any {
+  public render(): React.ReactNode {
     return null;
   }
 }

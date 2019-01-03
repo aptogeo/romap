@@ -7,7 +7,7 @@ export interface IControlProps extends IBaseToolProps {
   /**
    * Content.
    */
-  children?: React.ReactElement<BaseTool<any, any>> | Array<React.ReactElement<BaseTool<any, any>>>;
+  children?: React.ReactNode;
 }
 
 export interface IControlState {
@@ -57,7 +57,7 @@ export class Control extends BaseTool<IControlProps, IControlState> {
     });
   }
 
-  public render(): any {
+  public render(): React.ReactNode {
     let children: React.ReactNodeArray = [];
     if (this.state.control != null) {
       children = this.getChildren();

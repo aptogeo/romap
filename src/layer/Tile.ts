@@ -12,21 +12,20 @@ export interface ITileProps extends IBaseLayerProps {
 }
 
 export class Tile extends BaseLayer<ITileProps, {}, OlTileLayer, OlTileSource> {
-  public source: OlTileSource;
-
   public createOlLayer(): OlTileLayer {
     return new OlTileLayer();
   }
 
-  public checkProps(props: ITileProps) {
-    super.checkProps(props);
-    this.setSource(props.source);
+  public updateProps(prevProps: ITileProps, nextProps: ITileProps) {
+    super.updateProps(prevProps, nextProps);
+    if (prevProps.source !== nextProps.source) {
+      this.setSource(nextProps.source);
+    }
   }
 
   public setSource(source: OlTileSource) {
-    this.source = source;
-    if (this.source == null) {
-      this.source = undefined;
+    if (source == null) {
+      source = undefined;
     }
     this.getOlLayer().setSource(source);
   }
