@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MapChild } from '../RomapChild'
+import { MapChild } from '../RomapChild';
 
 export interface IBaseToolProps {
   active?: boolean;

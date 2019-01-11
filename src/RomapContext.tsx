@@ -15,7 +15,7 @@ export interface IInfoLayer {
   /**
    * Status.
    */
-  status: 'orig_add' | 'orig_del' | 'ext_add' | 'ext_del' | 'orig_modif_by_ext' | 'orig_del_by_ext' ;
+  status: 'orig_add' | 'orig_del' | 'ext_add' | 'ext_del' | 'orig_modif_by_ext' | 'orig_del_by_ext';
 }
 
 // Map context interface
@@ -39,4 +39,9 @@ export interface IMapContext {
 }
 
 // Map context
-export const mapContext = React.createContext<IMapContext>({ olMap: null, olGroup: null, infoLayers: null, setInfoLayer: (infoLayer: IInfoLayer) => { } });
+export const mapContext = React.createContext<IMapContext>({
+  olMap: null,
+  olGroup: null,
+  infoLayers: null,
+  setInfoLayer: (infoLayer: IInfoLayer) => {}
+});

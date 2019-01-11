@@ -7,7 +7,6 @@ import { MapChild } from './RomapChild';
 import { Projection } from './Projection';
 import { mountInfoLayers, updateInfoLayers, setInfoLayerInMap } from './utils';
 
-
 export interface IMapProps {
   /**
    * Children.
@@ -86,7 +85,7 @@ export class Romap extends React.Component<IMapProps, IMapState> {
     if (changed) {
       this.setState({ infoLayers });
     }
-  }
+  };
 
   public stopPropagationForComponents() {
     // Stop event propagation for components
@@ -110,7 +109,11 @@ export class Romap extends React.Component<IMapProps, IMapState> {
   public renderLayers(): React.ReactElement<BaseLayer<any, any, any, any>>[] {
     const elems: React.ReactElement<BaseLayer<any, any, any, any>>[] = [];
     this.state.infoLayers.forEach((infoLayer: IInfoLayer) => {
-      if (infoLayer.status === 'orig_add' || infoLayer.status === 'ext_add' || infoLayer.status === 'orig_modif_by_ext') {
+      if (
+        infoLayer.status === 'orig_add' ||
+        infoLayer.status === 'ext_add' ||
+        infoLayer.status === 'orig_modif_by_ext'
+      ) {
         const props = { ...infoLayer.reactBaseLayerProps, key: infoLayer.reactBaseLayerProps.id };
         elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, props));
       }
@@ -121,7 +124,11 @@ export class Romap extends React.Component<IMapProps, IMapState> {
   public renderChildren(): React.ReactNode {
     const elems: React.ReactElement<MapChild<any, any>>[] = [];
     React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
-      if (MapChild.isPrototypeOf(child.type) && !BaseLayer.isPrototypeOf(child.type) && !Projection.isPrototypeOf(child.type)) {
+      if (
+        MapChild.isPrototypeOf(child.type) &&
+        !BaseLayer.isPrototypeOf(child.type) &&
+        !Projection.isPrototypeOf(child.type)
+      ) {
         elems.push(child);
       }
     });

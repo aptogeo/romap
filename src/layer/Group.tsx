@@ -17,8 +17,8 @@ export interface IGroupState {
    */
   readyGroup: boolean;
   /**
-     * Info layers.
-     */
+   * Info layers.
+   */
   infoLayers: Map<string, IInfoLayer>;
 }
 
@@ -59,7 +59,7 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
     if (changed) {
       this.setState({ infoLayers });
     }
-  }
+  };
 
   public render(): React.ReactNode {
     if (!this.state.readyGroup) {

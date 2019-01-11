@@ -3,7 +3,7 @@ import OlBaseLayer from 'ol/layer/Base';
 import OlSource from 'ol/source/Source';
 import { isEqual } from 'lodash';
 import { walk } from '../utils';
-import { MapChild } from '../RomapChild'
+import { MapChild } from '../RomapChild';
 import { mapContext, IMapContext } from '../RomapContext';
 
 let globalOrder = 0;
@@ -39,12 +39,10 @@ export interface IBaseLayerProps {
   opacity?: number;
 }
 
-export class BaseLayer<
-  P extends IBaseLayerProps,
-  S,
-  OLL extends OlBaseLayer,
-  OLS extends OlSource
-> extends MapChild<P, S> {
+export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OLS extends OlSource> extends MapChild<
+  P,
+  S
+> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public context: IMapContext;

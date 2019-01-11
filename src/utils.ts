@@ -4,7 +4,7 @@ import OlGroupLayer from 'ol/layer/Group';
 import OlBaseLayer from 'ol/layer/Base';
 import OlView from 'ol/View';
 import { isEqual } from 'lodash';
-import {  IInfoLayer } from './RomapContext';
+import { IInfoLayer } from './RomapContext';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
 
 /**
@@ -47,7 +47,6 @@ export function cloneView(view: OlView) {
     resolutions: view.getResolutions()
   });
 }
-
 
 export function mountInfoLayers(infoLayers: Map<string, IInfoLayer>, children: React.ReactNode) {
   if (children) {
