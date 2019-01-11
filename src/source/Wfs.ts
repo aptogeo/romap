@@ -10,6 +10,7 @@ export class Wfs extends AbstractExternalFeature {
   constructor(options?: any) {
     super(options);
     this.typename = options.typename;
+    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public load(extent: [number, number, number, number], projectionCode: string) {

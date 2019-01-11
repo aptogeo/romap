@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { MapChild } from '../RomapChild'
 
 export interface IBaseToolProps {
   active?: boolean;
   disable?: boolean;
 }
 
-export class BaseTool<P extends IBaseToolProps, S> extends React.Component<P, S> {
+export class BaseTool<P extends IBaseToolProps, S> extends MapChild<P, S> {
   public getChildren(): React.ReactNodeArray {
     let children: React.ReactNodeArray = [];
     if (this.props.children) {

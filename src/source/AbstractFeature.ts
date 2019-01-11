@@ -1,9 +1,11 @@
 import OlVector from 'ol/source/Vector';
 import OlFeature from 'ol/Feature';
+import { fromCircle } from 'ol/geom/Polygon';
+import Circle from 'ol/geom/Circle';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import booleanDisjoint from '@turf/boolean-disjoint';
 import { Geometry } from '@turf/helpers/lib/geojson';
-import { IExtended, IQueryRequest, IQueryResponse, IToc, ITocElement } from './IExtended';
+import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
 
 export abstract class AbstractFeature extends OlVector implements IExtended {
   protected label: string;
@@ -19,7 +21,10 @@ export abstract class AbstractFeature extends OlVector implements IExtended {
   query(request: IQueryRequest): Promise<IQueryResponse> {
     const { olMap, geometry, geometryProjection, limit } = request;
     const features = [] as OlFeature[];
-    const destGeometry = geometry.transform(geometryProjection, olMap.getView().getProjection());
+    let destGeometry = geometry.transform(geometryProjection, olMap.getView().getProjection());
+    if (destGeometry.getType() === 'Circle') {
+      destGeometry = fromCircle(geometry as Circle);
+    }
     const extent = destGeometry.getExtent();
     const jsonGeom = (this.queryGeoJSONFormat.writeGeometryObject(destGeometry) as any) as Geometry;
     this.forEachFeatureIntersectingExtent(extent, (feature: OlFeature) => {
@@ -37,12 +42,6 @@ export abstract class AbstractFeature extends OlVector implements IExtended {
   }
 
   getToc(): Promise<IToc> {
-    const tocElements: ITocElement[] = [];
-    tocElements.push({
-      name: this.label,
-      tocElements: null,
-      tocLegendElements: null
-    });
-    return Promise.resolve<IToc>({ tocElements });
+    return Promise.resolve<IToc>({ tocElements: null });
   }
 }

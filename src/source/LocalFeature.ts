@@ -68,6 +68,7 @@ export class LocalFeature extends AbstractFeature {
     this.viewProjection = null;
     this.oldViewProjection = null;
     this.savedFeatures = null;
+    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public clearForReload() {

@@ -10,6 +10,7 @@ export class QueryArcGISRest extends AbstractExternalFeature {
   constructor(options?: any) {
     super(options);
     this.where = options.where;
+    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public load(extent: [number, number, number, number], projectionCode: string) {

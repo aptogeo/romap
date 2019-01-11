@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mapContext } from '../MapContext';
+import { mapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 export class MapResizer extends BaseTool<IBaseToolProps, {}> {

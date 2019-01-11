@@ -3,15 +3,16 @@ import OlBaseLayer from 'ol/layer/Base';
 import OlSource from 'ol/source/Source';
 import { isEqual } from 'lodash';
 import { walk } from '../utils';
-import { mapContext, IMapContext } from '../MapContext';
+import { MapChild } from '../RomapChild'
+import { mapContext, IMapContext } from '../RomapContext';
 
 let globalOrder = 0;
 
 export interface IBaseLayerProps {
   /**
-   * Id.
+   * Unique id.
    */
-  id?: string;
+  id: string;
   /**
    * Name.
    */
@@ -43,7 +44,7 @@ export class BaseLayer<
   S,
   OLL extends OlBaseLayer,
   OLS extends OlSource
-> extends React.Component<P, S> {
+> extends MapChild<P, S> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public context: IMapContext;
@@ -106,7 +107,7 @@ export class BaseLayer<
     if (prevProps.order !== nextProps.order || prevProps.type !== nextProps.type) {
       this.setOrder(nextProps.order, nextProps.type);
     }
-    this.setProps(nextProps);
+    this.setReactProps(nextProps);
   }
 
   public internalRemoveEvents() {
@@ -191,8 +192,8 @@ export class BaseLayer<
     this.olLayer.setExtent(extent);
   }
 
-  public setProps(props: P) {
-    this.olLayer.set('props', props, false);
+  public setReactProps(props: P) {
+    this.olLayer.set('reactProps', props, false);
   }
 
   private handleBaseLayerPropertychange = (event: any) => {

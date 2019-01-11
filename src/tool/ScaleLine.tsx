@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { getPointResolution } from 'ol/proj';
-import { mapContext } from '../MapContext';
+import { mapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 const LEADING_DIGITS = [1, 2, 5];

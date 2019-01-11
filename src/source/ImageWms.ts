@@ -1,6 +1,6 @@
 import OlImageWMS from 'ol/source/ImageWMS';
 import OlFeature from 'ol/Feature';
-import { IExtended, IQueryRequest, IQueryResponse, IToc, ITocElement } from './IExtended';
+import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
 
 export class ImageWms extends OlImageWMS implements IExtended {
   protected label: string;
@@ -19,12 +19,6 @@ export class ImageWms extends OlImageWMS implements IExtended {
   }
 
   getToc(): Promise<IToc> {
-    const tocElements: ITocElement[] = [];
-    tocElements.push({
-      name: this.label,
-      tocElements: null,
-      tocLegendElements: null
-    });
-    return Promise.resolve<IToc>({ tocElements });
+    return Promise.resolve<IToc>({ tocElements: null });
   }
 }

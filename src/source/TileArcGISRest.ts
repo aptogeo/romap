@@ -1,6 +1,6 @@
 import OlTileArcGISRest from 'ol/source/TileArcGISRest';
 import OlFeature from 'ol/Feature';
-import { IExtended, IQueryRequest, IQueryResponse, IToc, ITocElement } from './IExtended';
+import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
 
 export class TileArcGISRest extends OlTileArcGISRest implements IExtended {
   protected label: string;
@@ -19,12 +19,6 @@ export class TileArcGISRest extends OlTileArcGISRest implements IExtended {
   }
 
   getToc(): Promise<IToc> {
-    const tocElements: ITocElement[] = [];
-    tocElements.push({
-      name: this.label,
-      tocElements: null,
-      tocLegendElements: null
-    });
-    return Promise.resolve<IToc>({ tocElements });
+    return Promise.resolve<IToc>({ tocElements: null });
   }
 }

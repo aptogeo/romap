@@ -1,6 +1,6 @@
 import * as React from 'react';
 import OlControl from 'ol/control/Control';
-import { mapContext } from '../MapContext';
+import { mapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 export interface IControlProps extends IBaseToolProps {

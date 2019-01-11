@@ -56,11 +56,11 @@ class Maps extends React.Component {
 
     return (
       <div className="maps">
-        <romap.Map keyboardEventTarget={document}>
+        <romap.Romap keyboardEventTarget={document}>
           <romap.View center={[490000, 6800000]} zoom={5} projection="EPSG:2154" />
-          <romap.layer.Tile source={world2D} name="World 2D" />
-          <romap.layer.Group>
-            <romap.layer.Image source={britishNationalGrid} name="British National Grid" />
+          <romap.layer.Tile id="World 2D" source={world2D} name="World 2D" />
+          <romap.layer.Group id="Grp1">
+            <romap.layer.Image id="British National Grid" source={britishNationalGrid} name="British National Grid" />
           </romap.layer.Group>
           <romap.tool.Control>
             <romap.tool.PanZoom />
@@ -68,11 +68,12 @@ class Maps extends React.Component {
           <romap.tool.Control>
             <romap.tool.ScaleLine />
           </romap.tool.Control>
-        </romap.Map>
-        <romap.Map keyboardEventTarget={document}>
+        </romap.Romap>
+        <romap.Romap keyboardEventTarget={document}>
           <romap.View center={[508000, 6000000]} zoom={5} />
-          <romap.layer.Image source={landsatSource} name="Land sat" />
+          <romap.layer.Image id="Land sat" source={landsatSource} name="Land sat" />
           <romap.layer.Vector
+            id="States Provinces Lines"
             source={statesProvincesLinesSource}
             style={
               new Style({
@@ -90,7 +91,7 @@ class Maps extends React.Component {
           <romap.tool.Control>
             <romap.tool.ScaleLine />
           </romap.tool.Control>
-        </romap.Map>
+        </romap.Romap>
       </div>
     );
   }
