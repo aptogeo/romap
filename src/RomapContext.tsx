@@ -1,17 +1,17 @@
 import * as React from 'react';
 import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
-import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
+import { IBaseLayerProps } from './layer/BaseLayer';
 
 export interface IInfoLayer {
   /**
    * React BaseLayer Element.
    */
-  reactBaseLayerElement: React.ReactElement<BaseLayer<any, any, any, any>>;
+  reactBaseLayerElement: React.ReactElement<IBaseLayerProps>;
   /**
-   * React BaseLayer Props.
+   * Id.
    */
-  reactBaseLayerProps: IBaseLayerProps;
+  id: string;
   /**
    * Parent layer id.
    */

@@ -46,7 +46,8 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
-    type: 'OVERLAY'
+    type: 'OVERLAY',
+    visible: true
   };
 
   public context: IMapContext;
@@ -211,8 +212,8 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
         if (currentOlLayer.get('type') === 'BASE' && currentOlLayer !== this.olLayer) {
           const mapContext = currentOlLayer.get('mapContext') as IMapContext;
           const infoLayer = mapContext.getInfoLayer(currentOlLayer.get('id'));
-          if (infoLayer.reactBaseLayerProps.visible) {
-            infoLayer.reactBaseLayerProps.visible = false;
+          if (infoLayer.reactBaseLayerElement.props.visible) {
+            infoLayer.reactBaseLayerElement.props.visible = false;
             mapContext.setInfoLayer(infoLayer);
           }
         }

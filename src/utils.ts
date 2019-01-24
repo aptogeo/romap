@@ -4,10 +4,8 @@ import OlGroupLayer from 'ol/layer/Group';
 import OlBaseLayer from 'ol/layer/Base';
 import OlView from 'ol/View';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
-import { isEqual } from 'lodash';
 import { IInfoLayer } from './RomapContext';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
-import { any } from 'prop-types';
 
 /**
  * Walk recursivly.
@@ -92,8 +90,9 @@ export function mountInfoLayers(
         const props = child.props as IBaseLayerProps;
         setInfoLayer({
           reactBaseLayerElement: child,
-          reactBaseLayerProps: props,
+          //reactBaseLayerProps: props,
           status: 'orig_add',
+          id: props.id,
           parentId
         });
       }
@@ -115,8 +114,9 @@ export function updateInfoLayers(
         setInfoLayer(
           {
             reactBaseLayerElement: child,
-            reactBaseLayerProps: props,
+            //reactBaseLayerProps: props,
             status: 'orig_del',
+            id: props.id,
             parentId: prevParentId
           },
           false
@@ -130,8 +130,9 @@ export function updateInfoLayers(
         const props = child.props as IBaseLayerProps;
         setInfoLayer({
           reactBaseLayerElement: child,
-          reactBaseLayerProps: props,
+          //reactBaseLayerProps: props,
           status: 'orig_add',
+          id: props.id,
           parentId: nextParentId
         });
       }

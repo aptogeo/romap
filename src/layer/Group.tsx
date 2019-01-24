@@ -47,16 +47,15 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
     return new OlGroupLayer();
   }
 
-  public renderLayers(): React.ReactElement<BaseLayer<any, any, any, any>>[] {
-    const elems: React.ReactElement<BaseLayer<any, any, any, any>>[] = [];
+  public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
+    const elems: React.ReactElement<IBaseLayerProps>[] = [];
     this.context.getInfoLayers(this.props.id).forEach((infoLayer: IInfoLayer) => {
       if (
         infoLayer.status === 'orig_add' ||
         infoLayer.status === 'ext_add' ||
         infoLayer.status === 'orig_modif_by_ext'
       ) {
-        const props = { ...infoLayer.reactBaseLayerProps, key: infoLayer.reactBaseLayerProps.id };
-        elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, props));
+        elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
       }
     });
     return elems;

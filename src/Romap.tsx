@@ -133,21 +133,21 @@ export class Romap extends React.Component<IMapProps, IMapState> {
   public setInfoLayer = (infoLayer: IInfoLayer, setStateIfChanging: boolean = true) => {
     const infoLayers = this.state.infoLayers;
     let changed = false;
-    const found = infoLayers.get(infoLayer.reactBaseLayerProps.id);
+    const found = infoLayers.get(infoLayer.id);
     if (!found) {
-      infoLayers.set(infoLayer.reactBaseLayerProps.id, {
+      infoLayers.set(infoLayer.id, {
         ...infoLayer,
         status: 'ext_add'
       });
       changed = true;
     } else if (found.status === 'orig_add' || found.status === 'orig_modif_by_ext') {
-      infoLayers.set(infoLayer.reactBaseLayerProps.id, {
+      infoLayers.set(infoLayer.id, {
         ...infoLayer,
         status: 'orig_modif_by_ext'
       });
       changed = true;
     } else if (infoLayer.status === 'ext_add') {
-      infoLayers.set(infoLayer.reactBaseLayerProps.id, {
+      infoLayers.set(infoLayer.id, {
         ...infoLayer,
         status: 'ext_add'
       });
@@ -198,23 +198,22 @@ export class Romap extends React.Component<IMapProps, IMapState> {
     }
   }
 
-  public renderLayers(): React.ReactElement<BaseLayer<any, any, any, any>>[] {
-    const elems: React.ReactElement<BaseLayer<any, any, any, any>>[] = [];
+  public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
+    const elems: React.ReactElement<IBaseLayerProps>[] = [];
     this.getInfoLayers().forEach((infoLayer: IInfoLayer) => {
       if (
         infoLayer.status === 'orig_add' ||
         infoLayer.status === 'ext_add' ||
         infoLayer.status === 'orig_modif_by_ext'
       ) {
-        const props = { ...infoLayer.reactBaseLayerProps, key: infoLayer.reactBaseLayerProps.id };
-        elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, props));
+        elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
       }
     });
     return elems;
   }
 
   public renderNonLayers(): React.ReactNode {
-    const elems: React.ReactElement<MapChild<any, any>>[] = [];
+    const elems: React.ReactElement<IBaseLayerProps>[] = [];
     React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
       if (
         MapChild.isPrototypeOf(child.type) &&
