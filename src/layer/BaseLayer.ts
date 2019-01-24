@@ -1,10 +1,10 @@
 import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
 import OlSource from 'ol/source/Source';
-import { isEqual } from 'lodash';
 import { walk } from '../utils';
 import { MapChild } from '../RomapChild';
 import { mapContext, IMapContext } from '../RomapContext';
+import { jsonEqual } from '../utils';
 
 let globalOrder = 0;
 
@@ -20,7 +20,7 @@ export interface IBaseLayerProps {
   /**
    * type: BASE or OVERLAY.
    */
-  type?: string;
+  type?: 'BASE' | 'OVERLAY';
   /**
    * Extent.
    */
@@ -44,6 +44,10 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
   S
 > {
   public static contextType: React.Context<IMapContext> = mapContext;
+
+  public static defaultProps = {
+    type: 'OVERLAY'
+  };
 
   public context: IMapContext;
 
@@ -84,6 +88,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
   }
 
   public updateProps(prevProps: P, nextProps: P) {
+    this.setContext(this.context);
     if (prevProps.id !== nextProps.id) {
       this.setId(nextProps.id);
     }
@@ -99,7 +104,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     if (prevProps.opacity !== nextProps.opacity) {
       this.setOpacity(nextProps.opacity);
     }
-    if (!isEqual(prevProps.extent, nextProps.extent)) {
+    if (!jsonEqual(prevProps.extent, nextProps.extent)) {
       this.setExtent(nextProps.extent);
     }
     if (prevProps.order !== nextProps.order || prevProps.type !== nextProps.type) {
@@ -133,6 +138,10 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     if ('setSource' in this.olLayer) {
       return (this.olLayer as any).setSource(olSource);
     }
+  }
+
+  public setContext(mapContext: IMapContext) {
+    this.olLayer.set('mapContext', mapContext);
   }
 
   public setId(id: string) {
@@ -200,7 +209,12 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     if (key === 'visible' && value === true && this.props.type === 'BASE') {
       walk(this.context.olMap, (currentOlLayer: any) => {
         if (currentOlLayer.get('type') === 'BASE' && currentOlLayer !== this.olLayer) {
-          currentOlLayer.setVisible(false);
+          const mapContext = currentOlLayer.get('mapContext') as IMapContext;
+          const infoLayer = mapContext.getInfoLayer(currentOlLayer.get('id'));
+          if (infoLayer.reactBaseLayerProps.visible) {
+            infoLayer.reactBaseLayerProps.visible = false;
+            mapContext.setInfoLayer(infoLayer);
+          }
         }
         return true;
       });

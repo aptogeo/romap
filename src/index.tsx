@@ -1,5 +1,4 @@
 export * from './Romap';
-export * from './View';
 export * from './Projection';
 
 import * as _layer from './layer';

@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { mapContext } from '../RomapContext';
+import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 export class MapResizer extends BaseTool<IBaseToolProps, {}> {
-  public static contextType = mapContext;
+  public static contextType: React.Context<IMapContext> = mapContext;
+
+  public context: IMapContext;
 
   constructor(props: {}) {
     super(props);

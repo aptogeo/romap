@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { getPointResolution } from 'ol/proj';
-import { mapContext } from '../RomapContext';
+import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 const LEADING_DIGITS = [1, 2, 5];
@@ -14,19 +14,17 @@ export interface IScaleLineProps extends IBaseToolProps {
    * Min Width name.
    */
   minWidth?: number;
-  /**
-   * Internationalization
-   */
-  i18n?: { [key: string]: string };
 }
 
 export class ScaleLine extends BaseTool<IScaleLineProps, any> {
+  public static contextType: React.Context<IMapContext> = mapContext;
+
   public static defaultProps = {
     className: 'scaleline',
     minWidth: 64
   };
 
-  public static contextType = mapContext;
+  public context: IMapContext;
 
   /**
    * Div ScaleLine.
@@ -132,8 +130,7 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
     if (this.props.disable === true) {
       return null;
     }
-    const { i18n } = this.props;
-    const scanlineTitle = i18n && i18n.scanlineTitle ? i18n.scanlineTitle : 'Diagonal distance in map center';
+    const scanlineTitle = this.context.getLocalizedText('scanlineTitle', 'Diagonal distance in map center');
     return (
       <div
         ref={divScaleLine => {

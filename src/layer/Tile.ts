@@ -1,5 +1,4 @@
 import * as React from 'react';
-import OlBaseLayer from 'ol/layer/Base';
 import OlTileLayer from 'ol/layer/Tile';
 import OlTileSource from 'ol/source/Tile';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';

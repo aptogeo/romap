@@ -1,6 +1,6 @@
 import * as React from 'react';
 import OlControl from 'ol/control/Control';
-import { mapContext } from '../RomapContext';
+import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 export interface IControlProps extends IBaseToolProps {
@@ -18,7 +18,9 @@ export interface IControlState {
 }
 
 export class Control extends BaseTool<IControlProps, IControlState> {
-  public static contextType = mapContext;
+  public static contextType: React.Context<IMapContext> = mapContext;
+
+  public context: IMapContext;
 
   /**
    * Control div.

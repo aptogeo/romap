@@ -1,4 +1,3 @@
-import { isEqual, assign } from 'lodash';
 import OlFeature from 'ol/Feature';
 import OlProjection from 'ol/proj/Projection';
 import { AbstractFeature } from './AbstractFeature';
@@ -11,11 +10,11 @@ export class AbstractExternalFeature extends AbstractFeature {
   private extent: [number, number, number, number];
 
   constructor(options?: any) {
-    const opt = {};
-    assign(opt, options, {
+    super({
+      ...options,
       loader: (extent: [number, number, number, number], resolution: number, projection: OlProjection) => {
         const projectionCode = projection.getCode();
-        if (!isEqual(this.projectionCode, projectionCode)) {
+        if (this.projectionCode !== projectionCode) {
           this.projectionCode = projectionCode;
           this.extent = null;
           this.clear();
@@ -47,7 +46,6 @@ export class AbstractExternalFeature extends AbstractFeature {
         return [extent];
       }
     });
-    super(opt);
     this.projectionCode = null;
     this.loadedFeatures = null;
   }

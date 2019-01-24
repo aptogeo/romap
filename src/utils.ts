@@ -3,9 +3,11 @@ import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
 import OlBaseLayer from 'ol/layer/Base';
 import OlView from 'ol/View';
+import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import { isEqual } from 'lodash';
 import { IInfoLayer } from './RomapContext';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
+import { any } from 'prop-types';
 
 /**
  * Walk recursivly.
@@ -48,90 +50,91 @@ export function cloneView(view: OlView) {
   });
 }
 
-export function mountInfoLayers(infoLayers: Map<string, IInfoLayer>, children: React.ReactNode) {
+/**
+ * Reverse coordinates.
+ * @param {OlSimpleGeometry} geometry
+ */
+export function revertCoordinate(geometry: OlSimpleGeometry) {
+  return geometry.applyTransform((input: number[], ouput: number[], dimension: number) => {
+    for (let i = 0; i < input.length; i += dimension) {
+      const y = input[i];
+      const x = input[i + 1];
+      ouput[i] = x;
+      ouput[i + 1] = y;
+    }
+    return ouput;
+  });
+}
+
+/**
+ * Perform JSON equal.
+ * @param obj1 object 1
+ * @param obj2 object 2
+ */
+export function jsonEqual(obj1: any, obj2: any): boolean {
+  if (obj1 === obj2) {
+    return true;
+  }
+  if (obj1 == null || obj2 == null) {
+    return false;
+  }
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
+export function mountInfoLayers(
+  setInfoLayer: (infoLayer: IInfoLayer, setStateIfChanging?: boolean) => void,
+  children: React.ReactNode,
+  parentId: string
+) {
   if (children) {
     React.Children.map(children, (child: React.ReactElement<any>) => {
       if (BaseLayer.isPrototypeOf(child.type)) {
         const props = child.props as IBaseLayerProps;
-        infoLayers.set(props.id, {
+        setInfoLayer({
           reactBaseLayerElement: child,
           reactBaseLayerProps: props,
-          status: 'orig_add'
+          status: 'orig_add',
+          parentId
         });
       }
     });
   }
 }
 
-export function updateInfoLayers(infoLayers: Map<string, IInfoLayer>, children: React.ReactNode): boolean {
-  infoLayers.forEach((infoLayer, id) => {
-    if (infoLayer.status === 'orig_add') {
-      infoLayer.status = 'orig_del';
-    }
-  });
-  let changed = false;
-  if (children) {
-    React.Children.map(children, (child: React.ReactElement<any>) => {
+export function updateInfoLayers(
+  setInfoLayer: (infoLayer: IInfoLayer, setStateIfChanging?: boolean) => void,
+  prevChildren: React.ReactNode,
+  nextChildren: React.ReactNode,
+  prevParentId: string,
+  nextParentId: string
+) {
+  if (prevChildren) {
+    React.Children.map(prevChildren, (child: React.ReactElement<any>) => {
       if (BaseLayer.isPrototypeOf(child.type)) {
         const props = child.props as IBaseLayerProps;
-        const current = infoLayers.get(props.id);
-        if (!current) {
-          infoLayers.set(props.id, {
+        setInfoLayer(
+          {
             reactBaseLayerElement: child,
             reactBaseLayerProps: props,
-            status: 'orig_add'
-          });
-          changed = true;
-        } else {
-          current.status = 'orig_add';
-          if (!isEqual(props, current.reactBaseLayerProps)) {
-            changed = true;
-          }
-        }
+            status: 'orig_del',
+            parentId: prevParentId
+          },
+          false
+        );
       }
     });
   }
-  infoLayers.forEach((infoLayer, id) => {
-    if (infoLayer.status === 'orig_del') {
-      infoLayers.delete(id);
-      changed = true;
-    }
-  });
-  return changed;
-}
-
-export function setInfoLayerInMap(infoLayers: Map<string, IInfoLayer>, infoLayer: IInfoLayer): boolean {
-  let changed = false;
-  const current = infoLayers.get(infoLayer.reactBaseLayerProps.id);
-  if (!current) {
-    infoLayers.set(infoLayer.reactBaseLayerProps.id, {
-      ...infoLayer,
-      status: 'ext_add'
+  if (nextChildren) {
+    React.Children.map(nextChildren, (child: React.ReactElement<any>) => {
+      if (BaseLayer.isPrototypeOf(child.type)) {
+        const props = child.props as IBaseLayerProps;
+        setInfoLayer({
+          reactBaseLayerElement: child,
+          reactBaseLayerProps: props,
+          status: 'orig_add',
+          parentId: nextParentId
+        });
+      }
     });
-    changed = true;
-  } else {
-    if (infoLayer.status === 'ext_add' && current.status === 'orig_add') {
-      infoLayers.set(infoLayer.reactBaseLayerProps.id, {
-        ...infoLayer,
-        status: 'orig_modif_by_ext'
-      });
-      changed = true;
-    } else if (infoLayer.status === 'ext_add' && current.status === 'ext_add') {
-      infoLayers.set(infoLayer.reactBaseLayerProps.id, {
-        ...infoLayer,
-        status: 'ext_add'
-      });
-      changed = true;
-    } else if (infoLayer.status === 'ext_del' && current.status === 'orig_add') {
-      infoLayers.set(infoLayer.reactBaseLayerProps.id, {
-        ...infoLayer,
-        status: 'orig_del_by_ext'
-      });
-      changed = true;
-    } else if (infoLayer.status === 'ext_del' && current.status === 'ext_add') {
-      infoLayers.delete(infoLayer.reactBaseLayerProps.id);
-      changed = true;
-    }
   }
-  return changed;
 }

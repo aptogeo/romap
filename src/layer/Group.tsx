@@ -2,13 +2,13 @@ import * as React from 'react';
 import OlGroupLayer from 'ol/layer/Group';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 import { mapContext, IMapContext, IInfoLayer } from '../RomapContext';
-import { mountInfoLayers, updateInfoLayers, setInfoLayerInMap } from '../utils';
+import { mountInfoLayers, updateInfoLayers } from '../utils';
 
 export interface IGroupProps extends IBaseLayerProps {
   /**
    * Content.
    */
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export interface IGroupState {
@@ -19,7 +19,7 @@ export interface IGroupState {
   /**
    * Info layers.
    */
-  infoLayers: Map<string, IInfoLayer>;
+  //infoLayers: Map<string, IInfoLayer>;
 }
 
 export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, null> {
@@ -29,22 +29,16 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
 
   public constructor(props: IGroupProps) {
     super(props);
-    this.state = { readyGroup: false, infoLayers: new Map<string, IInfoLayer>() };
+    this.state = { readyGroup: false };
   }
 
   public componentDidMount() {
-    const infoLayers = new Map<string, IInfoLayer>();
-    mountInfoLayers(infoLayers, this.props.children);
-    this.setState({ infoLayers });
+    mountInfoLayers(this.context.setInfoLayer, this.props.children, this.props.id);
     super.componentDidMount();
   }
 
   public componentDidUpdate(prevProps: IGroupProps) {
-    const infoLayers = new Map<string, IInfoLayer>(this.state.infoLayers);
-    const changed = updateInfoLayers(infoLayers, this.props.children);
-    if (changed) {
-      this.setState({ infoLayers });
-    }
+    updateInfoLayers(this.context.setInfoLayer, prevProps.children, this.props.children, null, null);
     super.componentDidUpdate(prevProps);
   }
 
@@ -53,13 +47,20 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
     return new OlGroupLayer();
   }
 
-  public setInfoLayer = (infoLayer: IInfoLayer) => {
-    const infoLayers = new Map<string, IInfoLayer>(this.state.infoLayers);
-    const changed = setInfoLayerInMap(infoLayers, infoLayer);
-    if (changed) {
-      this.setState({ infoLayers });
-    }
-  };
+  public renderLayers(): React.ReactElement<BaseLayer<any, any, any, any>>[] {
+    const elems: React.ReactElement<BaseLayer<any, any, any, any>>[] = [];
+    this.context.getInfoLayers(this.props.id).forEach((infoLayer: IInfoLayer) => {
+      if (
+        infoLayer.status === 'orig_add' ||
+        infoLayer.status === 'ext_add' ||
+        infoLayer.status === 'orig_modif_by_ext'
+      ) {
+        const props = { ...infoLayer.reactBaseLayerProps, key: infoLayer.reactBaseLayerProps.id };
+        elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, props));
+      }
+    });
+    return elems;
+  }
 
   public render(): React.ReactNode {
     if (!this.state.readyGroup) {
@@ -69,13 +70,12 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
       <div>
         <mapContext.Provider
           value={{
+            ...this.context,
             olMap: this.context.olMap,
-            olGroup: this.getOlLayer(),
-            infoLayers: this.context.infoLayers,
-            setInfoLayer: this.setInfoLayer
+            olGroup: this.getOlLayer()
           }}
         >
-          {this.props.children}
+          {this.renderLayers()}
         </mapContext.Provider>
       </div>
     );

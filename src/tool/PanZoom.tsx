@@ -2,7 +2,7 @@ import * as React from 'react';
 import OlView from 'ol/View';
 import { inAndOut } from 'ol/easing';
 import { cloneView } from '../utils';
-import { mapContext } from '../RomapContext';
+import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 export interface IPanZoomProps extends IBaseToolProps {
@@ -30,13 +30,11 @@ export interface IPanZoomProps extends IBaseToolProps {
    * Show Rotation
    */
   showRotation?: boolean;
-  /**
-   * Internationalization
-   */
-  i18n?: { [key: string]: string };
 }
 
 export class PanZoom extends BaseTool<IPanZoomProps, any> {
+  public static contextType: React.Context<IMapContext> = mapContext;
+
   public static defaultProps = {
     className: 'panzoom',
     showZoom: true,
@@ -46,7 +44,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     showRotation: true
   };
 
-  public static contextType = mapContext;
+  public context: IMapContext;
 
   /**
    * Origin.
@@ -203,12 +201,11 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     if (!this.props.showPan) {
       return null;
     }
-    const { i18n } = this.props;
-    const upTitle = i18n && i18n.upTitle ? i18n.upTitle : 'Pan up';
-    const downTitle = i18n && i18n.downTitle ? i18n.downTitle : 'Pan down';
-    const rightTitle = i18n && i18n.rightTitle ? i18n.rightTitle : 'Pan right';
-    const leftTitle = i18n && i18n.leftTitle ? i18n.leftTitle : 'Pan left';
-    const originTitle = i18n && i18n.originTitle ? i18n.originTitle : 'Zoom origin';
+    const upTitle = this.context.getLocalizedText('upTitle', 'Pan up');
+    const downTitle = this.context.getLocalizedText('downTitle', 'Pan down');
+    const rightTitle = this.context.getLocalizedText('rightTitle', 'Pan right');
+    const leftTitle = this.context.getLocalizedText('leftTitle', 'Pan left');
+    const originTitle = this.context.getLocalizedText('originTitle', 'Zoom origin');
     let origin = null;
     if (this.props.showOrigin) {
       origin = <button className={`${this.props.className}-origin`} onClick={this.handleOrigin} title={originTitle} />;
@@ -230,9 +227,8 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     if (!this.props.showZoom) {
       return null;
     }
-    const { i18n } = this.props;
-    const zoomTitle = i18n && i18n.zoomTitle ? i18n.zoomTitle : 'Zoom in';
-    const unzoomTitle = i18n && i18n.unzoomTitle ? i18n.unzoomTitle : 'Zoom out';
+    const zoomTitle = this.context.getLocalizedText('zoomTitle', 'Zoom in');
+    const unzoomTitle = this.context.getLocalizedText('unzoomTitle', 'Zoom out');
     let slider = null;
     if (this.props.showZoomSlider) {
       slider = (
@@ -264,8 +260,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     if (!this.props.showRotation) {
       return null;
     }
-    const { i18n } = this.props;
-    const rotateTitle = i18n && i18n.rotateTitle ? i18n.rotateTitle : 'Set map orientation to north up';
+    const rotateTitle = this.context.getLocalizedText('rotateTitle', 'Set map orientation to north up');
     return (
       <div>
         <button

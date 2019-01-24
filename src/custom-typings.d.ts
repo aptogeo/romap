@@ -3,7 +3,9 @@ declare module 'ol' {
 }
 
 declare module 'ol/Map' {
-  export default ol.Map;
+  export default class extends ol.Map {
+    getOverlayContainer(): HTMLElement;
+  }
 }
 
 declare module 'ol/View' {

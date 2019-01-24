@@ -1,6 +1,6 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
-import { mapContext } from '../RomapContext';
+import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 export interface IOverlayProps extends IBaseToolProps {
@@ -30,12 +30,14 @@ export interface IOverlayState {
 }
 
 export class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
+  public static contextType: React.Context<IMapContext> = mapContext;
+
   public static defaultProps = {
     positioning: 'top-left',
     autoPan: false
   };
 
-  public static contextType = mapContext;
+  public context: IMapContext;
 
   /**
    * Overlay div.
