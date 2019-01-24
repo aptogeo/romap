@@ -23,9 +23,12 @@ export class Toc extends BaseTool<ITocProps, any> {
     const infoLayer = this.context.getInfoLayer(id);
     if (infoLayer) {
       const visible = !infoLayer.reactBaseLayerElement.props.visible;
-      this.context.setInfoLayer({...infoLayer, reactBaseLayerElement: React.cloneElement(infoLayer.reactBaseLayerElement, { visible })});
+      this.context.setInfoLayer({
+        ...infoLayer,
+        reactBaseLayerElement: React.cloneElement(infoLayer.reactBaseLayerElement, { visible })
+      });
     }
-  }
+  };
 
   public renderBaseList(parentId: string = null): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
@@ -61,7 +64,12 @@ export class Toc extends BaseTool<ITocProps, any> {
         const subOverlayTree = this.renderOverlayTree(infoLayer.id);
         overlayTree.push(
           <div key={infoLayer.id}>
-            <input type="checkbox" checked={infoLayer.reactBaseLayerElement.props.visible} onChange={this.handleCheckboxChange} data-id={infoLayer.id} />
+            <input
+              type="checkbox"
+              checked={infoLayer.reactBaseLayerElement.props.visible}
+              onChange={this.handleCheckboxChange}
+              data-id={infoLayer.id}
+            />
             <label>{infoLayer.reactBaseLayerElement.props.name}</label>
             {subOverlayTree}
           </div>
