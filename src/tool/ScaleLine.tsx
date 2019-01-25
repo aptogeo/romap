@@ -1,7 +1,68 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { getPointResolution } from 'ol/proj';
 import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
+
+const Container = styled.div`
+  top: 15px;
+  left: 15px;
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  background-color: rgba(213, 213, 213, 0.61);
+  border-style: solid;
+  border-color: rgba(172, 172, 172, 0.61);
+  border-width: 1px;
+  border-radius: 5px;
+  color: #242424;
+  box-shadow: none;
+`;
+
+const Inner = styled.div`
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  height: 4px;
+`;
+
+const Parts = styled.div`
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+`;
+
+const Part1 = styled.div`
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  height: 4px;
+  width: 50%;
+  background-color: #333;
+`;
+
+const Part2 = styled.div`
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  height: 4px;
+  width: 50%;
+  background-color: #555;
+`;
+
+const Label = styled.div`
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  margin-left: 4px;
+  text-align: center;
+  vertical-align: bottom;
+  font-weight: 400;
+  font-size: 12px;
+`;
+
 
 const LEADING_DIGITS = [1, 2, 5];
 
@@ -132,31 +193,31 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
     }
     const scanlineTitle = this.context.getLocalizedText('scanlineTitle', 'Diagonal distance in map center');
     return (
-      <div
+      <Container
         ref={divScaleLine => {
           this.divScaleLine = divScaleLine;
         }}
         className={`${this.props.className} ol-unselectable ol-control`}
         title={scanlineTitle}
       >
-        <div
+        <Inner
           ref={divScaleLineInner => {
             this.divScaleLineInner = divScaleLineInner;
           }}
           className={`${this.props.className}-inner`}
         >
-          <div className={`${this.props.className}-parts`}>
-            <div className={`${this.props.className}-part1`} />
-            <div className={`${this.props.className}-part2`} />
-          </div>
-        </div>
-        <div
+          <Parts className={`${this.props.className}-parts`}>
+            <Part1 className={`${this.props.className}-part1`} />
+            <Part2 className={`${this.props.className}-part2`} />
+          </Parts>
+        </Inner>
+        <Label
           ref={divScaleLineLabel => {
             this.divScaleLineLabel = divScaleLineLabel;
           }}
           className={`${this.props.className}-label`}
         />
-      </div>
+      </Container>
     );
   }
 }

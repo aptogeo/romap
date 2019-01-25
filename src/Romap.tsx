@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
@@ -7,6 +8,39 @@ import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
 import { MapChild } from './RomapChild';
 import { Projection } from './Projection';
 import { mountInfoLayers, updateInfoLayers } from './utils';
+
+const GlobalStyle = createGlobalStyle`
+  .ol-unsupported {
+    display: none;
+  }
+
+  .ol-viewport, .ol-unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
+  .ol-selectable {
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+
+  .ol-control {
+    position: absolute;
+  }
+
+  .ol-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s linear 0s, visibility 0s linear 0.25s;
+  }
+`
 
 export interface IMapProps {
   /**
@@ -17,6 +51,14 @@ export interface IMapProps {
    * Class name.
    */
   className?: string;
+  /**
+   * Style.
+   */
+  style?: React.CSSProperties;
+  /**
+   * Style.
+   */
+  olMapStyle?: React.CSSProperties;
   /**
    * Keyboard Event Target.
    */
@@ -229,12 +271,16 @@ export class Romap extends React.Component<IMapProps, IMapState> {
 
   public render(): React.ReactNode {
     return (
-      <div className={this.props.className}>
+      <div className={this.props.className} style={this.props.style}
+      >
+        <GlobalStyle />
         <div
           ref={divMap => {
             this.divMap = divMap;
           }}
           className={`${this.props.className}-olmap`}
+          style={this.props.olMapStyle}
+
         />
         <mapContext.Provider
           value={{

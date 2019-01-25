@@ -4,11 +4,6 @@ import ImageStatic from 'ol/source/ImageStatic';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 
-import './sample.css';
-import './panzoom.css';
-import './scaleline.css';
-import './toc.css';
-
 export class SampleApp extends React.Component {
   public render(): React.ReactNode {
     const wkt2154 =
@@ -56,8 +51,8 @@ class Maps extends React.Component {
     });
 
     return (
-      <div className="maps">
-        <romap.Romap keyboardEventTarget={document} center={[490000, 6800000]} zoom={5} projection="EPSG:2154">
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <romap.Romap keyboardEventTarget={document} center={[490000, 6800000]} zoom={5} projection="EPSG:2154" style={{ flex: '1 1 0' }} olMapStyle={{ height: 600 }}>
           <romap.layer.Tile id="World 2D" source={world2D} name="World 2D" />
           <romap.layer.Group id="Grp1" name="Groupe 1">
             <romap.layer.Image id="British National Grid" source={britishNationalGrid} name="British National Grid" />
@@ -72,7 +67,7 @@ class Maps extends React.Component {
             <romap.tool.Toc />
           </romap.tool.Control>
         </romap.Romap>
-        <romap.Romap keyboardEventTarget={document} center={[508000, 6000000]} zoom={5}>
+        <romap.Romap keyboardEventTarget={document} center={[508000, 6000000]} zoom={5} style={{ flex: '1 1 0' }} olMapStyle={{ height: 600 }}>
           <romap.layer.Image id="Land sat" source={landsatSource} name="Land sat" />
           <romap.layer.Vector
             id="States Provinces Lines"

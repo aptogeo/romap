@@ -5,6 +5,140 @@ import { cloneView } from '../utils';
 import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
+`
+.panzoom {
+  top: 50px;
+  left: 15px;
+  width: 96px;
+}
+
+.panzoom button {
+  height: 32px;
+  width: 32px;
+  background-color: rgba(213, 213, 213, 0.61);
+  border-style: solid;
+  border-color: rgba(172, 172, 172, 0.61);
+  color: #242424;
+  box-shadow: none;
+}
+
+button.panzoom-up {
+  display: block;
+  margin-left: 32px;
+  border-width: 1px 1px 0px 1px !important;
+  border-radius: 5px 5px 0px 0px !important;
+}
+
+button.panzoom-up:after {
+  content: '↑';
+}
+
+button.panzoom-left {
+  display: inline;
+  margin-left: 0px;
+  border-width: 1px 0px 1px 1px !important;
+  border-radius: 5px 0px 0px 5px !important;
+}
+
+button.panzoom-left:after {
+  content: '←';
+}
+
+.panzoom-origin {
+  display: inline;
+  border-width: 0px !important;
+  border-radius: 0px !important;
+}
+
+button.panzoom-origin:after {
+  content: '⤢';
+}
+
+button.panzoom-noorigin {
+  display: inline;
+  border-width: 0px !important;
+  border-radius: 0px !important;
+}
+
+button.panzoom-noorigin:after {
+  content: '·';
+}
+
+button.panzoom-right {
+  display: inline;
+  border-width: 1px 1px 1px 0px !important;
+  border-radius: 0px 5px 5px 0px !important;
+}
+
+button.panzoom-right:after {
+  content: '→';
+}
+
+button.panzoom-down {
+  display: block;
+  margin-left: 32px;
+  border-width: 0px 1px 1px 1px !important;
+  border-radius: 0px 0px 5px 5px !important;
+}
+
+button.panzoom-down:after {
+  content: '↓';
+}
+
+button.panzoom-zoom {
+  display: block;
+  margin-top: 2px;
+  margin-left: 32px;
+  border-width: 1px 1px 0px 1px !important;
+  border-radius: 5px 5px 0px 0px !important;
+}
+
+button.panzoom-zoom:after {
+  content: '+';
+}
+
+button.panzoom-unzoom {
+  display: block;
+  margin-left: 32px;
+  border-width: 0px 1px 1px 1px !important;
+  border-radius: 0px 0px 5px 5px !important;
+}
+
+button.panzoom-unzoom:after {
+  content: '-';
+}
+
+div.panzoom-zoom-slider {
+  margin-left: 32px;
+  width: 30px;
+  height: 100px;
+  background-color: rgba(213, 213, 213, 0.61);
+  border-style: solid;
+  border-color: rgba(172, 172, 172, 0.61);
+  border-width: 1px 1px 1px 1px !important;
+}
+
+button.panzoom-zoom-slider-thumb {
+  position: relative;
+  width: 28px !important;
+  left: 1px !important;
+  height: 10px !important;
+  background-color: #242424 !important;
+}
+
+button.panzoom-rotate {
+  display: block;
+  margin-top: 2px;
+  margin-left: 32px;
+  border-width: 1px 1px 1px 1px !important;
+  border-radius: 5px 5px 5px 5px !important;
+}
+
+span.panzoom-span-rotate:after {
+  content: '⇑';
+}
+`
+
 export interface IPanZoomProps extends IBaseToolProps {
   /**
    * Class name.

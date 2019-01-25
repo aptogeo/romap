@@ -1,6 +1,14 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
+
+const Container = styled.div`
+  top: 15px;
+  right: 15px;
+  width: 200px;
+  background-color: white;
+`;
 
 export interface ITocProps extends IBaseToolProps {
   /**
@@ -84,10 +92,10 @@ export class Toc extends BaseTool<ITocProps, any> {
       return null;
     }
     return (
-      <div className={`${this.props.className} ol-unselectable ol-control`}>
+      <Container className={`${this.props.className} ol-unselectable ol-control`}>
         {this.renderBaseList()}
         {this.renderOverlayTree()}
-      </div>
+      </Container>
     );
   }
 }
