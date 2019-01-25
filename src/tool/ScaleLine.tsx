@@ -63,7 +63,6 @@ const Label = styled.div`
   font-size: 12px;
 `;
 
-
 const LEADING_DIGITS = [1, 2, 5];
 
 export interface IScaleLineProps extends IBaseToolProps {

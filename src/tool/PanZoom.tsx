@@ -137,7 +137,7 @@ button.panzoom-rotate {
 span.panzoom-span-rotate:after {
   content: '⇑';
 }
-`
+`;
 
 export interface IPanZoomProps extends IBaseToolProps {
   /**

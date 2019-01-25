@@ -40,7 +40,7 @@ const GlobalStyle = createGlobalStyle`
     visibility: hidden;
     transition: opacity 0.25s linear 0s, visibility 0s linear 0.25s;
   }
-`
+`;
 
 export interface IMapProps {
   /**
@@ -271,8 +271,7 @@ export class Romap extends React.Component<IMapProps, IMapState> {
 
   public render(): React.ReactNode {
     return (
-      <div className={this.props.className} style={this.props.style}
-      >
+      <div className={this.props.className} style={this.props.style}>
         <GlobalStyle />
         <div
           ref={divMap => {
@@ -280,7 +279,6 @@ export class Romap extends React.Component<IMapProps, IMapState> {
           }}
           className={`${this.props.className}-olmap`}
           style={this.props.olMapStyle}
-
         />
         <mapContext.Provider
           value={{
