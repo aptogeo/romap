@@ -10,6 +10,18 @@ const Container = styled.div`
   background-color: white;
 `;
 
+const SpanParentSubTree = styled.span`
+  ::after {
+    margin-left: 10px;
+    margin-botom: 2px;
+    content: '▶';
+  }
+`;
+
+const DivSubTree = styled.div`
+  margin-left: 20px;
+`;
+
 export interface ITocProps extends IBaseToolProps {
   /**
    * Class name.
@@ -64,24 +76,42 @@ export class Toc extends BaseTool<ITocProps, any> {
   public renderOverlayTree(parentId: string = null): React.ReactNodeArray {
     const overlayTree: React.ReactNodeArray = [];
     const infoLayers = this.context.getInfoLayers(parentId);
-    if (infoLayers == null) {
+    if (infoLayers == null || infoLayers.length === 0) {
       return null;
     }
     infoLayers.forEach(infoLayer => {
       if (infoLayer.reactBaseLayerElement.props.type === 'OVERLAY') {
         const subOverlayTree = this.renderOverlayTree(infoLayer.id);
-        overlayTree.push(
-          <div key={infoLayer.id}>
-            <input
-              type="checkbox"
-              checked={infoLayer.reactBaseLayerElement.props.visible}
-              onChange={this.handleCheckboxChange}
-              data-id={infoLayer.id}
-            />
-            <label>{infoLayer.reactBaseLayerElement.props.name}</label>
-            {subOverlayTree}
-          </div>
-        );
+        if (subOverlayTree == null) {
+          overlayTree.push(
+            <div key={infoLayer.id}>
+              <input
+                type="checkbox"
+                checked={infoLayer.reactBaseLayerElement.props.visible}
+                onChange={this.handleCheckboxChange}
+                data-id={infoLayer.id}
+              />
+              <label>{infoLayer.reactBaseLayerElement.props.name}</label>
+            </div>
+          );
+        } else {
+          overlayTree.push(
+            <div key={infoLayer.id}>
+              <SpanParentSubTree>
+                <input
+                  type="checkbox"
+                  checked={infoLayer.reactBaseLayerElement.props.visible}
+                  onChange={this.handleCheckboxChange}
+                  data-id={infoLayer.id}
+                />
+                <label>{infoLayer.reactBaseLayerElement.props.name}</label>
+              </SpanParentSubTree>
+              <DivSubTree>
+                {subOverlayTree}
+              </DivSubTree>
+            </div>
+          );
+        }
       }
     });
     return overlayTree;
