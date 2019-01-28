@@ -2,7 +2,6 @@ import * as React from 'react';
 import OlGroupLayer from 'ol/layer/Group';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 import { mapContext, IMapContext, IInfoLayer } from '../RomapContext';
-import { mountInfoLayers, updateInfoLayers } from '../utils';
 
 export interface IGroupProps extends IBaseLayerProps {
   /**
@@ -33,12 +32,12 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
   }
 
   public componentDidMount() {
-    mountInfoLayers(this.context.setInfoLayer, this.props.children, this.props.id);
+    this.context.infoLayerManager.mountInfoLayers(this.props.children, this.props.id);
     super.componentDidMount();
   }
 
   public componentDidUpdate(prevProps: IGroupProps) {
-    updateInfoLayers(this.context.setInfoLayer, prevProps.children, this.props.children, null, null);
+    this.context.infoLayerManager.updateInfoLayers(prevProps.children, this.props.children, null, null);
     super.componentDidUpdate(prevProps);
   }
 
@@ -49,14 +48,8 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
 
   public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
     const elems: React.ReactElement<IBaseLayerProps>[] = [];
-    this.context.getInfoLayers(this.props.id).forEach((infoLayer: IInfoLayer) => {
-      if (
-        infoLayer.status === 'orig_add' ||
-        infoLayer.status === 'ext_add' ||
-        infoLayer.status === 'orig_modif_by_ext'
-      ) {
+    this.context.infoLayerManager.getInfoLayers(infoLayer => infoLayer.parentId == this.props.id).forEach((infoLayer: IInfoLayer) => {
         elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
-      }
     });
     return elems;
   }
@@ -70,7 +63,6 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
         <mapContext.Provider
           value={{
             ...this.context,
-            olMap: this.context.olMap,
             olGroup: this.getOlLayer()
           }}
         >

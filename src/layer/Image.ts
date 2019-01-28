@@ -17,7 +17,7 @@ export class Image extends BaseLayer<IImageProps, {}, OlImageLayer, OlImageSourc
 
   public updateProps(prevProps: IImageProps, nextProps: IImageProps) {
     super.updateProps(prevProps, nextProps);
-    if (prevProps.source !== nextProps.source) {
+    if (prevProps == null || prevProps.source !== nextProps.source) {
       this.setSource(nextProps.source);
     }
   }

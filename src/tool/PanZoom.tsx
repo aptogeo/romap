@@ -214,14 +214,15 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
         return;
       }
       const rotation = viewState.rotation;
-      console.log(rotation);
-      if (rotation != null && rotation !== 0) {
-        this.buttonRotate.style.display = '';
-        const transform = 'rotate(' + rotation + 'rad)';
-        this.divRotate.style.webkitTransform = transform;
-        this.divRotate.style.transform = transform;
-      } else {
-        this.buttonRotate.style.display = 'none';
+      if (this.buttonRotate != null) {
+        if (rotation != null && rotation !== 0) {
+          this.buttonRotate.style.display = '';
+          const transform = 'rotate(' + rotation + 'rad)';
+          this.divRotate.style.webkitTransform = transform;
+          this.divRotate.style.transform = transform;
+        } else {
+          this.buttonRotate.style.display = 'none';
+        }
       }
     });
   }

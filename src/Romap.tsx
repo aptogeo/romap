@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
@@ -7,7 +7,8 @@ import { mapContext, IInfoLayer } from './RomapContext';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
 import { MapChild } from './RomapChild';
 import { Projection } from './Projection';
-import { mountInfoLayers, updateInfoLayers } from './utils';
+import { InfoLayerManager, InfoLayerManagerState } from './InfoLayerManager';
+
 
 const GlobalStyle = createGlobalStyle`
   .ol-unsupported {
@@ -85,14 +86,7 @@ export interface IMapProps {
   projection?: OlProjection | string;
 }
 
-export interface IMapState {
-  /**
-   * Info layers.
-   */
-  infoLayers: Map<string, IInfoLayer>;
-}
-
-export class Romap extends React.Component<IMapProps, IMapState> {
+export class Romap extends InfoLayerManager<IMapProps, InfoLayerManagerState> {
   public static defaultProps = {
     className: 'map'
   };
@@ -124,12 +118,11 @@ export class Romap extends React.Component<IMapProps, IMapState> {
     });
     this.olMap.setView(this.olView);
     this.stopPropagationForComponents();
-    this.state = { infoLayers: new Map<string, IInfoLayer>() };
   }
 
   public componentDidMount() {
     this.olMap.setTarget(this.divMap);
-    mountInfoLayers(this.setInfoLayer, this.props.children, null);
+    this.mountInfoLayers(this.props.children, null);
     // View
     const view = new OlView({
       center: this.props.center,
@@ -142,7 +135,7 @@ export class Romap extends React.Component<IMapProps, IMapState> {
   }
 
   public componentDidUpdate(prevProps: IMapProps) {
-    updateInfoLayers(this.setInfoLayer, prevProps.children, this.props.children, null, null);
+    this.updateInfoLayers(prevProps.children, this.props.children, null, null);
     // View
     const view = new OlView({
       center: this.props.center,
@@ -153,73 +146,6 @@ export class Romap extends React.Component<IMapProps, IMapState> {
     });
     this.olMap.setView(view);
   }
-
-  public getInfoLayers = (parentId: string = null) => {
-    const infoLayers: IInfoLayer[] = [];
-    this.state.infoLayers.forEach((infoLayer, id) => {
-      if (infoLayer.parentId === parentId) {
-        infoLayers.push(infoLayer);
-      }
-    });
-    return infoLayers;
-  };
-
-  public getInfoLayer = (id: string, parentId?: string) => {
-    const infoLayer = this.state.infoLayers.get(id);
-    if (parentId) {
-      return infoLayer.parentId === parentId ? infoLayer : null;
-    }
-    return infoLayer;
-  };
-
-  public setInfoLayer = (infoLayer: IInfoLayer, setStateIfChanging: boolean = true) => {
-    const infoLayers = this.state.infoLayers;
-    let changed = false;
-    const found = infoLayers.get(infoLayer.id);
-    if (!found) {
-      infoLayers.set(infoLayer.id, {
-        ...infoLayer,
-        status: 'ext_add'
-      });
-      changed = true;
-    } else if (found.status === 'orig_add' || found.status === 'orig_modif_by_ext') {
-      infoLayers.set(infoLayer.id, {
-        ...infoLayer,
-        status: 'orig_modif_by_ext'
-      });
-      changed = true;
-    } else if (infoLayer.status === 'ext_add') {
-      infoLayers.set(infoLayer.id, {
-        ...infoLayer,
-        status: 'ext_add'
-      });
-      changed = true;
-    }
-    if (setStateIfChanging && changed) {
-      this.setState({ infoLayers });
-    }
-  };
-
-  public deleteInfoLayer = (id: string, setStateIfChanging: boolean = true) => {
-    const infoLayers = this.state.infoLayers;
-    let changed = false;
-    const found = infoLayers.get(id);
-    if (found) {
-      if (found.status === 'orig_add' || found.status === 'orig_modif_by_ext') {
-        infoLayers.set(id, {
-          ...found,
-          status: 'orig_del_by_ext'
-        });
-        changed = true;
-      } else {
-        infoLayers.delete(id);
-        changed = true;
-      }
-    }
-    if (setStateIfChanging && changed) {
-      this.setState({ infoLayers });
-    }
-  };
 
   public stopPropagationForComponents() {
     // Stop event propagation for components
@@ -242,14 +168,8 @@ export class Romap extends React.Component<IMapProps, IMapState> {
 
   public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
     const elems: React.ReactElement<IBaseLayerProps>[] = [];
-    this.getInfoLayers().forEach((infoLayer: IInfoLayer) => {
-      if (
-        infoLayer.status === 'orig_add' ||
-        infoLayer.status === 'ext_add' ||
-        infoLayer.status === 'orig_modif_by_ext'
-      ) {
+    this.getInfoLayers(infoLayer => infoLayer.parentId == null).forEach((infoLayer: IInfoLayer) => {
         elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
-      }
     });
     return elems;
   }
@@ -265,7 +185,6 @@ export class Romap extends React.Component<IMapProps, IMapState> {
         elems.push(child);
       }
     });
-    elems.push(...this.renderLayers());
     return elems;
   }
 
@@ -284,10 +203,7 @@ export class Romap extends React.Component<IMapProps, IMapState> {
           value={{
             olMap: this.olMap,
             olGroup: this.olMap.getLayerGroup(),
-            getInfoLayers: this.getInfoLayers,
-            getInfoLayer: this.getInfoLayer,
-            setInfoLayer: this.setInfoLayer,
-            deleteInfoLayer: this.deleteInfoLayer,
+            infoLayerManager: this,
             getLocalizedText: (code: string, defaultText: string) => {
               return defaultText;
             }

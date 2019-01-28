@@ -60,7 +60,8 @@ class Maps extends React.Component {
           style={{ flex: '1 1 0' }}
           olMapStyle={{ height: 600 }}
         >
-          <romap.layer.Tile id="World 2D" source={world2D} name="World 2D" />
+          <romap.layer.Tile id="World 2D" source={world2D} name="World 2D" type="BASE" visible={true}/>
+          <romap.layer.Image id="Land sat" source={landsatSource} name="Land sat" type="BASE" />
           <romap.layer.Group id="Grp1" name="Groupe 1">
             <romap.layer.Image id="British National Grid" source={britishNationalGrid} name="British National Grid" />
           </romap.layer.Group>

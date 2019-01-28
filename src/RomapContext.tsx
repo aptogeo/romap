@@ -2,6 +2,7 @@ import * as React from 'react';
 import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
 import { IBaseLayerProps } from './layer/BaseLayer';
+import { InfoLayerManager } from './InfoLayerManager';
 
 export interface IInfoLayer {
   /**
@@ -25,29 +26,17 @@ export interface IInfoLayer {
 // Map context interface
 export interface IMapContext {
   /**
-   * OpenLayers map.
+   * OpenLayers map
    */
   olMap: OlMap;
   /**
-   * OpenLayers group.
+   * OpenLayers group
    */
   olGroup: OlGroupLayer;
   /**
-   * Get infoLayers
+   * InfoLayer Manager
    */
-  getInfoLayers: (parentId?: string) => IInfoLayer[];
-  /**
-   * Get infoLayer
-   */
-  getInfoLayer: (id: string, parentId?: string) => IInfoLayer;
-  /**
-   * Set infoLayer
-   */
-  setInfoLayer: (infoLayer: IInfoLayer, setStateIfChanging?: boolean) => void;
-  /**
-   * Delete infoLayer
-   */
-  deleteInfoLayer: (id: string, setStateIfChanging?: boolean) => void;
+  infoLayerManager: InfoLayerManager<any, any>;
   /**
    * Get localized text
    */
@@ -58,14 +47,7 @@ export interface IMapContext {
 export const mapContext = React.createContext<IMapContext>({
   olMap: null,
   olGroup: null,
-  getInfoLayers: (parentId?: string) => {
-    return [];
-  },
-  getInfoLayer: (id: string, parentId?: string) => {
-    return null;
-  },
-  setInfoLayer: (infoLayer: IInfoLayer, setStateIfChanging?: boolean) => {},
-  deleteInfoLayer: (id: string, setStateIfChanging?: boolean) => {},
+  infoLayerManager: null,
   getLocalizedText: (code: string, defaultText: string) => {
     return defaultText;
   }

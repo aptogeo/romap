@@ -21,10 +21,10 @@ export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, OlVectorS
 
   public updateProps(prevProps: IVectorProps, nextProps: IVectorProps) {
     super.updateProps(prevProps, nextProps);
-    if (prevProps.source !== nextProps.source) {
+    if (prevProps == null || prevProps.source !== nextProps.source) {
       this.setSource(nextProps.source);
     }
-    if (prevProps.style != nextProps.style) {
+    if (prevProps == null || prevProps.style != nextProps.style) {
       this.setStyle(nextProps.style);
     }
   }

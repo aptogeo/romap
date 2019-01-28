@@ -41,7 +41,7 @@ export class Heatmap extends BaseLayer<IHeatmapProps, {}, OlHeatmapLayer, OlVect
 
   public updateProps(prevProps: IHeatmapProps, nextProps: IHeatmapProps) {
     super.updateProps(prevProps, nextProps);
-    if (prevProps.source !== nextProps.source) {
+    if (prevProps == null || prevProps.source !== nextProps.source) {
       this.setSource(nextProps.source);
     }
   }

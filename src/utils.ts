@@ -17,6 +17,9 @@ export function walk(
   fn: (layer: OlBaseLayer, idx: number, parent: OlGroupLayer) => boolean
 ) {
   const group = top instanceof OlMap ? top.getLayerGroup() : top;
+  if (group == null) {
+    return;
+  }
   group.getLayers().forEach((layer: OlBaseLayer, idx: number) => {
     if (layer) {
       const cont = fn(layer, idx, group);
@@ -77,65 +80,4 @@ export function jsonEqual(obj1: any, obj2: any): boolean {
     return false;
   }
   return JSON.stringify(obj1) === JSON.stringify(obj2);
-}
-
-export function mountInfoLayers(
-  setInfoLayer: (infoLayer: IInfoLayer, setStateIfChanging?: boolean) => void,
-  children: React.ReactNode,
-  parentId: string
-) {
-  if (children) {
-    React.Children.map(children, (child: React.ReactElement<any>) => {
-      if (BaseLayer.isPrototypeOf(child.type)) {
-        const props = child.props as IBaseLayerProps;
-        setInfoLayer({
-          reactBaseLayerElement: child,
-          //reactBaseLayerProps: props,
-          status: 'orig_add',
-          id: props.id,
-          parentId
-        });
-      }
-    });
-  }
-}
-
-export function updateInfoLayers(
-  setInfoLayer: (infoLayer: IInfoLayer, setStateIfChanging?: boolean) => void,
-  prevChildren: React.ReactNode,
-  nextChildren: React.ReactNode,
-  prevParentId: string,
-  nextParentId: string
-) {
-  if (prevChildren) {
-    React.Children.map(prevChildren, (child: React.ReactElement<any>) => {
-      if (BaseLayer.isPrototypeOf(child.type)) {
-        const props = child.props as IBaseLayerProps;
-        setInfoLayer(
-          {
-            reactBaseLayerElement: child,
-            //reactBaseLayerProps: props,
-            status: 'orig_del',
-            id: props.id,
-            parentId: prevParentId
-          },
-          false
-        );
-      }
-    });
-  }
-  if (nextChildren) {
-    React.Children.map(nextChildren, (child: React.ReactElement<any>) => {
-      if (BaseLayer.isPrototypeOf(child.type)) {
-        const props = child.props as IBaseLayerProps;
-        setInfoLayer({
-          reactBaseLayerElement: child,
-          //reactBaseLayerProps: props,
-          status: 'orig_add',
-          id: props.id,
-          parentId: nextParentId
-        });
-      }
-    });
-  }
 }

@@ -17,7 +17,7 @@ export class Tile extends BaseLayer<ITileProps, {}, OlTileLayer, OlTileSource> {
 
   public updateProps(prevProps: ITileProps, nextProps: ITileProps) {
     super.updateProps(prevProps, nextProps);
-    if (prevProps.source !== nextProps.source) {
+    if (prevProps == null || prevProps.source !== nextProps.source) {
       this.setSource(nextProps.source);
     }
   }

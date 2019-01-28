@@ -38,29 +38,30 @@ export class Toc extends BaseTool<ITocProps, any> {
 
   public context: IMapContext;
 
-  public handleCheckboxChange = (e: React.ChangeEvent) => {
+  public handleRadioChange = (e: React.ChangeEvent) => {
     const id = e.currentTarget.getAttribute('data-id');
-    const infoLayer = this.context.getInfoLayer(id);
-    if (infoLayer) {
-      const visible = !infoLayer.reactBaseLayerElement.props.visible;
-      this.context.setInfoLayer({
-        ...infoLayer,
-        reactBaseLayerElement: React.cloneElement(infoLayer.reactBaseLayerElement, { visible })
-      });
-    }
+    this.context.infoLayerManager.changeInfoLayerProps({ id, visible: true });
+  };
+
+  public handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id = e.currentTarget.getAttribute('data-id');
+    this.context.infoLayerManager.changeInfoLayerProps({ id, visible: e.currentTarget.checked });
   };
 
   public renderBaseList(parentId: string = null): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
-    const infoLayers = this.context.getInfoLayers(parentId);
-    if (infoLayers == null) {
-      return null;
-    }
-    infoLayers.forEach(infoLayer => {
-      if (infoLayer.reactBaseLayerElement.props.type === 'BASE') {
+    this.context.infoLayerManager
+      .getInfoLayers(infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'BASE')
+      .forEach(infoLayer => {
         bases.push(
           <div key={infoLayer.id}>
-            <input type="radio" name="radiotoc" checked={infoLayer.reactBaseLayerElement.props.visible} />
+            <input
+              type="radio"
+              name="radiotoc"
+              checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
+              onChange={this.handleRadioChange}
+              data-id={infoLayer.id}
+            />
             <label>{infoLayer.reactBaseLayerElement.props.name}</label>
           </div>
         );
@@ -68,50 +69,47 @@ export class Toc extends BaseTool<ITocProps, any> {
         if (subBaseList) {
           bases.push(subBaseList);
         }
-      }
-    });
+      });
     return bases;
   }
 
   public renderOverlayTree(parentId: string = null): React.ReactNodeArray {
     const overlayTree: React.ReactNodeArray = [];
-    const infoLayers = this.context.getInfoLayers(parentId);
-    if (infoLayers == null || infoLayers.length === 0) {
-      return null;
-    }
-    infoLayers.forEach(infoLayer => {
-      if (infoLayer.reactBaseLayerElement.props.type === 'OVERLAY') {
-        const subOverlayTree = this.renderOverlayTree(infoLayer.id);
-        if (subOverlayTree == null) {
-          overlayTree.push(
-            <div key={infoLayer.id}>
-              <input
-                type="checkbox"
-                checked={infoLayer.reactBaseLayerElement.props.visible}
-                onChange={this.handleCheckboxChange}
-                data-id={infoLayer.id}
-              />
-              <label>{infoLayer.reactBaseLayerElement.props.name}</label>
-            </div>
-          );
-        } else {
-          overlayTree.push(
-            <div key={infoLayer.id}>
-              <SpanParentSubTree>
+    this.context.infoLayerManager
+      .getInfoLayers(infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'OVERLAY')
+      .forEach(infoLayer => {
+        if (infoLayer.reactBaseLayerElement.props.type === 'OVERLAY') {
+          const subOverlayTree = this.renderOverlayTree(infoLayer.id);
+          if (subOverlayTree == null || subOverlayTree.length === 0) {
+            overlayTree.push(
+              <div key={infoLayer.id}>
                 <input
                   type="checkbox"
-                  checked={infoLayer.reactBaseLayerElement.props.visible}
+                  checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
                   onChange={this.handleCheckboxChange}
                   data-id={infoLayer.id}
                 />
                 <label>{infoLayer.reactBaseLayerElement.props.name}</label>
-              </SpanParentSubTree>
-              <DivSubTree>{subOverlayTree}</DivSubTree>
-            </div>
-          );
+              </div>
+            );
+          } else {
+            overlayTree.push(
+              <div key={infoLayer.id}>
+                <SpanParentSubTree>
+                  <input
+                    type="checkbox"
+                    defaultChecked={infoLayer.reactBaseLayerElement.props.visible}
+                    onChange={this.handleCheckboxChange}
+                    data-id={infoLayer.id}
+                  />
+                  <label>{infoLayer.reactBaseLayerElement.props.name}</label>
+                </SpanParentSubTree>
+                <DivSubTree>{subOverlayTree}</DivSubTree>
+              </div>
+            );
+          }
         }
-      }
-    });
+      });
     return overlayTree;
   }
 

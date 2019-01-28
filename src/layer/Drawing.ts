@@ -21,7 +21,7 @@ export class Drawing extends BaseLayer<IDrawingProps, {}, OlVectorLayer, LocalFe
 
   public updateProps(prevProps: IDrawingProps, nextProps: IDrawingProps) {
     super.updateProps(prevProps, nextProps);
-    if (prevProps.style != nextProps.style) {
+    if (prevProps == null || prevProps.style != nextProps.style) {
       this.setStyle(nextProps.style);
     }
   }
