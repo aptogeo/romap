@@ -1,18 +1,19 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import OlView from 'ol/View';
 import { inAndOut } from 'ol/easing';
 import { cloneView } from '../utils';
 import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
-`
-.panzoom {
+
+const Container = styled.div`
   top: 50px;
   left: 15px;
   width: 96px;
-}
+`;
 
-.panzoom button {
+const Button = styled.button`
   height: 32px;
   width: 32px;
   background-color: rgba(213, 213, 213, 0.61);
@@ -20,95 +21,101 @@ import { BaseTool, IBaseToolProps } from './BaseTool';
   border-color: rgba(172, 172, 172, 0.61);
   color: #242424;
   box-shadow: none;
-}
+`;
 
-button.panzoom-up {
+const ButtonUp = styled(Button)`
   display: block;
   margin-left: 32px;
   border-width: 1px 1px 0px 1px !important;
   border-radius: 5px 5px 0px 0px !important;
-}
+  ::after {
+    content: '↑';
+  }
+`;
 
-button.panzoom-up:after {
-  content: '↑';
-}
-
-button.panzoom-left {
+const ButtonLeft = styled(Button)`
   display: inline;
   margin-left: 0px;
   border-width: 1px 0px 1px 1px !important;
   border-radius: 5px 0px 0px 5px !important;
-}
+  ::after {
+    content: '←';
+  }
+`;
 
-button.panzoom-left:after {
-  content: '←';
-}
-
-.panzoom-origin {
+const ButtonOrigin = styled(Button)`
   display: inline;
   border-width: 0px !important;
   border-radius: 0px !important;
-}
+  ::after {
+    content: '⤢';
+  }
+`;
 
-button.panzoom-origin:after {
-  content: '⤢';
-}
-
-button.panzoom-noorigin {
+const ButtonNoorigin = styled(Button)`
   display: inline;
   border-width: 0px !important;
   border-radius: 0px !important;
-}
+  ::after {
+    content: '.';
+  }
+`;
 
-button.panzoom-noorigin:after {
-  content: '·';
-}
-
-button.panzoom-right {
+const ButtonRight = styled(Button)`
   display: inline;
   border-width: 1px 1px 1px 0px !important;
   border-radius: 0px 5px 5px 0px !important;
-}
+  ::after {
+    content: '→';
+  }
+`;
 
-button.panzoom-right:after {
-  content: '→';
-}
-
-button.panzoom-down {
+const ButtonDown = styled(Button)`
   display: block;
   margin-left: 32px;
   border-width: 0px 1px 1px 1px !important;
   border-radius: 0px 0px 5px 5px !important;
-}
+  ::after {
+    content: '↓';
+  }
+`;
 
-button.panzoom-down:after {
-  content: '↓';
-}
-
-button.panzoom-zoom {
+const ButtonZoom = styled(Button)`
   display: block;
   margin-top: 2px;
   margin-left: 32px;
   border-width: 1px 1px 0px 1px !important;
   border-radius: 5px 5px 0px 0px !important;
-}
+  ::after {
+    content: '+';
+  }
+`;
 
-button.panzoom-zoom:after {
-  content: '+';
-}
-
-button.panzoom-unzoom {
+const ButtonUnzoom = styled(Button)`
   display: block;
   margin-left: 32px;
   border-width: 0px 1px 1px 1px !important;
   border-radius: 0px 0px 5px 5px !important;
-}
+  ::after {
+    content: '-';
+  }
+`;
 
-button.panzoom-unzoom:after {
-  content: '-';
-}
+const ButtonRotate = styled(Button)`
+  display: block;
+  margin-top: 2px;
+  margin-left: 32px;
+  border-width: 1px 1px 1px 1px !important;
+  border-radius: 5px 5px 5px 5px !important;
+`;
 
-div.panzoom-zoom-slider {
+const SpanRotate = styled.span`
+  ::after {
+    content: '⇑';
+  }
+`;
+
+const DivSlider = styled.div`
   margin-left: 32px;
   width: 30px;
   height: 100px;
@@ -116,27 +123,14 @@ div.panzoom-zoom-slider {
   border-style: solid;
   border-color: rgba(172, 172, 172, 0.61);
   border-width: 1px 1px 1px 1px !important;
-}
+`;
 
-button.panzoom-zoom-slider-thumb {
+const ButtonSliderThumb = styled(Button)`
   position: relative;
   width: 28px !important;
   left: 1px !important;
   height: 10px !important;
   background-color: #242424 !important;
-}
-
-button.panzoom-rotate {
-  display: block;
-  margin-top: 2px;
-  margin-left: 32px;
-  border-width: 1px 1px 1px 1px !important;
-  border-radius: 5px 5px 5px 5px !important;
-}
-
-span.panzoom-span-rotate:after {
-  content: '⇑';
-}
 `;
 
 export interface IPanZoomProps extends IBaseToolProps {
@@ -188,17 +182,17 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
   /**
    * Button Rotate.
    */
-  private buttonRotate: any;
+  private buttonRotate: HTMLButtonElement;
 
   /**
-   * Span Rotate.
+   * Div Rotate.
    */
-  private spanRotate: any;
+  private divRotate: HTMLDivElement;
 
   /**
    * Container thumb.
    */
-  private containerThumb: any;
+  private containerThumb: HTMLDivElement;
 
   /**
    * Btn thumb.
@@ -221,12 +215,12 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
         return;
       }
       const rotation = viewState.rotation;
+      console.log(rotation);
       if (rotation != null && rotation !== 0) {
         this.buttonRotate.style.display = '';
         const transform = 'rotate(' + rotation + 'rad)';
-        this.spanRotate.style.msTransform = transform;
-        this.spanRotate.style.webkitTransform = transform;
-        this.spanRotate.style.transform = transform;
+        this.divRotate.style.webkitTransform = transform;
+        this.divRotate.style.transform = transform;
       } else {
         this.buttonRotate.style.display = 'none';
       }
@@ -342,17 +336,17 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     const originTitle = this.context.getLocalizedText('originTitle', 'Zoom origin');
     let origin = null;
     if (this.props.showOrigin) {
-      origin = <button className={`${this.props.className}-origin`} onClick={this.handleOrigin} title={originTitle} />;
+      origin = <ButtonOrigin className={`${this.props.className}-origin`} onClick={this.handleOrigin} title={originTitle} />;
     } else {
-      origin = <button className={`${this.props.className}-noorigin`} disabled />;
+      origin = <ButtonNoorigin className={`${this.props.className}-noorigin`} disabled />;
     }
     return (
       <div>
-        <button className={`${this.props.className}-up`} onClick={this.handleUp} title={upTitle} />
-        <button className={`${this.props.className}-left`} onClick={this.handleLeft} title={leftTitle} />
+        <ButtonUp className={`${this.props.className}-up`} onClick={this.handleUp} title={upTitle} />
+        <ButtonLeft className={`${this.props.className}-left`} onClick={this.handleLeft} title={leftTitle} />
         {origin}
-        <button className={`${this.props.className}-right`} onClick={this.handleRight} title={rightTitle} />
-        <button className={`${this.props.className}-down`} onClick={this.handleDown} title={downTitle} />
+        <ButtonRight className={`${this.props.className}-right`} onClick={this.handleRight} title={rightTitle} />
+        <ButtonDown className={`${this.props.className}-down`} onClick={this.handleDown} title={downTitle} />
       </div>
     );
   }
@@ -366,26 +360,26 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     let slider = null;
     if (this.props.showZoomSlider) {
       slider = (
-        <div
+        <DivSlider
           ref={containerThumb => {
             this.containerThumb = containerThumb;
           }}
           className={`${this.props.className}-zoom-slider`}
         >
-          <button
+          <ButtonSliderThumb
             ref={btnThumb => {
               this.btnThumb = btnThumb;
             }}
             className={`${this.props.className}-zoom-slider-thumb`}
           />
-        </div>
+        </DivSlider>
       );
     }
     return (
       <div>
-        <button className={`${this.props.className}-zoom`} onClick={this.handleZoom} title={zoomTitle} />
+        <ButtonZoom className={`${this.props.className}-zoom`} onClick={this.handleZoom} title={zoomTitle} />
         {slider}
-        <button className={`${this.props.className}-unzoom`} onClick={this.handleUnzoom} title={unzoomTitle} />
+        <ButtonUnzoom className={`${this.props.className}-unzoom`} onClick={this.handleUnzoom} title={unzoomTitle} />
       </div>
     );
   }
@@ -397,7 +391,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     const rotateTitle = this.context.getLocalizedText('rotateTitle', 'Set map orientation to north up');
     return (
       <div>
-        <button
+        <ButtonRotate
           ref={buttonRotate => {
             this.buttonRotate = buttonRotate;
           }}
@@ -405,13 +399,13 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
           onClick={this.handleResetRotation}
           title={rotateTitle}
         >
-          <span
-            ref={spanRotate => {
-              this.spanRotate = spanRotate;
-            }}
-            className={`${this.props.className}-span-rotate`}
-          />
-        </button>
+          <div
+            ref={divRotate => {
+              this.divRotate = divRotate;
+            }}>
+            <SpanRotate className={`${this.props.className}-span-rotate`} />
+          </div>
+        </ButtonRotate>
       </div>
     );
   }
@@ -421,11 +415,11 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
       return null;
     }
     return (
-      <div className={`${this.props.className} ol-unselectable ol-control`}>
+      <Container className={`${this.props.className} ol-unselectable ol-control`}>
         {this.renderPan()}
         {this.renderZoom()}
         {this.renderRotation()}
-      </div>
+      </Container>
     );
   }
 }
