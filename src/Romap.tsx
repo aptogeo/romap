@@ -9,7 +9,6 @@ import { MapChild } from './RomapChild';
 import { Projection } from './Projection';
 import { InfoLayerManager, InfoLayerManagerState } from './InfoLayerManager';
 
-
 const GlobalStyle = createGlobalStyle`
   .ol-unsupported {
     display: none;
@@ -169,7 +168,7 @@ export class Romap extends InfoLayerManager<IMapProps, InfoLayerManagerState> {
   public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
     const elems: React.ReactElement<IBaseLayerProps>[] = [];
     this.getInfoLayers(infoLayer => infoLayer.parentId == null).forEach((infoLayer: IInfoLayer) => {
-        elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
+      elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
     });
     return elems;
   }

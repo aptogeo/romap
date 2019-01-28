@@ -51,7 +51,9 @@ export class Toc extends BaseTool<ITocProps, any> {
   public renderBaseList(parentId: string = null): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
     this.context.infoLayerManager
-      .getInfoLayers(infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'BASE')
+      .getInfoLayers(
+        infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'BASE'
+      )
       .forEach(infoLayer => {
         bases.push(
           <div key={infoLayer.id}>
@@ -76,7 +78,9 @@ export class Toc extends BaseTool<ITocProps, any> {
   public renderOverlayTree(parentId: string = null): React.ReactNodeArray {
     const overlayTree: React.ReactNodeArray = [];
     this.context.infoLayerManager
-      .getInfoLayers(infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'OVERLAY')
+      .getInfoLayers(
+        infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'OVERLAY'
+      )
       .forEach(infoLayer => {
         if (infoLayer.reactBaseLayerElement.props.type === 'OVERLAY') {
           const subOverlayTree = this.renderOverlayTree(infoLayer.id);

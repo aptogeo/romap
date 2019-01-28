@@ -42,11 +42,11 @@ export interface IBaseLayerProps {
 export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OLS extends OlSource> extends MapChild<
   P,
   S
-  > {
+> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
-    type: 'OVERLAY',
+    type: 'OVERLAY'
   };
 
   public context: IMapContext;
@@ -100,7 +100,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     if (prevProps == null || prevProps.visible !== nextProps.visible) {
       let visible = nextProps.visible;
       if (nextProps.visible == null) {
-        this.context.infoLayerManager.changeInfoLayerProps({ id: nextProps.id, visible: (nextProps.type === 'OVERLAY') });
+        this.context.infoLayerManager.changeInfoLayerProps({ id: nextProps.id, visible: nextProps.type === 'OVERLAY' });
       } else {
         this.olLayer.setVisible(visible);
       }
@@ -170,12 +170,14 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     const key = event.key;
     const value = event.target.get(key);
     if (key === 'visible' && value === true && this.props.type === 'BASE') {
-      this.context.infoLayerManager.getInfoLayers(infoLayer => {
-        const props = infoLayer.reactBaseLayerElement.props;
-        return (props.type === 'BASE' && props.visible === true && props.id !== this.props.id)
-      }).forEach(infoLayer => {
-        this.context.infoLayerManager.changeInfoLayerProps({ id: infoLayer.id, visible: false });
-      });
+      this.context.infoLayerManager
+        .getInfoLayers(infoLayer => {
+          const props = infoLayer.reactBaseLayerElement.props;
+          return props.type === 'BASE' && props.visible === true && props.id !== this.props.id;
+        })
+        .forEach(infoLayer => {
+          this.context.infoLayerManager.changeInfoLayerProps({ id: infoLayer.id, visible: false });
+        });
     }
   };
 

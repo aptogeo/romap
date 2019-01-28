@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IBaseLayerProps, BaseLayer } from "./layer/BaseLayer";
+import { IBaseLayerProps, BaseLayer } from './layer/BaseLayer';
 
 export interface IInfoLayer {
   /**
@@ -28,23 +28,25 @@ export interface InfoLayerManagerState {
 }
 
 export class InfoLayerManager<P, S extends InfoLayerManagerState> extends React.Component<P, S> {
-
   private infoLayers = new Map<string, IInfoLayer>();
 
   constructor(props: P) {
-    super(props)
+    super(props);
     this.state = { infoLayerChangedCounter: 0 } as S;
   }
 
   /**
    * Get infoLayers
    */
-  public getInfoLayers(filterFn?: (value: IInfoLayer, index: number, array: IInfoLayer[]) => boolean, thisFilterArg?: any): IInfoLayer[] {
-    const arr = Array.from(this.infoLayers.values()).filter(infoLayer =>
-      infoLayer.status === 'orig_add' ||
-      infoLayer.status === 'ext_add' ||
-      infoLayer.status === 'orig_modif_by_ext');
-    return (filterFn == null) ? arr : arr.filter(filterFn, thisFilterArg);
+  public getInfoLayers(
+    filterFn?: (value: IInfoLayer, index: number, array: IInfoLayer[]) => boolean,
+    thisFilterArg?: any
+  ): IInfoLayer[] {
+    const arr = Array.from(this.infoLayers.values()).filter(
+      infoLayer =>
+        infoLayer.status === 'orig_add' || infoLayer.status === 'ext_add' || infoLayer.status === 'orig_modif_by_ext'
+    );
+    return filterFn == null ? arr : arr.filter(filterFn, thisFilterArg);
   }
 
   /**
@@ -142,7 +144,12 @@ export class InfoLayerManager<P, S extends InfoLayerManagerState> extends React.
     }
   }
 
-  public updateInfoLayers(prevChildren: React.ReactNode, nextChildren: React.ReactNode, prevParentId: string, nextParentId: string) {
+  public updateInfoLayers(
+    prevChildren: React.ReactNode,
+    nextChildren: React.ReactNode,
+    prevParentId: string,
+    nextParentId: string
+  ) {
     if (prevChildren) {
       React.Children.map(prevChildren, (child: React.ReactElement<any>) => {
         if (BaseLayer.isPrototypeOf(child.type)) {

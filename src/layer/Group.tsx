@@ -48,9 +48,11 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
 
   public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
     const elems: React.ReactElement<IBaseLayerProps>[] = [];
-    this.context.infoLayerManager.getInfoLayers(infoLayer => infoLayer.parentId == this.props.id).forEach((infoLayer: IInfoLayer) => {
+    this.context.infoLayerManager
+      .getInfoLayers(infoLayer => infoLayer.parentId == this.props.id)
+      .forEach((infoLayer: IInfoLayer) => {
         elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
-    });
+      });
     return elems;
   }
 
