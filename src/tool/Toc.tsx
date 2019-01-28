@@ -106,9 +106,7 @@ export class Toc extends BaseTool<ITocProps, any> {
                 />
                 <label>{infoLayer.reactBaseLayerElement.props.name}</label>
               </SpanParentSubTree>
-              <DivSubTree>
-                {subOverlayTree}
-              </DivSubTree>
+              <DivSubTree>{subOverlayTree}</DivSubTree>
             </div>
           );
         }
