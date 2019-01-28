@@ -6,7 +6,6 @@ import { cloneView } from '../utils';
 import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
-
 const Container = styled.div`
   top: 50px;
   left: 15px;
@@ -336,7 +335,9 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     const originTitle = this.context.getLocalizedText('originTitle', 'Zoom origin');
     let origin = null;
     if (this.props.showOrigin) {
-      origin = <ButtonOrigin className={`${this.props.className}-origin`} onClick={this.handleOrigin} title={originTitle} />;
+      origin = (
+        <ButtonOrigin className={`${this.props.className}-origin`} onClick={this.handleOrigin} title={originTitle} />
+      );
     } else {
       origin = <ButtonNoorigin className={`${this.props.className}-noorigin`} disabled />;
     }
@@ -402,7 +403,8 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
           <div
             ref={divRotate => {
               this.divRotate = divRotate;
-            }}>
+            }}
+          >
             <SpanRotate className={`${this.props.className}-span-rotate`} />
           </div>
         </ButtonRotate>
