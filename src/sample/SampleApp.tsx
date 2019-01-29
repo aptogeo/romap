@@ -54,9 +54,9 @@ class Maps extends React.Component {
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <romap.Romap
           keyboardEventTarget={document}
-          center={[490000, 6800000]}
-          zoom={5}
-          projection="EPSG:2154"
+          initialViewCenter={[490000, 6800000]}
+          initialViewZoom={5}
+          initialViewProjection="EPSG:2154"
           style={{ flex: '1 1 0' }}
           olMapStyle={{ height: 600 }}
         >
@@ -77,8 +77,8 @@ class Maps extends React.Component {
         </romap.Romap>
         <romap.Romap
           keyboardEventTarget={document}
-          center={[508000, 6000000]}
-          zoom={5}
+          initialViewCenter={[508000, 6000000]}
+          initialViewZoom={5}
           style={{ flex: '1 1 0' }}
           olMapStyle={{ height: 600 }}
         >

@@ -5,19 +5,19 @@ export interface IInfoLayer {
   /**
    * React BaseLayer Element.
    */
-  reactBaseLayerElement: React.ReactElement<IBaseLayerProps>;
+  reactBaseLayerElement: Readonly<React.ReactElement<IBaseLayerProps>>;
   /**
    * Id.
    */
-  id: string;
+  id: Readonly<string>;
   /**
    * Parent layer id.
    */
-  parentId: string;
+  parentId: Readonly<string>;
   /**
    * Status.
    */
-  status: 'orig_add' | 'orig_del' | 'ext_add' | 'ext_del' | 'orig_modif_by_ext' | 'orig_del_by_ext';
+  status: Readonly<'orig_add' | 'orig_del' | 'ext_add' | 'ext_del' | 'orig_modif_by_ext' | 'orig_del_by_ext'>;
 }
 
 export interface InfoLayerManagerState {
@@ -52,12 +52,8 @@ export class InfoLayerManager<P, S extends InfoLayerManagerState> extends React.
   /**
    * Get infoLayer
    */
-  public getInfoLayer(id: string, parentId?: string): IInfoLayer {
-    const infoLayer = this.infoLayers.get(id);
-    if (parentId) {
-      return infoLayer.parentId === parentId ? infoLayer : null;
-    }
-    return infoLayer;
+  public getInfoLayer(id: string): IInfoLayer {
+    return this.getInfoLayers(infoLayer => infoLayer.id == id).pop();
   }
 
   /**
@@ -122,29 +118,15 @@ export class InfoLayerManager<P, S extends InfoLayerManagerState> extends React.
    */
   changeInfoLayerProps(props: IBaseLayerProps) {
     const infoLayer = this.getInfoLayer(props.id);
-    this.setInfoLayer({
-      ...infoLayer,
-      reactBaseLayerElement: React.cloneElement(infoLayer.reactBaseLayerElement, props)
-    });
-  }
-
-  public mountInfoLayers(children: React.ReactNode, parentId: string) {
-    if (children) {
-      React.Children.map(children, (child: React.ReactElement<any>) => {
-        if (BaseLayer.isPrototypeOf(child.type)) {
-          const props = child.props as IBaseLayerProps;
-          this.setInfoLayer({
-            reactBaseLayerElement: child,
-            status: 'orig_add',
-            id: props.id,
-            parentId
-          });
-        }
+    if (infoLayer != null) {
+      this.setInfoLayer({
+        ...infoLayer,
+        reactBaseLayerElement: React.cloneElement(infoLayer.reactBaseLayerElement, props)
       });
     }
   }
 
-  public updateInfoLayers(
+  public updateFromChildren(
     prevChildren: React.ReactNode,
     nextChildren: React.ReactNode,
     prevParentId: string,
@@ -160,8 +142,7 @@ export class InfoLayerManager<P, S extends InfoLayerManagerState> extends React.
               status: 'orig_del',
               id: props.id,
               parentId: prevParentId
-            },
-            false
+            }
           );
         }
       });

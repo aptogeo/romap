@@ -64,25 +64,25 @@ export interface IMapProps {
    */
   keyboardEventTarget?: any;
   /**
-   * View center.
+   * Initial view center.
    */
-  center?: [number, number];
+  initialViewCenter?: [number, number];
   /*
-   * View zoom.
+   * Initial view zoom.
    */
-  zoom?: number;
+  initialViewZoom?: number;
   /*
-   * View resolution.
+   * Initial view resolution.
    */
-  resolution?: number;
+  initialViewResolution?: number;
   /*
-   * View rotation.
+   * Initial view rotation.
    */
-  rotation?: number;
+  initialViewRotation?: number;
   /*
-   * View projection.
+   * Initial view projection.
    */
-  projection?: OlProjection | string;
+  initialViewProjection?: OlProjection | string;
 }
 
 export class Romap extends InfoLayerManager<IMapProps, InfoLayerManagerState> {
@@ -121,29 +121,20 @@ export class Romap extends InfoLayerManager<IMapProps, InfoLayerManagerState> {
 
   public componentDidMount() {
     this.olMap.setTarget(this.divMap);
-    this.mountInfoLayers(this.props.children, null);
+    this.updateFromChildren(null, this.props.children, null, null);
     // View
     const view = new OlView({
-      center: this.props.center,
-      zoom: this.props.zoom,
-      resolution: this.props.resolution,
-      rotation: this.props.rotation,
-      projection: this.props.projection
+      center: this.props.initialViewCenter,
+      zoom: this.props.initialViewZoom,
+      resolution: this.props.initialViewResolution,
+      rotation: this.props.initialViewRotation,
+      projection: this.props.initialViewProjection
     });
     this.olMap.setView(view);
   }
 
   public componentDidUpdate(prevProps: IMapProps) {
-    this.updateInfoLayers(prevProps.children, this.props.children, null, null);
-    // View
-    const view = new OlView({
-      center: this.props.center,
-      zoom: this.props.zoom,
-      resolution: this.props.resolution,
-      rotation: this.props.rotation,
-      projection: this.props.projection
-    });
-    this.olMap.setView(view);
+    this.updateFromChildren(prevProps.children, this.props.children, null, null);
   }
 
   public stopPropagationForComponents() {

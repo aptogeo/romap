@@ -32,12 +32,12 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
   }
 
   public componentDidMount() {
-    this.context.infoLayerManager.mountInfoLayers(this.props.children, this.props.id);
+    this.context.infoLayerManager.updateFromChildren(null, this.props.children, null, this.props.id);
     super.componentDidMount();
   }
 
   public componentDidUpdate(prevProps: IGroupProps) {
-    this.context.infoLayerManager.updateInfoLayers(prevProps.children, this.props.children, null, null);
+    this.context.infoLayerManager.updateFromChildren(prevProps.children, this.props.children, null, null);
     super.componentDidUpdate(prevProps);
   }
 

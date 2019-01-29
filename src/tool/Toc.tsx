@@ -6,8 +6,22 @@ import { BaseTool, IBaseToolProps } from './BaseTool';
 const Container = styled.div`
   top: 15px;
   right: 15px;
+
+  background-color: rgba(213, 213, 213, 0.61);
+  border-style: solid;
+  border-color: rgba(172, 172, 172, 0.61);
+  border-width: 1px;
+  border-radius: 5px;
+  color: #242424;
+  box-shadow: none;
+`;
+
+const SubContainer = styled.div`
   width: 200px;
-  background-color: white;
+  max-height: 400px;
+  margin: 2px;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const SpanParentSubTree = styled.span`
@@ -64,7 +78,7 @@ export class Toc extends BaseTool<ITocProps, any> {
               onChange={this.handleRadioChange}
               data-id={infoLayer.id}
             />
-            <label>{infoLayer.reactBaseLayerElement.props.name}</label>
+            <label title={infoLayer.reactBaseLayerElement.props.name}>{infoLayer.reactBaseLayerElement.props.name}</label>
           </div>
         );
         const subBaseList = this.renderBaseList(infoLayer.id);
@@ -82,31 +96,33 @@ export class Toc extends BaseTool<ITocProps, any> {
         infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'OVERLAY'
       )
       .forEach(infoLayer => {
+        const name = infoLayer.reactBaseLayerElement.props.name || '';
+        let truncName = name;
+        if (truncName.length > 15) {
+          truncName = truncName.substring(0, 14) + '…';
+        }
+        const input = (<input
+          type="checkbox"
+          checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
+          onChange={this.handleCheckboxChange}
+          data-id={infoLayer.id}
+        />);
+        const label = (<label title={name}>{truncName}</label>);
         if (infoLayer.reactBaseLayerElement.props.type === 'OVERLAY') {
           const subOverlayTree = this.renderOverlayTree(infoLayer.id);
           if (subOverlayTree == null || subOverlayTree.length === 0) {
             overlayTree.push(
               <div key={infoLayer.id}>
-                <input
-                  type="checkbox"
-                  checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
-                  onChange={this.handleCheckboxChange}
-                  data-id={infoLayer.id}
-                />
-                <label>{infoLayer.reactBaseLayerElement.props.name}</label>
+                {input}
+                {label}
               </div>
             );
           } else {
             overlayTree.push(
               <div key={infoLayer.id}>
                 <SpanParentSubTree>
-                  <input
-                    type="checkbox"
-                    defaultChecked={infoLayer.reactBaseLayerElement.props.visible}
-                    onChange={this.handleCheckboxChange}
-                    data-id={infoLayer.id}
-                  />
-                  <label>{infoLayer.reactBaseLayerElement.props.name}</label>
+                  {input}
+                  {label}
                 </SpanParentSubTree>
                 <DivSubTree>{subOverlayTree}</DivSubTree>
               </div>
@@ -123,8 +139,10 @@ export class Toc extends BaseTool<ITocProps, any> {
     }
     return (
       <Container className={`${this.props.className} ol-unselectable ol-control`}>
-        {this.renderBaseList()}
-        {this.renderOverlayTree()}
+        <SubContainer>
+          {this.renderBaseList()}
+          {this.renderOverlayTree()}
+        </SubContainer>
       </Container>
     );
   }
