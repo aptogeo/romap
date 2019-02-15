@@ -1,4 +1,3 @@
-
 import OlProjection from 'ol/proj/Projection';
 import { Vector } from './Vector';
 import { jsonEqual } from '../utils';

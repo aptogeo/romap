@@ -1,10 +1,9 @@
 import OlImageStatic from 'ol/source/ImageStatic';
-import {get as getProjection} from 'ol/proj';
+import { get as getProjection } from 'ol/proj';
 import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
 import { IImage } from './IImage';
 
 export class ImageStatic extends OlImageStatic implements IImage {
-
   private projectionCode: string;
 
   constructor(options?: any) {
