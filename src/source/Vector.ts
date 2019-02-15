@@ -5,16 +5,16 @@ import Circle from 'ol/geom/Circle';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import booleanDisjoint from '@turf/boolean-disjoint';
 import { Geometry } from '@turf/helpers/lib/geojson';
-import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IVector } from './IVector';
 
-export abstract class AbstractFeature extends OlVector implements IExtended {
+export abstract class Vector extends OlVector implements IVector {
   protected label: string;
 
   private queryGeoJSONFormat = new OlGeoJSON();
 
   constructor(options?: any) {
     super(options);
-    this.constructor.name;
     this.label = options.label ? options.label : this.constructor.name;
   }
 

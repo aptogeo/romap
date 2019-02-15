@@ -1,20 +1,20 @@
 import * as React from 'react';
 import OlVectorLayer from 'ol/layer/Vector';
-import OlVectorSource from 'ol/source/Vector';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+import { IVector } from '../source';
 
 export interface IVectorProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: OlVectorSource;
+  source: IVector;
   /**
    * Style.
    */
   style?: any;
 }
 
-export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, OlVectorSource> {
+export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, IVector> {
   public createOlLayer(): OlVectorLayer {
     return new OlVectorLayer();
   }
@@ -29,7 +29,7 @@ export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, OlVectorS
     }
   }
 
-  public setSource(source: OlVectorSource) {
+  public setSource(source: IVector) {
     if (source == null) {
       source = undefined;
     }

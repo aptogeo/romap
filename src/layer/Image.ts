@@ -1,16 +1,16 @@
 import * as React from 'react';
 import OlImageLayer from 'ol/layer/Image';
-import OlImageSource from 'ol/source/Image';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+import { IImage } from '../source';
 
 export interface IImageProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: OlImageSource;
+  source: IImage;
 }
 
-export class Image extends BaseLayer<IImageProps, {}, OlImageLayer, OlImageSource> {
+export class Image extends BaseLayer<IImageProps, {}, OlImageLayer, IImage> {
   public createOlLayer(): OlImageLayer {
     return new OlImageLayer();
   }
@@ -22,7 +22,7 @@ export class Image extends BaseLayer<IImageProps, {}, OlImageLayer, OlImageSourc
     }
   }
 
-  public setSource(source: OlImageSource) {
+  public setSource(source: IImage) {
     if (source == null) {
       source = undefined;
     }

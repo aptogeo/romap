@@ -1,9 +1,7 @@
-import OlTileArcGISRest from 'ol/source/TileArcGISRest';
-import OlFeature from 'ol/Feature';
-import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
-import { ITileImage } from './ITileImage';
+import OlVectorTile from 'ol/source/VectorTile';
+import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
 
-export class TileArcGISRest extends OlTileArcGISRest implements ITileImage {
+export abstract class VectorTile extends OlVectorTile implements IExtended {
   protected label: string;
 
   constructor(options?: any) {
@@ -12,10 +10,9 @@ export class TileArcGISRest extends OlTileArcGISRest implements ITileImage {
   }
 
   query(request: IQueryRequest): Promise<IQueryResponse> {
-    const features = [] as OlFeature[];
     return Promise.resolve({
       request,
-      features
+      features: []
     });
   }
 

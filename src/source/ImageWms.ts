@@ -1,8 +1,9 @@
 import OlImageWMS from 'ol/source/ImageWMS';
 import OlFeature from 'ol/Feature';
-import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IImage } from './IImage';
 
-export class ImageWms extends OlImageWMS implements IExtended {
+export class ImageWms extends OlImageWMS implements IImage {
   protected label: string;
 
   constructor(options?: any) {

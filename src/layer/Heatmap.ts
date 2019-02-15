@@ -1,13 +1,13 @@
 import * as React from 'react';
 import OlHeatmapLayer from 'ol/layer/Heatmap';
-import OlVectorSource from 'ol/source/Vector';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+import { IVector } from '../source';
 
 export interface IHeatmapProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: OlVectorSource;
+  source: IVector;
   /**
    * Gradient.
    */
@@ -34,7 +34,7 @@ export interface IHeatmapProps extends IBaseLayerProps {
   renderMode: string;
 }
 
-export class Heatmap extends BaseLayer<IHeatmapProps, {}, OlHeatmapLayer, OlVectorSource> {
+export class Heatmap extends BaseLayer<IHeatmapProps, {}, OlHeatmapLayer, IVector> {
   public createOlLayer(): OlHeatmapLayer {
     return new OlHeatmapLayer();
   }
@@ -46,7 +46,7 @@ export class Heatmap extends BaseLayer<IHeatmapProps, {}, OlHeatmapLayer, OlVect
     }
   }
 
-  public setSource(source: OlVectorSource) {
+  public setSource(source: IVector) {
     if (source == null) {
       source = undefined;
     }

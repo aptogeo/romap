@@ -1,8 +1,9 @@
 import OlTileWMS from 'ol/source/TileWMS';
 import OlFeature from 'ol/Feature';
-import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { ITileImage } from './ITileImage';
 
-export class TileWms extends OlTileWMS implements IExtended {
+export class TileWms extends OlTileWMS implements ITileImage {
   protected label: string;
 
   constructor(options?: any) {

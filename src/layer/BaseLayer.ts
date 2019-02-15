@@ -5,6 +5,7 @@ import { walk } from '../utils';
 import { MapChild } from '../RomapChild';
 import { mapContext, IMapContext } from '../RomapContext';
 import { jsonEqual } from '../utils';
+import { IExtended } from '../source';
 
 let globalOrder = 0;
 
@@ -37,6 +38,10 @@ export interface IBaseLayerProps {
    * Opacity.
    */
   opacity?: number;
+  /**
+   * Source.
+   */
+  source?: IExtended;
 }
 
 export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OLS extends OlSource> extends MapChild<

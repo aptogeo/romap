@@ -136,14 +136,12 @@ export class InfoLayerManager<P, S extends InfoLayerManagerState> extends React.
       React.Children.map(prevChildren, (child: React.ReactElement<any>) => {
         if (BaseLayer.isPrototypeOf(child.type)) {
           const props = child.props as IBaseLayerProps;
-          this.setInfoLayer(
-            {
-              reactBaseLayerElement: child,
-              status: 'orig_del',
-              id: props.id,
-              parentId: prevParentId
-            }
-          );
+          this.setInfoLayer({
+            reactBaseLayerElement: child,
+            status: 'orig_del',
+            id: props.id,
+            parentId: prevParentId
+          });
         }
       });
     }

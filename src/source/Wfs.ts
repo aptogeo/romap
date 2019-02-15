@@ -1,8 +1,8 @@
 import OlGeoJSON from 'ol/format/GeoJSON';
 import { send, IResponse } from 'bhreq';
-import { AbstractExternalFeature } from './AbstractExternalFeature';
+import { ExternalVector } from './ExternalVector';
 
-export class Wfs extends AbstractExternalFeature {
+export class Wfs extends ExternalVector {
   private typename: string;
 
   private geoJSONFormat = new OlGeoJSON();
@@ -10,7 +10,6 @@ export class Wfs extends AbstractExternalFeature {
   constructor(options?: any) {
     super(options);
     this.typename = options.typename;
-    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public load(extent: [number, number, number, number], projectionCode: string) {

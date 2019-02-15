@@ -1,8 +1,8 @@
 import OlFeature from 'ol/Feature';
 import OlProjection from 'ol/proj/Projection';
-import { AbstractFeature } from './AbstractFeature';
+import { Vector } from './Vector';
 
-export class AbstractExternalFeature extends AbstractFeature {
+export class ExternalVector extends Vector {
   private projectionCode: string;
 
   private loadedFeatures: OlFeature[];

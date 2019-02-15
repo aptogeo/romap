@@ -43,7 +43,7 @@ export interface ITocProps extends IBaseToolProps {
   className?: string;
 }
 
-export class Toc extends BaseTool<ITocProps, any> {
+export class Toc extends BaseTool<ITocProps, {}> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
@@ -78,7 +78,9 @@ export class Toc extends BaseTool<ITocProps, any> {
               onChange={this.handleRadioChange}
               data-id={infoLayer.id}
             />
-            <label title={infoLayer.reactBaseLayerElement.props.name}>{infoLayer.reactBaseLayerElement.props.name}</label>
+            <label title={infoLayer.reactBaseLayerElement.props.name}>
+              {infoLayer.reactBaseLayerElement.props.name}
+            </label>
           </div>
         );
         const subBaseList = this.renderBaseList(infoLayer.id);
@@ -101,13 +103,15 @@ export class Toc extends BaseTool<ITocProps, any> {
         if (truncName.length > 15) {
           truncName = truncName.substring(0, 14) + '…';
         }
-        const input = (<input
-          type="checkbox"
-          checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
-          onChange={this.handleCheckboxChange}
-          data-id={infoLayer.id}
-        />);
-        const label = (<label title={name}>{truncName}</label>);
+        const input = (
+          <input
+            type="checkbox"
+            checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
+            onChange={this.handleCheckboxChange}
+            data-id={infoLayer.id}
+          />
+        );
+        const label = <label title={name}>{truncName}</label>;
         if (infoLayer.reactBaseLayerElement.props.type === 'OVERLAY') {
           const subOverlayTree = this.renderOverlayTree(infoLayer.id);
           if (subOverlayTree == null || subOverlayTree.length === 0) {

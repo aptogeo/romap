@@ -15,10 +15,6 @@ export interface IGroupState {
    * Group is ready ?.
    */
   readyGroup: boolean;
-  /**
-   * Info layers.
-   */
-  //infoLayers: Map<string, IInfoLayer>;
 }
 
 export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, null> {

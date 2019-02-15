@@ -1,8 +1,9 @@
+
 import OlProjection from 'ol/proj/Projection';
-import { AbstractFeature } from './AbstractFeature';
+import { Vector } from './Vector';
 import { jsonEqual } from '../utils';
 
-export class LocalFeature extends AbstractFeature {
+export class LocalVector extends Vector {
   protected savedFeatures: any;
 
   protected oldViewProjectionCode: string;

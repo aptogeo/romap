@@ -1,8 +1,8 @@
 import OlEsriJSON from 'ol/format/EsriJSON';
 import { send, IResponse } from 'bhreq';
-import { AbstractExternalFeature } from './AbstractExternalFeature';
+import { ExternalVector } from './ExternalVector';
 
-export class QueryArcGISRest extends AbstractExternalFeature {
+export class QueryArcGISRest extends ExternalVector {
   protected where: string;
 
   private esriJSONFormat = new OlEsriJSON();
@@ -10,7 +10,6 @@ export class QueryArcGISRest extends AbstractExternalFeature {
   constructor(options?: any) {
     super(options);
     this.where = options.where;
-    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public load(extent: [number, number, number, number], projectionCode: string) {

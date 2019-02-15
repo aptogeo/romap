@@ -1,16 +1,16 @@
 import * as React from 'react';
 import OlTileLayer from 'ol/layer/Tile';
-import OlTileSource from 'ol/source/Tile';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
+import { ITileImage } from '../source';
 
 export interface ITileProps extends IBaseLayerProps {
   /**
    * Source.
    */
-  source: OlTileSource;
+  source: ITileImage;
 }
 
-export class Tile extends BaseLayer<ITileProps, {}, OlTileLayer, OlTileSource> {
+export class Tile extends BaseLayer<ITileProps, {}, OlTileLayer, ITileImage> {
   public createOlLayer(): OlTileLayer {
     return new OlTileLayer();
   }
@@ -22,7 +22,7 @@ export class Tile extends BaseLayer<ITileProps, {}, OlTileLayer, OlTileSource> {
     }
   }
 
-  public setSource(source: OlTileSource) {
+  public setSource(source: ITileImage) {
     if (source == null) {
       source = undefined;
     }

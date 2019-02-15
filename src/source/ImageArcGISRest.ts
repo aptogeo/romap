@@ -1,8 +1,9 @@
 import OlImageArcGISRest from 'ol/source/ImageArcGISRest';
 import OlFeature from 'ol/Feature';
-import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IImage } from './IImage';
 
-export class ImageArcGISRest extends OlImageArcGISRest implements IExtended {
+export class ImageArcGISRest extends OlImageArcGISRest implements IImage {
   protected label: string;
 
   constructor(options?: any) {

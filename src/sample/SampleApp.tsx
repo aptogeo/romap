@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as romap from '../';
-import ImageStatic from 'ol/source/ImageStatic';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 
@@ -11,24 +10,12 @@ export class SampleApp extends React.Component {
     const wkt27700 =
       'PROJCS["OSGB 1936 / British National Grid",GEOGCS["OSGB 1936",DATUM["OSGB_1936",SPHEROID["Airy 1830",6377563.396,299.3249646,AUTHORITY["EPSG","7001"]],AUTHORITY["EPSG","6277"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4277"]],UNIT["metre",1,AUTHORITY["EPSG","9001"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",49],PARAMETER["central_meridian",-2],PARAMETER["scale_factor",0.9996012717],PARAMETER["false_easting",400000],PARAMETER["false_northing",-100000],AUTHORITY["EPSG","27700"],AXIS["Easting",EAST],AXIS["Northing",NORTH]]';
 
-    return (
-      <div>
-        <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
-        <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
-        <Maps />
-      </div>
-    );
-  }
-}
-
-class Maps extends React.Component {
-  public render(): React.ReactNode {
     const world2D = new romap.source.TileArcGISRest({
       url: 'https://services.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer',
       projection: 'EPSG:3857'
     });
 
-    const britishNationalGrid = new ImageStatic({
+    const britishNationalGrid = new romap.source.ImageStatic({
       url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/British_National_Grid.svg/2000px-British_National_Grid.svg.png',
       projection: 'EPSG:27700',
@@ -60,6 +47,8 @@ class Maps extends React.Component {
           style={{ flex: '1 1 0' }}
           olMapStyle={{ height: 600 }}
         >
+          <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
+          <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
           <romap.layer.Tile id="World 2D" source={world2D} name="World 2D" type="BASE" visible={true} />
           <romap.layer.Image id="Land sat" source={landsatSource} name="Land sat" type="BASE" />
           <romap.layer.Group id="Grp1" name="Groupe 1">
