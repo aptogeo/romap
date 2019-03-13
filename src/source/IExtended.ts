@@ -26,18 +26,32 @@ export interface IFilter {
   filters?: IFilter[];
 }
 
-	// And operation for group
-	// Or operation for group
-	// Eq operation for attribute (? = ?)
-	// Neq operation for attribute (? != ?)
-	// Gt operation for attribute (? > ?)
-	// Gte operation for attribute (? >= ?)
-	// Lt operation for attribute (? < ?)
-	// Lte operation for attribute (? <= ?)
-	// Lk operation for attribute (? LIKE ?)
-	// Nlk operation for attribute (? NOT LIKE ?)
-	// Ilk operation for attribute (? ILIKE ?)
-	// Nilk operation for attribute (? NOT ILIKE ?)
-	// Null operation for attribute (? IS NULL)
-	// Nnull operation for attribute (? IS NOT NULL)
-export type Op = 'and' | 'or' | 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte' | 'lk' | 'nlk' | 'ilk' | 'nilk' | 'null' | 'nnull'
+// And operation for group
+// Or operation for group
+// Eq operation for attribute (? = ?)
+// Neq operation for attribute (? != ?)
+// Gt operation for attribute (? > ?)
+// Gte operation for attribute (? >= ?)
+// Lt operation for attribute (? < ?)
+// Lte operation for attribute (? <= ?)
+// Lk operation for attribute (? LIKE ?)
+// Nlk operation for attribute (? NOT LIKE ?)
+// Ilk operation for attribute (? ILIKE ?)
+// Nilk operation for attribute (? NOT ILIKE ?)
+// Null operation for attribute (? IS NULL)
+// Nnull operation for attribute (? IS NOT NULL)
+export type Op =
+  | 'and'
+  | 'or'
+  | 'eq'
+  | 'neq'
+  | 'gt'
+  | 'gte'
+  | 'lt'
+  | 'lte'
+  | 'lk'
+  | 'nlk'
+  | 'ilk'
+  | 'nilk'
+  | 'null'
+  | 'nnull';
