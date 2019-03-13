@@ -1,6 +1,6 @@
 import OlImageStatic from 'ol/source/ImageStatic';
 import { get as getProjection } from 'ol/proj';
-import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse } from './IExtended';
 import { IImage } from './IImage';
 
 export class ImageStatic extends OlImageStatic implements IImage {
@@ -26,9 +26,5 @@ export class ImageStatic extends OlImageStatic implements IImage {
       request,
       features: []
     });
-  }
-
-  getToc(): Promise<IToc> {
-    return Promise.resolve<IToc>({ tocElements: null });
   }
 }

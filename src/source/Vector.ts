@@ -5,7 +5,7 @@ import Circle from 'ol/geom/Circle';
 import OlGeoJSON from 'ol/format/GeoJSON';
 import booleanDisjoint from '@turf/boolean-disjoint';
 import { Geometry } from '@turf/helpers/lib/geojson';
-import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse } from './IExtended';
 import { IVector } from './IVector';
 
 export abstract class Vector extends OlVector implements IVector {
@@ -19,9 +19,9 @@ export abstract class Vector extends OlVector implements IVector {
   }
 
   query(request: IQueryRequest): Promise<IQueryResponse> {
-    const { olMap, geometry, geometryProjection, limit } = request;
+    const { geometry, geometryProjection, limit } = request;
     const features = [] as OlFeature[];
-    let destGeometry = geometry.transform(geometryProjection, olMap.getView().getProjection());
+    let destGeometry = geometry.transform(geometryProjection, geometryProjection);
     if (destGeometry.getType() === 'Circle') {
       destGeometry = fromCircle(geometry as Circle);
     }
@@ -39,9 +39,5 @@ export abstract class Vector extends OlVector implements IVector {
       request,
       features
     });
-  }
-
-  getToc(): Promise<IToc> {
-    return Promise.resolve<IToc>({ tocElements: null });
   }
 }

@@ -1,5 +1,5 @@
 import OlVectorTile from 'ol/source/VectorTile';
-import { IExtended, IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IExtended, IQueryRequest, IQueryResponse } from './IExtended';
 
 export abstract class VectorTile extends OlVectorTile implements IExtended {
   protected label: string;
@@ -14,9 +14,5 @@ export abstract class VectorTile extends OlVectorTile implements IExtended {
       request,
       features: []
     });
-  }
-
-  getToc(): Promise<IToc> {
-    return Promise.resolve<IToc>({ tocElements: null });
   }
 }

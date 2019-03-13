@@ -1,6 +1,6 @@
 import OlImageWMS from 'ol/source/ImageWMS';
 import OlFeature from 'ol/Feature';
-import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse } from './IExtended';
 import { IImage } from './IImage';
 
 export class ImageWms extends OlImageWMS implements IImage {
@@ -17,9 +17,5 @@ export class ImageWms extends OlImageWMS implements IImage {
       request,
       features
     });
-  }
-
-  getToc(): Promise<IToc> {
-    return Promise.resolve<IToc>({ tocElements: null });
   }
 }

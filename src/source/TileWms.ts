@@ -1,6 +1,6 @@
 import OlTileWMS from 'ol/source/TileWMS';
 import OlFeature from 'ol/Feature';
-import { IQueryRequest, IQueryResponse, IToc } from './IExtended';
+import { IQueryRequest, IQueryResponse } from './IExtended';
 import { ITileImage } from './ITileImage';
 
 export class TileWms extends OlTileWMS implements ITileImage {
@@ -17,9 +17,5 @@ export class TileWms extends OlTileWMS implements ITileImage {
       request,
       features
     });
-  }
-
-  getToc(): Promise<IToc> {
-    return Promise.resolve<IToc>({ tocElements: null });
   }
 }
