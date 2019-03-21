@@ -4,8 +4,8 @@ import { IMapContext, mapContext } from '../RomapContext';
 
 export interface IBaseContainerProps extends IRomapChildProps {
   /**
- * Content.
- */
+   * Content.
+   */
   children: React.ReactNode;
 }
 

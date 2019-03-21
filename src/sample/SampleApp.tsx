@@ -50,12 +50,12 @@ export class SampleApp extends React.Component {
         >
           <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
           <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
-          <romap.layer.Tile  source={world2D} name="World 2D" type="BASE" visible={true} id={generateUUID()} />
+          <romap.layer.Tile source={world2D} name="World 2D" type="BASE" visible={true} id={generateUUID()} />
           <romap.layer.Image source={landsatSource} name="Land sat" type="BASE" id={generateUUID()} />
           <romap.layer.Group name="Groupe 1" id={generateUUID()}>
             <romap.layer.Image source={britishNationalGrid} name="British National Grid" id={generateUUID()} />
           </romap.layer.Group>
-          <romap.container.Control id={generateUUID()} >
+          <romap.container.Control id={generateUUID()}>
             <romap.tool.PanZoom id={generateUUID()} />
           </romap.container.Control>
           <romap.container.Control id={generateUUID()}>

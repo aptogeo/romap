@@ -74,15 +74,17 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
   }
 
   /**
-     * Get infoElements
-     */
+   * Get infoElements
+   */
   public getInfoElements(
     filterFn?: (value: IInfoElement, index: number, array: IInfoElement[]) => boolean,
     thisFilterArg?: any
   ): IInfoElement[] {
     const arr = Array.from(this.infoElements.values()).filter(
       infoElement =>
-        infoElement.status === 'orig_add' || infoElement.status === 'ext_add' || infoElement.status === 'orig_modif_by_ext'
+        infoElement.status === 'orig_add' ||
+        infoElement.status === 'ext_add' ||
+        infoElement.status === 'orig_modif_by_ext'
     );
     return filterFn == null ? arr : arr.filter(filterFn, thisFilterArg);
   }

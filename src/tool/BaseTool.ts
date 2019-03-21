@@ -20,5 +20,4 @@ export interface IBaseToolProps extends IRomapChildProps {
   disable?: boolean;
 }
 
-export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
-}
+export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {}

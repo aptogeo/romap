@@ -178,8 +178,10 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
     });
     // Containers & Tools
     this.getInfoElements(infoElement => infoElement.parentId == null).forEach(infoElement => {
-      if (BaseContainer.isPrototypeOf(infoElement.reactElement.type) ||
-        BaseTool.isPrototypeOf(infoElement.reactElement.type)) {
+      if (
+        BaseContainer.isPrototypeOf(infoElement.reactElement.type) ||
+        BaseTool.isPrototypeOf(infoElement.reactElement.type)
+      ) {
         console.log(infoElement.reactElement.type);
         elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
       }

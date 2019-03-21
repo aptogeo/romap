@@ -65,9 +65,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
   public renderBaseList(parentId: string = null): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
     this.context.romapManager
-      .getInfoElements(
-        infoLayer => infoLayer.parentId === parentId && infoLayer.reactElement.props.type === 'BASE'
-      )
+      .getInfoElements(infoLayer => infoLayer.parentId === parentId && infoLayer.reactElement.props.type === 'BASE')
       .forEach(infoLayer => {
         bases.push(
           <div key={infoLayer.id}>
@@ -78,9 +76,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
               onChange={this.handleRadioChange}
               data-id={infoLayer.id}
             />
-            <label title={infoLayer.reactElement.props.name}>
-              {infoLayer.reactElement.props.name}
-            </label>
+            <label title={infoLayer.reactElement.props.name}>{infoLayer.reactElement.props.name}</label>
           </div>
         );
         const subBaseList = this.renderBaseList(infoLayer.id);
