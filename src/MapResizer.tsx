@@ -1,19 +1,14 @@
 import * as React from 'react';
-import { mapContext, IMapContext } from '../RomapContext';
-import { BaseTool, IBaseToolProps } from './BaseTool';
+import { mapContext, IMapContext } from './RomapContext';
 
-export class MapResizer extends BaseTool<IBaseToolProps, {}> {
+export class MapResizer extends React.Component {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public context: IMapContext;
 
   constructor(props: {}) {
     super(props);
-    if (this.props.disable === true) {
-      window.removeEventListener('resize', this.updateSize);
-    } else {
-      window.addEventListener('resize', this.updateSize);
-    }
+    window.addEventListener('resize', this.updateSize);
   }
 
   public updateSize = () => {

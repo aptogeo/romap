@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as romap from '../';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
+import { generateUUID } from '../utils';
 
 export class SampleApp extends React.Component {
   public render(): React.ReactNode {
@@ -49,48 +50,20 @@ export class SampleApp extends React.Component {
         >
           <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
           <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
-          <romap.layer.Tile id="World 2D" source={world2D} name="World 2D" type="BASE" visible={true} />
-          <romap.layer.Image id="Land sat" source={landsatSource} name="Land sat" type="BASE" />
-          <romap.layer.Group id="Grp1" name="Groupe 1">
-            <romap.layer.Image id="British National Grid" source={britishNationalGrid} name="British National Grid" />
+          <romap.layer.Tile  source={world2D} name="World 2D" type="BASE" visible={true} id={generateUUID()} />
+          <romap.layer.Image source={landsatSource} name="Land sat" type="BASE" id={generateUUID()} />
+          <romap.layer.Group name="Groupe 1" id={generateUUID()}>
+            <romap.layer.Image source={britishNationalGrid} name="British National Grid" id={generateUUID()} />
           </romap.layer.Group>
-          <romap.tool.Control>
-            <romap.tool.PanZoom />
-          </romap.tool.Control>
-          <romap.tool.Control>
-            <romap.tool.ScaleLine />
-          </romap.tool.Control>
-          <romap.tool.Control>
-            <romap.tool.Toc />
-          </romap.tool.Control>
-        </romap.Romap>
-        <romap.Romap
-          keyboardEventTarget={document}
-          initialViewCenter={[508000, 6000000]}
-          initialViewZoom={5}
-          style={{ flex: '1 1 0' }}
-          olMapStyle={{ height: 600 }}
-        >
-          <romap.layer.Image id="Land sat" source={landsatSource} name="Land sat" />
-          <romap.layer.Vector
-            id="States Provinces Lines"
-            source={statesProvincesLinesSource}
-            style={
-              new Style({
-                stroke: new Stroke({
-                  color: 'rgba(0, 0, 255, 1.0)',
-                  width: 2
-                })
-              })
-            }
-            name="States Provinces Lines"
-          />
-          <romap.tool.Control>
-            <romap.tool.PanZoom showZoomSlider={false} showOrigin={false} />
-          </romap.tool.Control>
-          <romap.tool.Control>
-            <romap.tool.ScaleLine />
-          </romap.tool.Control>
+          <romap.container.Control id={generateUUID()} >
+            <romap.tool.PanZoom id={generateUUID()} />
+          </romap.container.Control>
+          <romap.container.Control id={generateUUID()}>
+            <romap.tool.ScaleLine id={generateUUID()} />
+          </romap.container.Control>
+          <romap.container.Control id={generateUUID()}>
+            <romap.tool.Toc id={generateUUID()} />
+          </romap.container.Control>
         </romap.Romap>
       </div>
     );

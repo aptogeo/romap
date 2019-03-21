@@ -1,7 +1,8 @@
 import * as React from 'react';
 import OlGroupLayer from 'ol/layer/Group';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
-import { mapContext, IMapContext, IInfoLayer } from '../RomapContext';
+import { mapContext, IMapContext } from '../RomapContext';
+import { IRomapChildProps } from '../RomapChild';
 
 export interface IGroupProps extends IBaseLayerProps {
   /**
@@ -28,12 +29,12 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
   }
 
   public componentDidMount() {
-    this.context.infoLayerManager.updateFromChildren(null, this.props.children, null, this.props.id);
+    this.context.romapManager.updateFromChildren(null, this.props.children, null, this.props.id);
     super.componentDidMount();
   }
 
   public componentDidUpdate(prevProps: IGroupProps) {
-    this.context.infoLayerManager.updateFromChildren(prevProps.children, this.props.children, null, null);
+    this.context.romapManager.updateFromChildren(prevProps.children, this.props.children, null, null);
     super.componentDidUpdate(prevProps);
   }
 
@@ -42,12 +43,12 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
     return new OlGroupLayer();
   }
 
-  public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
-    const elems: React.ReactElement<IBaseLayerProps>[] = [];
-    this.context.infoLayerManager
-      .getInfoLayers(infoLayer => infoLayer.parentId == this.props.id)
-      .forEach((infoLayer: IInfoLayer) => {
-        elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
+  public renderChildren(): React.ReactElement<IRomapChildProps>[] {
+    const elems: React.ReactElement<IRomapChildProps>[] = [];
+    this.context.romapManager
+      .getInfoElements(infoElement => infoElement.parentId == this.props.id)
+      .forEach(infoElement => {
+        elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
       });
     return elems;
   }
@@ -64,7 +65,7 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
             olGroup: this.getOlLayer()
           }}
         >
-          {this.renderLayers()}
+          {this.renderChildren()}
         </mapContext.Provider>
       </div>
     );

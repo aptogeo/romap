@@ -2,18 +2,14 @@ import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
 import OlSource from 'ol/source/Source';
 import { walk } from '../utils';
-import { MapChild } from '../RomapChild';
+import { RomapChild, IRomapChildProps } from '../RomapChild';
 import { mapContext, IMapContext } from '../RomapContext';
 import { jsonEqual } from '../utils';
 import { IExtended } from '../source';
 
 let globalOrder = 0;
 
-export interface IBaseLayerProps {
-  /**
-   * Unique id.
-   */
-  id: string;
+export interface IBaseLayerProps extends IRomapChildProps {
   /**
    * Name.
    */
@@ -44,10 +40,10 @@ export interface IBaseLayerProps {
   source?: IExtended;
 }
 
-export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OLS extends OlSource> extends MapChild<
+export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OLS extends OlSource> extends RomapChild<
   P,
   S
-> {
+  > {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
@@ -105,7 +101,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     if (prevProps == null || prevProps.visible !== nextProps.visible) {
       let visible = nextProps.visible;
       if (nextProps.visible == null) {
-        this.context.infoLayerManager.changeInfoLayerProps({ id: nextProps.id, visible: nextProps.type === 'OVERLAY' });
+        this.context.romapManager.changeInfoElementProps({ id: nextProps.id, visible: nextProps.type === 'OVERLAY' });
       } else {
         this.olLayer.setVisible(visible);
       }
@@ -175,13 +171,13 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     const key = event.key;
     const value = event.target.get(key);
     if (key === 'visible' && value === true && this.props.type === 'BASE') {
-      this.context.infoLayerManager
-        .getInfoLayers(infoLayer => {
-          const props = infoLayer.reactBaseLayerElement.props;
+      this.context.romapManager
+        .getInfoElements(infoElement => {
+          const props = infoElement.reactElement.props;
           return props.type === 'BASE' && props.visible === true && props.id !== this.props.id;
         })
         .forEach(infoLayer => {
-          this.context.infoLayerManager.changeInfoLayerProps({ id: infoLayer.id, visible: false });
+          this.context.romapManager.changeInfoElementProps({ id: infoLayer.id, visible: false });
         });
     }
   };

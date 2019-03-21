@@ -54,19 +54,19 @@ export class Toc extends BaseTool<ITocProps, {}> {
 
   public handleRadioChange = (e: React.ChangeEvent) => {
     const id = e.currentTarget.getAttribute('data-id');
-    this.context.infoLayerManager.changeInfoLayerProps({ id, visible: true });
+    this.context.romapManager.changeInfoElementProps({ id, visible: true });
   };
 
   public handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.currentTarget.getAttribute('data-id');
-    this.context.infoLayerManager.changeInfoLayerProps({ id, visible: e.currentTarget.checked });
+    this.context.romapManager.changeInfoElementProps({ id, visible: e.currentTarget.checked });
   };
 
   public renderBaseList(parentId: string = null): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
-    this.context.infoLayerManager
-      .getInfoLayers(
-        infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'BASE'
+    this.context.romapManager
+      .getInfoElements(
+        infoLayer => infoLayer.parentId === parentId && infoLayer.reactElement.props.type === 'BASE'
       )
       .forEach(infoLayer => {
         bases.push(
@@ -74,12 +74,12 @@ export class Toc extends BaseTool<ITocProps, {}> {
             <input
               type="radio"
               name="radiotoc"
-              checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
+              checked={infoLayer.reactElement.props.visible ? true : false}
               onChange={this.handleRadioChange}
               data-id={infoLayer.id}
             />
-            <label title={infoLayer.reactBaseLayerElement.props.name}>
-              {infoLayer.reactBaseLayerElement.props.name}
+            <label title={infoLayer.reactElement.props.name}>
+              {infoLayer.reactElement.props.name}
             </label>
           </div>
         );
@@ -93,12 +93,12 @@ export class Toc extends BaseTool<ITocProps, {}> {
 
   public renderOverlayTree(parentId: string = null): React.ReactNodeArray {
     const overlayTree: React.ReactNodeArray = [];
-    this.context.infoLayerManager
-      .getInfoLayers(
-        infoLayer => infoLayer.parentId === parentId && infoLayer.reactBaseLayerElement.props.type === 'OVERLAY'
+    this.context.romapManager
+      .getInfoElements(
+        infoElement => infoElement.parentId === parentId && infoElement.reactElement.props.type === 'OVERLAY'
       )
-      .forEach(infoLayer => {
-        const name = infoLayer.reactBaseLayerElement.props.name || '';
+      .forEach(infoElement => {
+        const name = infoElement.reactElement.props.name || '';
         let truncName = name;
         if (truncName.length > 15) {
           truncName = truncName.substring(0, 14) + '…';
@@ -106,24 +106,24 @@ export class Toc extends BaseTool<ITocProps, {}> {
         const input = (
           <input
             type="checkbox"
-            checked={infoLayer.reactBaseLayerElement.props.visible ? true : false}
+            checked={infoElement.reactElement.props.visible ? true : false}
             onChange={this.handleCheckboxChange}
-            data-id={infoLayer.id}
+            data-id={infoElement.id}
           />
         );
         const label = <label title={name}>{truncName}</label>;
-        if (infoLayer.reactBaseLayerElement.props.type === 'OVERLAY') {
-          const subOverlayTree = this.renderOverlayTree(infoLayer.id);
+        if (infoElement.reactElement.props.type === 'OVERLAY') {
+          const subOverlayTree = this.renderOverlayTree(infoElement.id);
           if (subOverlayTree == null || subOverlayTree.length === 0) {
             overlayTree.push(
-              <div key={infoLayer.id}>
+              <div key={infoElement.id}>
                 {input}
                 {label}
               </div>
             );
           } else {
             overlayTree.push(
-              <div key={infoLayer.id}>
+              <div key={infoElement.id}>
                 <SpanParentSubTree>
                   {input}
                   {label}

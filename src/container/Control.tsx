@@ -1,13 +1,13 @@
 import * as React from 'react';
 import OlControl from 'ol/control/Control';
 import { mapContext, IMapContext } from '../RomapContext';
-import { BaseTool, IBaseToolProps } from './BaseTool';
+import { BaseContainer, IBaseContainerProps } from './BaseContainer';
 
-export interface IControlProps extends IBaseToolProps {
+export interface IControlProps extends IBaseContainerProps {
   /**
    * Content.
    */
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export interface IControlState {
@@ -17,7 +17,7 @@ export interface IControlState {
   control: OlControl;
 }
 
-export class Control extends BaseTool<IControlProps, IControlState> {
+export class Control extends BaseContainer<IControlProps, IControlState> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public context: IMapContext;
@@ -35,13 +35,8 @@ export class Control extends BaseTool<IControlProps, IControlState> {
   }
 
   public componentDidMount() {
-    this.componentDidUpdate();
-  }
-
-  public componentDidUpdate() {
-    if (this.controlDiv != null && this.state.control == null) {
-      this.createControl();
-    }
+    super.componentDidMount();
+    this.createControl();
   }
 
   public componentWillUnmount() {
@@ -60,10 +55,6 @@ export class Control extends BaseTool<IControlProps, IControlState> {
   }
 
   public render(): React.ReactNode {
-    let children: React.ReactNodeArray = [];
-    if (this.state.control != null) {
-      children = this.getChildren();
-    }
     return (
       <div style={{ display: 'none' }}>
         <div
@@ -71,7 +62,7 @@ export class Control extends BaseTool<IControlProps, IControlState> {
             this.controlDiv = controlDiv;
           }}
         >
-          <div>{children}</div>
+          <div>{this.renderChildren()}</div>
         </div>
       </div>
     );

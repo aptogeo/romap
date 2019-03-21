@@ -3,11 +3,13 @@ import { createGlobalStyle } from 'styled-components';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
-import { mapContext, IInfoLayer } from './RomapContext';
+import { mapContext } from './RomapContext';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
-import { MapChild } from './RomapChild';
+import { RomapChild } from './RomapChild';
 import { Projection } from './Projection';
-import { InfoLayerManager, InfoLayerManagerState } from './InfoLayerManager';
+import { RomapManager, RomapManagerState, IInfoTool } from './RomapManager';
+import { IBaseToolProps, BaseTool } from './tool/BaseTool';
+import { BaseContainer } from './container/BaseContainer';
 
 const GlobalStyle = createGlobalStyle`
   .ol-unsupported {
@@ -85,7 +87,7 @@ export interface IMapProps {
   initialViewProjection?: OlProjection | string;
 }
 
-export class Romap extends InfoLayerManager<IMapProps, InfoLayerManagerState> {
+export class Romap extends RomapManager<IMapProps, RomapManagerState> {
   public static defaultProps = {
     className: 'map'
   };
@@ -156,23 +158,30 @@ export class Romap extends InfoLayerManager<IMapProps, InfoLayerManagerState> {
     }
   }
 
-  public renderLayers(): React.ReactElement<IBaseLayerProps>[] {
+  public renderNonRomapChildren(): React.ReactNode {
     const elems: React.ReactElement<IBaseLayerProps>[] = [];
-    this.getInfoLayers(infoLayer => infoLayer.parentId == null).forEach((infoLayer: IInfoLayer) => {
-      elems.push(React.cloneElement(infoLayer.reactBaseLayerElement, { key: infoLayer.id }));
+    React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
+      if (!RomapChild.isPrototypeOf(child.type)) {
+        elems.push(child);
+      }
     });
     return elems;
   }
 
-  public renderNonLayers(): React.ReactNode {
-    const elems: React.ReactElement<IBaseLayerProps>[] = [];
-    React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
-      if (
-        MapChild.isPrototypeOf(child.type) &&
-        !BaseLayer.isPrototypeOf(child.type) &&
-        !Projection.isPrototypeOf(child.type)
-      ) {
-        elems.push(child);
+  public renderRomapChildren(): React.ReactElement<IBaseToolProps>[] {
+    const elems: React.ReactElement<IBaseToolProps>[] = [];
+    // Layers
+    this.getInfoElements().forEach(infoElement => {
+      if (BaseLayer.isPrototypeOf(infoElement.reactElement.type)) {
+        elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
+      }
+    });
+    // Containers & Tools
+    this.getInfoElements(infoElement => infoElement.parentId == null).forEach(infoElement => {
+      if (BaseContainer.isPrototypeOf(infoElement.reactElement.type) ||
+        BaseTool.isPrototypeOf(infoElement.reactElement.type)) {
+        console.log(infoElement.reactElement.type);
+        elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
       }
     });
     return elems;
@@ -193,14 +202,14 @@ export class Romap extends InfoLayerManager<IMapProps, InfoLayerManagerState> {
           value={{
             olMap: this.olMap,
             olGroup: this.olMap.getLayerGroup(),
-            infoLayerManager: this,
+            romapManager: this,
             getLocalizedText: (code: string, defaultText: string) => {
               return defaultText;
             }
           }}
         >
-          {this.renderNonLayers()}
-          {this.renderLayers()}
+          {this.renderNonRomapChildren()}
+          {this.renderRomapChildren()}
         </mapContext.Provider>
       </div>
     );

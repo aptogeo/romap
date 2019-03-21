@@ -1,13 +1,13 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
 import { mapContext, IMapContext } from '../RomapContext';
-import { BaseTool, IBaseToolProps } from './BaseTool';
+import { BaseContainer, IBaseContainerProps } from './BaseContainer';
 
-export interface IOverlayProps extends IBaseToolProps {
+export interface IOverlayProps extends IBaseContainerProps {
   /**
    * Content.
    */
-  children?: React.ReactNode;
+  children: React.ReactNode;
   /**
    * Positioning.
    */
@@ -29,7 +29,7 @@ export interface IOverlayState {
   overlay: OlOverlay;
 }
 
-export class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
+export class Overlay extends BaseContainer<IOverlayProps, IOverlayState> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
@@ -62,16 +62,12 @@ export class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
   }
 
   public componentDidMount() {
-    this.componentDidUpdate();
+    super.componentDidMount();
+    this.createOverlay();
   }
 
-  public componentDidUpdate() {
-    if (this.overlayDiv != null && this.state.overlay == null) {
-      this.createOverlay();
-    }
-    if (this.state.overlay == null) {
-      return;
-    }
+  public componentDidUpdate(prevProps: IOverlayProps) {
+    super.componentDidUpdate(prevProps);
     this.state.overlay.setPositioning(this.props.positioning as any);
     this.computePosition();
   }
@@ -122,10 +118,6 @@ export class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
   }
 
   public render(): React.ReactNode {
-    let children: React.ReactNodeArray = [];
-    if (this.state.overlay != null) {
-      children = this.getChildren();
-    }
     return (
       <div style={{ display: 'none' }}>
         <div
@@ -133,7 +125,7 @@ export class Overlay extends BaseTool<IOverlayProps, IOverlayState> {
             this.overlayDiv = overlayDiv;
           }}
         >
-          <div>{children}</div>
+          <div>{this.renderChildren()}</div>
         </div>
       </div>
     );

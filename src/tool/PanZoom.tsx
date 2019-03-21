@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import OlView from 'ol/View';
 import { inAndOut } from 'ol/easing';
-import { cloneView } from '../utils';
+import { cloneView, generateUUID } from '../utils';
 import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 

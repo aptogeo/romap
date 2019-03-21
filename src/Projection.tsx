@@ -3,7 +3,6 @@ import OlProjection from 'ol/proj/Projection';
 import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import { transformExtent, get as getOlProjection } from 'ol/proj';
-import { MapChild } from './RomapChild';
 
 const projMap = new Map<string, ProjectionInfo>();
 
@@ -28,7 +27,7 @@ export interface IProjectionProps {
   remarks?: string;
 }
 
-export class Projection extends MapChild<IProjectionProps, any> {
+export class Projection extends React.Component<IProjectionProps, any> {
   public projectionInfo: ProjectionInfo;
 
   constructor(props: IProjectionProps) {
