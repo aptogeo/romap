@@ -133,7 +133,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
     return overlayTree;
   }
 
-  public render(): React.ReactNode {
+  public renderTool(): React.ReactNode {
     if (this.props.disable === true) {
       return null;
     }

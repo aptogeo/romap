@@ -6,8 +6,7 @@ import OlProjection from 'ol/proj/Projection';
 import { mapContext } from './RomapContext';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
 import { RomapChild } from './RomapChild';
-import { Projection } from './Projection';
-import { RomapManager, RomapManagerState, IInfoTool } from './RomapManager';
+import { RomapManager, RomapManagerState } from './RomapManager';
 import { IBaseToolProps, BaseTool } from './tool/BaseTool';
 import { BaseContainer } from './container/BaseContainer';
 
@@ -182,7 +181,6 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
         BaseContainer.isPrototypeOf(infoElement.reactElement.type) ||
         BaseTool.isPrototypeOf(infoElement.reactElement.type)
       ) {
-        console.log(infoElement.reactElement.type);
         elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
       }
     });
