@@ -50,14 +50,14 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
 
   public handleClick = () => {
     this.activate();
-  }
+  };
 
   public renderTool(): React.ReactNode {
     return null;
   }
 
   public render(): React.ReactNode {
-    const className = (this.props.activated) ? 'activated': 'deactivated';
+    const className = this.props.activated ? 'activated' : 'deactivated';
     return (
       <div onClick={this.handleClick.bind(this)} className={className}>
         {this.renderTool()}

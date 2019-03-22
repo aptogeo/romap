@@ -139,12 +139,14 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     const props = infoElement.reactElement.props as IBaseToolProps;
     if (!props.activated) {
       if (!props.independant) {
-        this.getInfoElements(otherInfoElement => (otherInfoElement.id != props.id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)))
-          .forEach(otherInfoElement => {
-            if (!(otherInfoElement.reactElement.props as IBaseToolProps).independant) {
-              this.changeInfoElementProps({ id: otherInfoElement.id, activated: false });
-            }
-          });
+        this.getInfoElements(
+          otherInfoElement =>
+            otherInfoElement.id != props.id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)
+        ).forEach(otherInfoElement => {
+          if (!(otherInfoElement.reactElement.props as IBaseToolProps).independant) {
+            this.changeInfoElementProps({ id: otherInfoElement.id, activated: false });
+          }
+        });
       }
       this.changeInfoElementProps({ id, activated: true });
     }
@@ -160,13 +162,15 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
       this.changeInfoElementProps({ id, activated: false });
       if (!props.independant) {
         let defaultElement: IInfoElement;
-        this.getInfoElements(otherInfoElement => (otherInfoElement.id != props.id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)))
-          .forEach(otherInfoElement => {
-            if (!(otherInfoElement.reactElement.props as IBaseToolProps).independant) {
-              this.changeInfoElementProps({ id: otherInfoElement.id, activated: false });
-              defaultElement = otherInfoElement;
-            }
-          });
+        this.getInfoElements(
+          otherInfoElement =>
+            otherInfoElement.id != props.id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)
+        ).forEach(otherInfoElement => {
+          if (!(otherInfoElement.reactElement.props as IBaseToolProps).independant) {
+            this.changeInfoElementProps({ id: otherInfoElement.id, activated: false });
+            defaultElement = otherInfoElement;
+          }
+        });
         if (defaultElement != null) {
           this.activateTool(defaultElement.id);
         }
