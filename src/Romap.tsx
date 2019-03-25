@@ -124,14 +124,16 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
     this.olMap.setTarget(this.divMap);
     this.updateFromChildren(null, this.props.children, null, null);
     // View
-    const view = new OlView({
-      center: this.props.initialViewCenter,
-      zoom: this.props.initialViewZoom,
-      resolution: this.props.initialViewResolution,
-      rotation: this.props.initialViewRotation,
-      projection: this.props.initialViewProjection
-    });
-    this.olMap.setView(view);
+    if (this.props.initialViewCenter != null && this.props.initialViewZoom != null) {
+      const view = new OlView({
+        center: this.props.initialViewCenter,
+        zoom: this.props.initialViewZoom,
+        resolution: this.props.initialViewResolution,
+        rotation: this.props.initialViewRotation,
+        projection: this.props.initialViewProjection
+      });
+      this.olMap.setView(view);
+    }
   }
 
   public componentDidUpdate(prevProps: IMapProps) {

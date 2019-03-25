@@ -33,11 +33,6 @@ export class SampleApp extends React.Component {
       ratio: 1
     });
 
-    const statesProvincesLinesSource = new romap.source.Wfs({
-      url: 'https://ahocevar.com/geoserver/wfs',
-      typename: 'ne:ne_10m_admin_1_states_provinces_lines_shp'
-    });
-
     return (
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <romap.Romap

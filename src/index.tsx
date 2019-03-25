@@ -1,5 +1,9 @@
 export * from './Romap';
 export * from './Projection';
+export * from './HeightResizer';
+export * from './RomapChild';
+export * from './RomapContext';
+export * from './RomapManager';
 
 import * as _layer from './layer';
 export const layer = _layer;
