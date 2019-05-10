@@ -12,3 +12,5 @@ export * from './Wfs';
 export * from './TileArcGISRest';
 export * from './ImageArcGISRest';
 export * from './ImageStatic';
+export * from './ImageWms';
+export * from './TileWms';

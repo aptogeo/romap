@@ -3,6 +3,10 @@ import { mapContext, IMapContext } from './RomapContext';
 
 export interface IResizerProps {
   /**
+   * Height percent.
+   */
+  heightPercent?: number;
+  /**
    * Height removal.
    */
   heightRemoval?: string;
@@ -12,6 +16,7 @@ export class HeightResizer extends React.Component<IResizerProps, {}> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
+    heightPercent: 100,
     heightRemoval: '15px'
   };
 
@@ -36,7 +41,7 @@ export class HeightResizer extends React.Component<IResizerProps, {}> {
     const olMap = this.context.olMap;
     const targetElement = olMap.getTargetElement() as HTMLElement;
     if (targetElement) {
-      targetElement.parentElement.style.height = `calc(100% - ${this.props.heightRemoval})`;
+      targetElement.parentElement.style.height = `calc(${this.props.heightPercent} - ${this.props.heightRemoval})`;
       const w = targetElement.offsetWidth;
       const h = targetElement.parentElement.offsetHeight;
       targetElement.style.height = `${h}px`;
