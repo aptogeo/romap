@@ -34,7 +34,7 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
     activated: false,
     defaultActivated: false,
     independant: false,
-    className: 'tool',
+    className: 'tool'
   };
 
   public static contextType: React.Context<IMapContext> = mapContext;

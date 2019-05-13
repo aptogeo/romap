@@ -25,7 +25,9 @@ export class Zone extends BaseContainer<IZoneProps, {}> {
   public render(): React.ReactNode {
     const className = `${this.props.className}`;
     return (
-      <div className={className} style={this.props.style}>{this.renderChildren()}</div>
+      <div className={className} style={this.props.style}>
+        {this.renderChildren()}
+      </div>
     );
   }
 }

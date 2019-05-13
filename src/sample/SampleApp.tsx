@@ -4,7 +4,6 @@ import { generateUUID } from '../utils';
 import { IBaseButtonToolProps, IBaseWindowToolProps } from '../tool';
 
 class CounterButton extends romap.tool.BaseButtonTool<IBaseButtonToolProps, any> {
-
   public constructor(props: IBaseButtonToolProps) {
     super(props);
     if (props.activated) {
@@ -28,7 +27,6 @@ class CounterButton extends romap.tool.BaseButtonTool<IBaseButtonToolProps, any>
 }
 
 class CounterWindow extends romap.tool.BaseWindowTool<IBaseWindowToolProps, any> {
-
   public constructor(props: IBaseWindowToolProps) {
     super(props);
     if (props.activated) {

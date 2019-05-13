@@ -7,7 +7,7 @@ const Window = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #cccccc;
   border-radius: 3px;
   background-color: rgba(255, 255, 255, 0.9);
   padding: 3px;
@@ -94,11 +94,14 @@ export interface IBaseWindowToolState {
   position: any;
 }
 
-export class BaseWindowTool<P extends IBaseWindowToolProps = IBaseWindowToolProps, S extends IBaseWindowToolState = IBaseWindowToolState> extends BaseButtonTool<P, S> {
+export class BaseWindowTool<
+  P extends IBaseWindowToolProps = IBaseWindowToolProps,
+  S extends IBaseWindowToolState = IBaseWindowToolState
+> extends BaseButtonTool<P, S> {
   public static defaultProps = {
     ...BaseButtonTool.defaultProps,
     defaultOpened: false,
-    hideCloseButton: false,
+    hideCloseButton: false
   };
 
   private windowElement: HTMLSpanElement;
@@ -127,8 +130,8 @@ export class BaseWindowTool<P extends IBaseWindowToolProps = IBaseWindowToolProp
   }
 
   /**
- * Open window.
- */
+   * Open window.
+   */
   public open(): boolean {
     if (this.state.open) {
       return false;
@@ -149,8 +152,8 @@ export class BaseWindowTool<P extends IBaseWindowToolProps = IBaseWindowToolProp
   }
 
   /**
- * Close window
- */
+   * Close window
+   */
   public close(): boolean {
     if (!this.state.open) {
       return false;
@@ -185,16 +188,16 @@ export class BaseWindowTool<P extends IBaseWindowToolProps = IBaseWindowToolProp
       this.open();
       this.activate();
     }
-  }
+  };
 
   public handleWindowClick = () => {
     this.activate();
-  }
+  };
 
   public handleCloseClick = (event: any) => {
     event.preventDefault();
     this.close();
-  }
+  };
 
   public renderHeader(): React.ReactNode {
     return null;
@@ -224,7 +227,11 @@ export class BaseWindowTool<P extends IBaseWindowToolProps = IBaseWindowToolProp
     let openButton = null;
     if (!this.props.hideOpenButton) {
       openButton = (
-        <button className={`${this.props.className.split(/\s+/g)[0]}-open-button`} title={this.props.buttonTitle} onClick={this.handleButtonClick}>
+        <button
+          className={`${this.props.className.split(/\s+/g)[0]}-open-button`}
+          title={this.props.buttonTitle}
+          onClick={this.handleButtonClick}
+        >
           {this.renderOpenButtonContent()}
         </button>
       );
@@ -258,9 +265,7 @@ export class BaseWindowTool<P extends IBaseWindowToolProps = IBaseWindowToolProp
               {this.renderHeader()}
               {closeButton}
             </TitleBar>
-            <Content className={`${this.props.className}-content`}>
-              {this.renderTool()}
-            </Content>
+            <Content className={`${this.props.className}-content`}>{this.renderTool()}</Content>
           </Window>
         </Drag>
       </React.Fragment>

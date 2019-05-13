@@ -40,7 +40,7 @@ export class BaseButtonTool<P extends IBaseButtonToolProps = IBaseButtonToolProp
         this.activate();
       }
     }
-  }
+  };
 
   public render(): React.ReactNode {
     const className = `${this.props.className}
