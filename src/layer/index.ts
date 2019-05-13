@@ -1,3 +1,4 @@
+export * from './BaseLayer';
 export * from './Drawing';
 export * from './Group';
 export * from './Heatmap';

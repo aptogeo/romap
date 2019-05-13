@@ -47,6 +47,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
+    ...BaseTool.defaultProps,
     className: 'toc'
   };
 
@@ -134,7 +135,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
   }
 
   public renderTool(): React.ReactNode {
-    if (this.props.disable === true) {
+    if (this.props.disabled === true) {
       return null;
     }
     return (

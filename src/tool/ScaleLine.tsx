@@ -80,6 +80,7 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
+    ...BaseTool.defaultProps,
     className: 'scaleline',
     minWidth: 64
   };
@@ -187,7 +188,7 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
   }
 
   public renderTool(): React.ReactNode {
-    if (this.props.disable === true) {
+    if (this.props.disabled === true) {
       return null;
     }
     const scanlineTitle = this.context.getLocalizedText('scanlineTitle', 'Diagonal distance in map center');

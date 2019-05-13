@@ -8,11 +8,11 @@ export interface IBaseToolProps extends IRomapChildProps {
    */
   id: string;
   /**
-   * Active.
+   * Activated.
    */
   activated?: boolean;
   /**
-   * Active by default when all others are deactivated.
+   * Activated by default when all others are deactivated.
    */
   defaultActivated?: boolean;
   /**
@@ -20,12 +20,23 @@ export interface IBaseToolProps extends IRomapChildProps {
    */
   independant?: boolean;
   /**
-   * Disable.
+   * Disabled.
    */
-  disable?: boolean;
+  disabled?: boolean;
+  /**
+   * Class name.
+   */
+  className?: string;
 }
 
 export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
+  public static defaultProps = {
+    activated: false,
+    defaultActivated: false,
+    independant: false,
+    className: 'tool',
+  };
+
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public context: IMapContext;
@@ -57,9 +68,11 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
   }
 
   public render(): React.ReactNode {
-    const className = this.props.activated ? 'activated' : 'deactivated';
+    const className = `${this.props.className}
+      ${this.props.activated ? `${this.props.className}-activated` : `${this.props.className}-unactivated`}
+      ${this.props.disabled ? `${this.props.className}-disabled` : `${this.props.className}-activated`}`;
     return (
-      <div onClick={this.handleClick.bind(this)} className={className}>
+      <div onClick={this.handleClick} className={className}>
         {this.renderTool()}
       </div>
     );

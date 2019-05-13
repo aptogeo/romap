@@ -1,8 +1,63 @@
 import * as React from 'react';
 import * as romap from '../';
-import Style from 'ol/style/Style';
-import Stroke from 'ol/style/Stroke';
 import { generateUUID } from '../utils';
+import { IBaseButtonToolProps, IBaseWindowToolProps } from '../tool';
+
+class CounterButton extends romap.tool.BaseButtonTool<IBaseButtonToolProps, any> {
+
+  public constructor(props: IBaseButtonToolProps) {
+    super(props);
+    if (props.activated) {
+      this.state = { count: 1 };
+    } else {
+      this.state = { count: 0 };
+    }
+  }
+
+  public componentDidUpdate(prevProps: IBaseButtonToolProps) {
+    if (this.props.activated && !prevProps.activated) {
+      this.setState({
+        count: this.state.count + 1
+      });
+    }
+  }
+
+  public renderTool(): any {
+    return <span>count: {String(this.state.count)}</span>;
+  }
+}
+
+class CounterWindow extends romap.tool.BaseWindowTool<IBaseWindowToolProps, any> {
+
+  public constructor(props: IBaseWindowToolProps) {
+    super(props);
+    if (props.activated) {
+      this.state = { count: 1 };
+    } else {
+      this.state = { count: 0 };
+    }
+  }
+
+  public componentDidUpdate(prevProps: IBaseWindowToolProps) {
+    if (this.props.activated && !prevProps.activated) {
+      this.setState({
+        count: this.state.count + 1
+      });
+    }
+  }
+
+  public renderHeader(): React.ReactNode {
+    return <span>Counter</span>;
+  }
+
+  public renderOpenButton(): React.ReactNode {
+    return <span>Counter</span>;
+  }
+
+  public renderTool(): any {
+    return <span>count: {String(this.state.count)}</span>;
+  }
+}
 
 export class SampleApp extends React.Component {
   public render(): React.ReactNode {
@@ -59,6 +114,12 @@ export class SampleApp extends React.Component {
           <romap.container.Control id={generateUUID()}>
             <romap.tool.Toc id={generateUUID()} />
           </romap.container.Control>
+          <romap.container.Zone id={generateUUID()}>
+            <CounterButton id={generateUUID()} />
+            <CounterButton id={generateUUID()} />
+            <CounterButton id={generateUUID()} />
+            <CounterWindow id={generateUUID()} />
+          </romap.container.Zone>
         </romap.Romap>
       </div>
     );

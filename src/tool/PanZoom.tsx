@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import OlView from 'ol/View';
 import { inAndOut } from 'ol/easing';
-import { cloneView, generateUUID } from '../utils';
+import { cloneView } from '../utils';
 import { mapContext, IMapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
@@ -163,6 +163,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
+    ...BaseTool.defaultProps,
     className: 'panzoom',
     showZoom: true,
     showZoomSlider: true,
@@ -414,7 +415,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
   }
 
   public renderTool(): React.ReactNode {
-    if (this.props.disable === true) {
+    if (this.props.disabled === true) {
       return null;
     }
     return (
