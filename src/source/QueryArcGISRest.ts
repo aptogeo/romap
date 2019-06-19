@@ -15,9 +15,7 @@ export class QueryArcGISRest extends ExternalVector {
   public load(extent: [number, number, number, number], projectionCode: string) {
     const srid = projectionCode.split(':').pop();
     const geometry = encodeURIComponent(
-      `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${
-        extent[3]
-      },"spatialReference":{"wkid":${srid}}}`
+      `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${extent[3]},"spatialReference":{"wkid":${srid}}}`
     );
     let url = `${this.getUrl()}/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${geometry}&geometryType=esriGeometryEnvelope&inSR=${srid}&outFields=*&outSR=${srid}`;
     if (this.where) {
