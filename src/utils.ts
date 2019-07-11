@@ -5,6 +5,7 @@ import OlBaseLayer from 'ol/layer/Base';
 import OlView from 'ol/View';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
+import { IFeatureType } from './source';
 
 /**
  * Walk recursivly.
@@ -89,9 +90,20 @@ export function generateUUID(): string {
   if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
     d += performance.now(); //use high-precision timer if available
   }
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = (d + Math.random() * 16) % 16 | 0;
     d = Math.floor(d / 16);
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
   });
+}
+
+/**
+ * Generate LAYERS param from IFeatureType array.
+ */
+export function getLayersFromTypes(types: IFeatureType<string>[]): string {
+  if (types == null || types.length === 0) {
+    return undefined;
+  } else {
+    return types.map(t => t.id).join(',');
+  }
 }

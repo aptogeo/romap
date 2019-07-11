@@ -1,135 +1,84 @@
-import OlProjection from 'ol/proj/Projection';
+import OlFeature from 'ol/Feature';
 import { Vector } from './Vector';
-import { jsonEqual } from '../utils';
 
 export class LocalVector extends Vector {
-  protected savedFeatures: any;
+  private strategy_: (extent: [number, number, number, number], resolution: number) => any;
 
-  protected oldViewProjectionCode: string;
-
-  protected viewProjectionCode: string;
-
-  protected lastExtent: [number, number, number, number];
-
-  protected lastResolution: number;
-
-  protected optionLoader: (
-    extent: [number, number, number, number],
-    resolution: number,
-    projection: OlProjection
-  ) => void;
-
-  protected optionStrategy: (
-    extent: [number, number, number, number],
-    resolution: number
-  ) => [number, number, number, number];
+  private origstrategy_: (extent: [number, number, number, number], resolution: number) => any;
 
   constructor(options?: any) {
-    super({
-      ...options,
-      loader: (extent: [number, number, number, number], resolution: number, projection: OlProjection) => {
-        const projectionCode = projection.getCode();
-        if (projectionCode != this.viewProjectionCode) {
-          this.oldViewProjectionCode = this.viewProjectionCode;
-          this.viewProjectionCode = projectionCode;
-          this.projectAll();
-        } else {
-          this.reportAll();
-        }
-        if (this.optionLoader) {
-          this.optionLoader.call(this, extent, resolution, projection);
-        }
-      },
-      strategy: (extent: [number, number, number, number], resolution: number): [[number, number, number, number]] => {
-        const features = this.getFeatures();
-        if (
-          !jsonEqual(this.lastExtent, extent) ||
-          this.lastResolution != resolution ||
-          !this.savedFeatures ||
-          this.savedFeatures.length !== features.length
-        ) {
-          this.lastExtent = extent;
-          this.lastResolution = resolution;
-          this.savedFeatures = features.slice(0);
-          this.clearForReload();
-        }
-        if (this.optionStrategy) {
-          return this.optionStrategy.call(this, extent, resolution);
-        }
-        return [extent];
+    super({ ...options, useSpatialIndex: true });
+    this.origstrategy_ = this.strategy_;
+    this.strategy_ = (extent: [number, number, number, number], resolution: number) => {
+      if (this.oldProjectionCode !== this.actualProjectionCode) {
+        this.reproj();
       }
-    });
-    this.optionLoader = options.loader;
-    this.optionStrategy = options.strategy;
-    this.on('addfeature', this.handleAddFeature, this);
-    this.viewProjectionCode = null;
-    this.oldViewProjectionCode = null;
-    this.savedFeatures = null;
+      return this.origstrategy_.call(this, extent, resolution);
+    };
+    this.on('addfeature', this.handleAddFeature);
+    this.oldProjectionCode = null;
+    this.actualProjectionCode = null;
     this.label = options.label ? options.label : this.constructor.name;
   }
 
-  public clearForReload() {
-    super.clear(true);
-  }
-
-  public clear(fast?: boolean) {
-    this.savedFeatures = null;
-    super.clear(fast);
-  }
-
-  private projectAll() {
-    if (this.savedFeatures) {
-      for (const savedFeature of this.savedFeatures) {
-        if (
-          savedFeature.get('originalProjectionCode') &&
-          savedFeature.get('originalGeometry') &&
-          this.viewProjectionCode
-        ) {
-          const geom = savedFeature.get('originalGeometry').clone();
-          geom.transform(savedFeature.get('originalProjectionCode'), this.viewProjectionCode);
-          savedFeature.setGeometry(geom);
-        } else if (this.oldViewProjectionCode && this.viewProjectionCode && savedFeature.getGeometry()) {
-          savedFeature.getGeometry().transform(this.oldViewProjectionCode, this.viewProjectionCode);
+  private reproj() {
+    const features: OlFeature[] = [];
+    const extents: [number, number, number, number][] = [];
+    this.forEachFeature((feature: ol.Feature) => {
+      if (feature.getGeometry() != null) {
+        const originalProjectionCode = feature.get('originalProjectionCode');
+        const originalGeometry = feature.get('originalGeometry');
+        if (originalProjectionCode != null && originalGeometry != null && originalProjectionCode !== this.actualProjectionCode) {
+          const geom = originalGeometry.clone();
+          geom.transform(feature.get('originalProjection'), this.actualProjectionCode);
+          feature.set(feature.getGeometryName(), geom, true);
+          const extent = geom.getExtent();
+          extents.push(extent);
+          features.push(feature);
         }
       }
-      this.addFeatures(this.savedFeatures);
+      return null;
+    });
+    if ((this as any).featuresRtree_) {
+      (this as any).featuresRtree_.clear();
+      (this as any).featuresRtree_.load(extents, features);
     }
-    this.savedFeatures = null;
-  }
-
-  private reportAll() {
-    if (this.savedFeatures) {
-      this.un('addfeature', this.handleAddFeature, this);
-      this.addFeatures(this.savedFeatures);
-      this.on('addfeature', this.handleAddFeature, this);
-    }
-    this.savedFeatures = null;
   }
 
   private setOriginal(feature: any) {
-    if (!this.viewProjectionCode || !feature.getGeometry()) {
+    if (feature.getGeometry() == null) {
       return;
     }
-    feature.un('change:geometry', this.handleChangeFeatureGeometry, this);
-    feature.getGeometry().un('change', this.handleChangeGeometry, this);
-    feature.set('originalProjectionCode', this.viewProjectionCode);
-    feature.set('originalGeometry', feature.getGeometry());
-    feature.on('change:geometry', this.handleChangeFeatureGeometry, this);
-    feature.getGeometry().set('feature', feature);
-    feature.getGeometry().on('change', this.handleChangeGeometry, this);
+    const geometry = feature.getGeometry();
+    feature.set('originalProjectionCode', this.actualProjectionCode, true);
+    feature.set('originalGeometry', geometry, true);
+    geometry.set('feature', feature, true);
+    feature.once('change:geometry', this.handleChangeFeatureGeometry, this);
+    geometry.once('change', this.handleChangeGeometry, this);
   }
 
   private handleAddFeature = (event: any) => {
-    this.setOriginal(event.feature);
+    const feature = event.feature;
+    if (feature != null) {
+      this.setOriginal(feature);
+    }
   };
 
   private handleChangeFeatureGeometry = (event: any) => {
-    this.setOriginal(event.feature);
+    const feature = event.feature;
+    if (feature != null) {
+      this.setOriginal(feature);
+    }
   };
 
   private handleChangeGeometry(event: any) {
     const geometry = event.target;
-    const feature = geometry.get('feature');
-    feature.setGeometry(geometry);
+    if (geometry != null) {
+      const feature = geometry.get('feature');
+      if (feature != null) {
+        feature.set(feature.getGeometryName(), geometry, true);
+        this.setOriginal(feature);
+      }
+    }
   }
 }

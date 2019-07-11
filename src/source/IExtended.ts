@@ -2,16 +2,19 @@ import OlSource from 'ol/source/Source';
 import OlFeature from 'ol/Feature';
 import OlGeometry from 'ol/geom/Geometry';
 import OlProjection from 'ol/proj/Projection';
+import { fromExtent } from 'ol/geom/Polygon';
 
 export interface IExtended extends OlSource {
   query(identifyRequest: IQueryRequest): Promise<IQueryResponse>;
 }
 
 export interface IQueryRequest {
-  geometry: OlGeometry;
-  geometryProjection: OlProjection;
-  filters: IFilter[];
-  limit: number;
+  mapProjection?: OlProjection;
+  geometry?: OlGeometry;
+  geometryProjection?: OlProjection;
+  filters?: IFilter[];
+  offset?: number;
+  limit?: number;
 }
 
 export interface IQueryResponse {
@@ -21,9 +24,34 @@ export interface IQueryResponse {
 
 export interface IFilter {
   op: Op;
-  attr?: string;
+  attr?: IAttribute;
   value?: string | number | boolean;
   filters?: IFilter[];
+}
+
+export interface IAttribute {
+  key: string;
+  type?: 'Oid' | 'Boolean' | 'Number' | 'String' | 'Date' | 'Geometry' | 'Unknown';
+  name?: string;
+}
+
+export interface IFeatureType<IDT extends number | string> {
+  id: IDT;
+  name?: string;
+  identifierAttribute?: IAttribute;
+  attributes?: IAttribute[];
+}
+
+export function constructQueryRequestFromPixel(pixel: [number, number], tolerance: number, olMap: ol.Map): IQueryRequest {
+  const coord = this.context.olMap.getCoordinateFromPixel(pixel);
+  const resolution = this.context.olMap.getView().getResolution();
+  const extent: [number, number, number, number] = [coord[0] - tolerance * resolution,
+  coord[1] - tolerance * resolution,
+  coord[0] + tolerance * resolution,
+  coord[1] + tolerance * resolution];
+  return {
+    geometry: fromExtent(extent)
+  };
 }
 
 // And operation for group

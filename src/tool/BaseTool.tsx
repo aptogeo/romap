@@ -59,7 +59,7 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
     }
   }
 
-  public handleClick = () => {
+  public handleBaseToolClick = () => {
     this.activate();
   };
 
@@ -72,7 +72,7 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
       ${this.props.activated ? `${this.props.className}-activated` : `${this.props.className}-unactivated`}
       ${this.props.disabled ? `${this.props.className}-disabled` : `${this.props.className}-activated`}`;
     return (
-      <div onClick={this.handleClick} className={className}>
+      <div onClick={this.handleBaseToolClick} className={className}>
         {this.renderTool()}
       </div>
     );

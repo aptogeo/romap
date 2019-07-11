@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as romap from '../';
-import { generateUUID } from '../utils';
+import OlBaseLayer from 'ol/layer/Base';
+import { generateUUID, walk } from '../utils';
 import { IBaseButtonToolProps, IBaseWindowToolProps } from '../tool';
+import { constructQueryRequestFromPixel, IQueryResponse, IExtended } from '../source';
+import { IMapContext, mapContext } from '../RomapContext';
 
 class CounterButton extends romap.tool.BaseButtonTool<IBaseButtonToolProps, any> {
   public constructor(props: IBaseButtonToolProps) {
@@ -57,6 +60,71 @@ class CounterWindow extends romap.tool.BaseWindowTool<IBaseWindowToolProps, any>
   }
 }
 
+class QueryWindow extends romap.tool.BaseWindowTool<IBaseWindowToolProps, any> {
+  public static contextType: React.Context<IMapContext> = mapContext;
+
+  public context: IMapContext;
+
+  public constructor(props: IBaseWindowToolProps) {
+    super(props);
+  }
+
+  public componentDidMount() {
+    this.componentDidUpdate();
+  }
+
+  public componentDidUpdate() {
+    if (this.props.activated) {
+      this.context.olMap.on('click', this.handleClick);
+    } else {
+      this.context.olMap.un('click', this.handleClick);
+    }
+  }
+
+  public componentWillUnmount() {
+    this.context.olMap.un('click', this.handleClick);
+  }
+
+  public handleClick = (e: any) => {
+    this.setState({ queryResponses: null });
+    const queryRequest = constructQueryRequestFromPixel(e.pixel, 2, this.context.olMap);
+    const promises: Array<Promise<IQueryResponse>> = [];
+    walk(this.context.olMap, (currentOlLayer: OlBaseLayer) => {
+      if (currentOlLayer.getVisible() && 'getSource' in currentOlLayer) {
+        const source = (currentOlLayer as any).getSource();
+        if (source && 'query' in source) {
+          promises.push((source as IExtended).query(queryRequest));
+        }
+      }
+      return true;
+    });
+    Promise.all(promises).then((queryResponses) => {
+      this.setState({ queryResponses });
+    });
+  }
+
+  public renderHeader(): React.ReactNode {
+    return <span>Query</span>;
+  }
+
+  public renderOpenButton(): React.ReactNode {
+    return <span>Query</span>;
+  }
+
+  public renderTool(): any {
+    return (
+      <div>
+        {this.state && this.state.queryResponse && (
+          <div>{JSON.stringify(this.state.queryResponses)}</div>
+        )}
+        {!this.state || !this.state.queryResponses && (
+          <div>Click on map</div>
+        )}
+      </div>
+    );
+  }
+}
+
 export class SampleApp extends React.Component {
   public render(): React.ReactNode {
     const wkt2154 =
@@ -76,14 +144,10 @@ export class SampleApp extends React.Component {
       imageExtent: [0, 0, 700000, 1300000]
     });
 
-    const landsatSource = new romap.source.ImageArcGISRest({
-      url: 'https://landsat2.arcgis.com/arcgis/rest/services/Landsat8_Views/ImageServer',
-      projection: 'EPSG:3857',
-      params: {
-        FORMAT: 'jpgpng',
-        TRANSPARENT: true
-      },
-      ratio: 1
+
+    const toppStateSource = new romap.source.TileWms({
+      url: 'https://ahocevar.com/geoserver/wms',
+      types: [{ id: 'topp:states'}]
     });
 
     return (
@@ -99,10 +163,10 @@ export class SampleApp extends React.Component {
           <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
           <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
           <romap.layer.Tile source={world2D} name="World 2D" type="BASE" visible={true} id={generateUUID()} />
-          <romap.layer.Image source={landsatSource} name="Land sat" type="BASE" id={generateUUID()} />
           <romap.layer.Group name="Groupe 1" id={generateUUID()}>
             <romap.layer.Image source={britishNationalGrid} name="British National Grid" id={generateUUID()} />
           </romap.layer.Group>
+          <romap.layer.Tile source={toppStateSource} name="Topp States" id={generateUUID()} />
           <romap.container.Control id={generateUUID()}>
             <romap.tool.PanZoom id={generateUUID()} />
           </romap.container.Control>
@@ -117,6 +181,7 @@ export class SampleApp extends React.Component {
             <CounterButton id={generateUUID()} />
             <CounterButton id={generateUUID()} />
             <CounterWindow id={generateUUID()} />
+            <QueryWindow id={generateUUID()} />
           </romap.container.Zone>
         </romap.Romap>
       </div>

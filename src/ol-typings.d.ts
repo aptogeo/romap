@@ -176,7 +176,9 @@ declare module 'ol/source/UrlTile' {
 }
 
 declare module 'ol/source/Vector' {
-  export default ol.source.Vector;
+  export default class extends ol.source.Vector {
+    public loadFeatures(extent: [number, number, number, number], resolution: number, projection: OlProjection): void;
+  }
 }
 
 declare module 'ol/source/VectorEvent' {

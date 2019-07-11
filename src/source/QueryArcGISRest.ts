@@ -1,15 +1,19 @@
 import OlEsriJSON from 'ol/format/EsriJSON';
 import { send, IResponse } from 'bhreq';
 import { ExternalVector } from './ExternalVector';
+import { IFeatureType } from './IExtended';
 
 export class QueryArcGISRest extends ExternalVector {
   protected where: string;
 
   private esriJSONFormat = new OlEsriJSON();
 
-  constructor(options?: any) {
+  protected type: IFeatureType<number>;
+
+  constructor(options: any = {}) {
     super(options);
-    this.where = options.where;
+    this.type = options.type ? options.type : null;
+    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public load(extent: [number, number, number, number], projectionCode: string) {

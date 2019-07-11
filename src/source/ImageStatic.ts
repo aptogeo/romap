@@ -6,7 +6,7 @@ import { IImage } from './IImage';
 export class ImageStatic extends OlImageStatic implements IImage {
   private projectionCode: string;
 
-  constructor(options?: any) {
+  constructor(options: any = {}) {
     super(options);
     if (typeof options.projection === 'string') {
       this.projectionCode = options.projection;

@@ -1,60 +1,21 @@
-import OlFeature from 'ol/Feature';
-import OlProjection from 'ol/proj/Projection';
 import { Vector } from './Vector';
 
 export class ExternalVector extends Vector {
-  private projectionCode: string;
+  private strategy_: (extent: [number, number, number, number], resolution: number) => any;
 
-  private loadedFeatures: OlFeature[];
+  private origstrategy_: (extent: [number, number, number, number], resolution: number) => any;
 
-  private extent: [number, number, number, number];
-
-  constructor(options?: any) {
-    super({
-      ...options,
-      loader: (extent: [number, number, number, number], resolution: number, projection: OlProjection) => {
-        const projectionCode = projection.getCode();
-        if (this.projectionCode !== projectionCode) {
-          this.projectionCode = projectionCode;
-          this.extent = null;
-          this.clear();
-          return;
-        }
-        if (this.loadedFeatures != null) {
-          this.dispatchEvent('imageloadstart');
-          this.addFeatures(this.loadedFeatures);
-          this.dispatchEvent('imageloadend');
-        }
-      },
-      strategy: (extent: [number, number, number, number], resolution: number) => {
-        if (this.projectionCode != null && (this.extent == null || !this.containsExtent(this.extent, extent))) {
-          this.dispatchEvent('imageloadstart');
-          this.load(extent, this.projectionCode).then(
-            (features: any) => {
-              this.loadedFeatures = features;
-              this.clear();
-              this.dispatchEvent('imageloadend');
-            },
-            () => {
-              this.loadedFeatures = [];
-              this.clear();
-              this.dispatchEvent('imageloaderror');
-            }
-          );
-          this.extent = extent;
-        }
-        return [extent];
+  constructor(options: any = {}) {
+    super({ ...options, useSpatialIndex: false });
+    this.origstrategy_ = this.strategy_;
+    this.strategy_ = (extent: [number, number, number, number], resolution: number) => {
+      if (this.oldProjectionCode !== this.actualProjectionCode) {
+        this.clear();
       }
-    });
-    this.projectionCode = null;
-    this.loadedFeatures = null;
-  }
-
-  public load(extent: [number, number, number, number], projectionCode: string): Promise<void | OlFeature[]> {
-    return Promise.resolve([]);
-  }
-
-  public containsExtent(extent1: [number, number, number, number], extent2: [number, number, number, number]) {
-    return extent1[0] <= extent2[0] && extent2[2] <= extent1[2] && extent1[1] <= extent2[1] && extent2[3] <= extent1[3];
+      return this.origstrategy_.call(this, extent, resolution);
+    };
+    this.oldProjectionCode = null;
+    this.actualProjectionCode = null;
+    this.label = options.label ? options.label : this.constructor.name;
   }
 }
