@@ -13,10 +13,14 @@ export class Wfs extends ExternalVector {
 
   constructor(options: any = {}) {
     super({
-      ...options, format: new OlGeoJSON(), url: (extent: [number, number, number, number], projection: OlProjection) => {
+      ...options,
+      format: new OlGeoJSON(),
+      url: (extent: [number, number, number, number], projection: OlProjection) => {
         return `${this.getUrl()}?service=WFS&version=1.1.0&request=GetFeature&typename=${
           this.type.id
-        }&outputFormat=application/json&srsname=${projection.getCode()}&bbox=${extent.join(',')},${projection.getCode()}`;
+        }&outputFormat=application/json&srsname=${projection.getCode()}&bbox=${extent.join(
+          ','
+        )},${projection.getCode()}`;
       }
     });
     this.type = options.type ? options.type : null;

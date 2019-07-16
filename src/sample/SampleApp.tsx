@@ -98,10 +98,10 @@ class QueryWindow extends romap.tool.BaseWindowTool<IBaseWindowToolProps, any> {
       }
       return true;
     });
-    Promise.all(promises).then((queryResponses) => {
+    Promise.all(promises).then(queryResponses => {
       this.setState({ queryResponses });
     });
-  }
+  };
 
   public renderHeader(): React.ReactNode {
     return <span>Query</span>;
@@ -114,12 +114,8 @@ class QueryWindow extends romap.tool.BaseWindowTool<IBaseWindowToolProps, any> {
   public renderTool(): any {
     return (
       <div>
-        {this.state && this.state.queryResponse && (
-          <div>{JSON.stringify(this.state.queryResponses)}</div>
-        )}
-        {!this.state || !this.state.queryResponses && (
-          <div>Click on map</div>
-        )}
+        {this.state && this.state.queryResponse && <div>{JSON.stringify(this.state.queryResponses)}</div>}
+        {!this.state || (!this.state.queryResponses && <div>Click on map</div>)}
       </div>
     );
   }
@@ -144,10 +140,9 @@ export class SampleApp extends React.Component {
       imageExtent: [0, 0, 700000, 1300000]
     });
 
-
     const toppStateSource = new romap.source.TileWms({
       url: 'https://ahocevar.com/geoserver/wms',
-      types: [{ id: 'topp:states'}]
+      types: [{ id: 'topp:states' }]
     });
 
     return (

@@ -10,7 +10,7 @@ export class TileWms extends OlTileWMS implements ITileImage {
   protected types: IFeatureType<string>[];
 
   constructor(options: any = {}) {
-    super({...options, params: { LAYERS: getLayersFromTypes(options.types) }});
+    super({ ...options, params: { LAYERS: getLayersFromTypes(options.types) } });
     this.label = options.label ? options.label : this.constructor.name;
     this.types = options.types;
   }

@@ -39,7 +39,7 @@ export abstract class Vector extends OlVector implements IVector {
       if (mapProjection != null && geometryProjection != null) {
         destGeometry = geometry.transform(geometryProjection, mapProjection);
       } else {
-        destGeometry = geometry
+        destGeometry = geometry;
       }
       if (destGeometry.getType() === 'Circle') {
         destGeometry = fromCircle(geometry as Circle);
@@ -57,10 +57,10 @@ export abstract class Vector extends OlVector implements IVector {
     } else {
       this.forEachFeature((feature: OlFeature) => {
         if (features.length < limit) {
-            features.push(feature);
+          features.push(feature);
         }
       });
-    }   
+    }
     return Promise.resolve({
       request,
       features

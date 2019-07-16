@@ -42,13 +42,19 @@ export interface IFeatureType<IDT extends number | string> {
   attributes?: IAttribute[];
 }
 
-export function constructQueryRequestFromPixel(pixel: [number, number], tolerance: number, olMap: ol.Map): IQueryRequest {
+export function constructQueryRequestFromPixel(
+  pixel: [number, number],
+  tolerance: number,
+  olMap: ol.Map
+): IQueryRequest {
   const coord = this.context.olMap.getCoordinateFromPixel(pixel);
   const resolution = this.context.olMap.getView().getResolution();
-  const extent: [number, number, number, number] = [coord[0] - tolerance * resolution,
-  coord[1] - tolerance * resolution,
-  coord[0] + tolerance * resolution,
-  coord[1] + tolerance * resolution];
+  const extent: [number, number, number, number] = [
+    coord[0] - tolerance * resolution,
+    coord[1] - tolerance * resolution,
+    coord[0] + tolerance * resolution,
+    coord[1] + tolerance * resolution
+  ];
   return {
     geometry: fromExtent(extent)
   };
