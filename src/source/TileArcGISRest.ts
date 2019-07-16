@@ -6,7 +6,7 @@ import { ITileImage } from './ITileImage';
 export class TileArcGISRest extends OlTileArcGISRest implements ITileImage {
   protected label: string;
 
-  protected type: IFeatureType<number>;
+  protected type: IFeatureType<number>[];
 
   constructor(options: any = {}) {
     super(options);
