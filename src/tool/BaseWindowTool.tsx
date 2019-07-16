@@ -199,7 +199,7 @@ export class BaseWindowTool<
     this.close();
   };
 
-  public renderHeader(): React.ReactNode {
+  public renderHeaderContent(): React.ReactNode {
     return null;
   }
 
@@ -262,7 +262,7 @@ export class BaseWindowTool<
             ref={ref => (this.windowElement = ref)}
           >
             <TitleBar className={`${this.props.className}-titlebar`}>
-              {this.renderHeader()}
+              {this.renderHeaderContent()}
               {closeButton}
             </TitleBar>
             <Content className={`${this.props.className}-content`}>{this.renderTool()}</Content>
