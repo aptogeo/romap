@@ -1,3 +1,4 @@
+import OlMap from 'ol/Map';
 import OlSource from 'ol/source/Source';
 import OlFeature from 'ol/Feature';
 import OlGeometry from 'ol/geom/Geometry';
@@ -45,10 +46,10 @@ export interface IFeatureType<IDT extends number | string> {
 export function constructQueryRequestFromPixel(
   pixel: [number, number],
   tolerance: number,
-  olMap: ol.Map
+  olMap: OlMap
 ): IQueryRequest {
-  const coord = this.context.olMap.getCoordinateFromPixel(pixel);
-  const resolution = this.context.olMap.getView().getResolution();
+  const coord = olMap.getCoordinateFromPixel(pixel);
+  const resolution = olMap.getView().getResolution();
   const extent: [number, number, number, number] = [
     coord[0] - tolerance * resolution,
     coord[1] - tolerance * resolution,

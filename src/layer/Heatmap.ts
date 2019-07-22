@@ -73,25 +73,4 @@ export class Heatmap extends BaseLayer<IHeatmapProps, {}, OlHeatmapLayer, IVecto
     }
     this.getOlLayer().setBlur(blur);
   }
-
-  public setShadow(shadow: number) {
-    if (shadow == null) {
-      shadow = undefined;
-    }
-    this.getOlLayer().setShadow(shadow);
-  }
-
-  public setWeight(weight: string) {
-    if (weight == null) {
-      weight = undefined;
-    }
-    this.getOlLayer().setWeight(weight);
-  }
-
-  public setRenderMode(renderMode: string) {
-    if (renderMode == null) {
-      renderMode = undefined;
-    }
-    this.getOlLayer().setRenderMode(renderMode);
-  }
 }
