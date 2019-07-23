@@ -70,7 +70,7 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
   public render(): React.ReactNode {
     const className = `${this.props.className}
       ${this.props.activated ? `${this.props.className}-activated` : `${this.props.className}-unactivated`}
-      ${this.props.disabled ? `${this.props.className}-disabled` : `${this.props.className}-activated`}`;
+      ${this.props.disabled ? `${this.props.className}-disabled` : `${this.props.className}-enabled`}`;
     return (
       <div onClick={this.handleBaseToolClick} className={className}>
         {this.renderTool()}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RomapChild, IRomapChildProps } from './RomapChild';
 import { BaseTool, IBaseToolProps } from './tool/BaseTool';
 
-export type status = 'orig_add' | 'orig_del' | 'ext_add' | 'ext_del' | 'orig_modif_by_ext' | 'orig_del_by_ext';
+export type status = 'add' | 'modif' | 'del';
 
 export interface IInfoElement {
   /**
@@ -47,9 +47,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
   ): IInfoElement[] {
     const arr = Array.from(this.infoElements.values()).filter(
       infoElement =>
-        infoElement.status === 'orig_add' ||
-        infoElement.status === 'ext_add' ||
-        infoElement.status === 'orig_modif_by_ext'
+        infoElement.status !== 'del'
     );
     return filterFn == null ? arr : arr.filter(filterFn, thisFilterArg);
   }
@@ -68,47 +66,28 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     const found = this.infoElements.get(infoElement.id);
     let changed = false;
     if (!found) {
-      this.infoElements.set(infoElement.id, {
-        ...infoElement,
-        status: 'ext_add'
-      });
-      changed = true;
-    } else if (found.status === 'orig_add' || found.status === 'orig_modif_by_ext') {
-      this.infoElements.set(infoElement.id, {
-        ...infoElement,
-        status: 'orig_modif_by_ext'
-      });
-      changed = true;
-    } else if (infoElement.status === 'ext_add') {
-      this.infoElements.set(infoElement.id, {
-        ...infoElement,
-        status: 'ext_add'
-      });
-      changed = true;
-    }
-    if (setStateIfChanging && changed) {
-      this.setState((state: S) => {
-        return { changedCounter: state.changedCounter + 1 };
-      });
-    }
-  }
-
-  /**
-   * Delete infoElement
-   */
-  public deleteInfoElement(id: string, setStateIfChanging = true) {
-    let changed = false;
-    const found = this.infoElements.get(id);
-    if (found) {
-      if (found.status === 'orig_add' || found.status === 'orig_modif_by_ext') {
-        this.infoElements.set(id, {
-          ...found,
-          status: 'orig_del_by_ext'
+      if (infoElement.status !== 'del') {
+        this.infoElements.set(infoElement.id, {
+          ...infoElement,
+          status: 'add'
+        });
+        changed = true;
+      }
+    } else {
+      if (infoElement.status === 'del') {
+        this.infoElements.set(infoElement.id, {
+          ...infoElement,
+          status: 'del'
         });
         changed = true;
       } else {
-        this.infoElements.delete(id);
-        changed = true;
+        this.infoElements.set(infoElement.id, {
+          ...infoElement,
+          status: 'modif'
+        });
+        if (infoElement.status === 'modif') {
+          changed = true;
+        }
       }
     }
     if (setStateIfChanging && changed) {
@@ -152,7 +131,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     }
   }
 
-  public deactivateTool(id: string, force = false) {
+  public deactivateTool(id: string) {
     const infoElement = this.getInfoElement(id);
     if (infoElement == null || !BaseTool.isPrototypeOf(infoElement.reactElement.type)) {
       return;
@@ -184,16 +163,12 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     prevParentId: string,
     nextParentId: string
   ) {
+    const toDel = new Map<string, React.ReactElement<any>>();
     if (prevChildren) {
       React.Children.map(prevChildren, (child: React.ReactElement<any>) => {
         if (RomapChild.isPrototypeOf(child.type)) {
           const props = child.props as IRomapChildProps;
-          this.setInfoElement({
-            reactElement: child,
-            status: 'orig_del',
-            id: props.id,
-            parentId: prevParentId
-          });
+          toDel.set(props.id, child);
         }
       });
     }
@@ -201,14 +176,26 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
       React.Children.map(nextChildren, (child: React.ReactElement<any>) => {
         if (RomapChild.isPrototypeOf(child.type)) {
           const props = child.props as IRomapChildProps;
-          this.setInfoElement({
-            reactElement: child,
-            status: 'orig_add',
-            id: props.id,
-            parentId: nextParentId
-          });
+          if (toDel.has(props.id)) {
+            toDel.delete(props.id);
+          } else {
+            this.setInfoElement({
+              reactElement: child,
+              status: 'add',
+              id: props.id,
+              parentId: nextParentId
+            });
+          }
         }
       });
     }
+    toDel.forEach((child: React.ReactElement<any>, key: string) => {
+      this.setInfoElement({
+        reactElement: child,
+        status: 'del',
+        id: key,
+        parentId: nextParentId
+      });
+    });
   }
 }

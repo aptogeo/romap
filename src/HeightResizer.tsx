@@ -41,7 +41,7 @@ export class HeightResizer extends React.Component<IResizerProps, {}> {
     const olMap = this.context.olMap;
     const targetElement = olMap.getTargetElement() as HTMLElement;
     if (targetElement) {
-      targetElement.parentElement.style.height = `calc(${this.props.heightPercent} - ${this.props.heightRemoval})`;
+      targetElement.parentElement.style.height = `calc(${this.props.heightPercent}% - ${this.props.heightRemoval})`;
       const w = targetElement.offsetWidth;
       const h = targetElement.parentElement.offsetHeight;
       targetElement.style.height = `${h}px`;
