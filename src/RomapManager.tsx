@@ -45,10 +45,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     filterFn?: (value: IInfoElement, index: number, array: IInfoElement[]) => boolean,
     thisFilterArg?: any
   ): IInfoElement[] {
-    const arr = Array.from(this.infoElements.values()).filter(
-      infoElement =>
-        infoElement.status !== 'del'
-    );
+    const arr = Array.from(this.infoElements.values()).filter(infoElement => infoElement.status !== 'del');
     return filterFn == null ? arr : arr.filter(filterFn, thisFilterArg);
   }
 
