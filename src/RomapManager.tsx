@@ -112,7 +112,10 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     }
   }
 
-  public addOrUpdateLayer(cl: React.ClassType<IBaseLayerProps, BaseLayer<IBaseLayerProps, any, any, any>, any>, props: IBaseLayerProps) {
+  public addOrUpdateLayer(
+    cl: React.ClassType<IBaseLayerProps, BaseLayer<IBaseLayerProps, any, any, any>, any>,
+    props: IBaseLayerProps
+  ) {
     const id = props.id ? props.id : generateUUID();
     const name = props.name ? props.name : id;
     const source = props.source ? props.source : new LocalVectorSource({});
@@ -120,7 +123,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
       reactElement: React.createElement(VectorLayer, {
         id,
         name,
-        source,
+        source
       }),
       id
     });

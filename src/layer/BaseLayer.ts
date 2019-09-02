@@ -43,7 +43,7 @@ export interface IBaseLayerProps extends IRomapChildProps {
 export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OLS extends OlSource> extends RomapChild<
   P,
   S
-  > {
+> {
   public static contextType: React.Context<IMapContext> = mapContext;
 
   public static defaultProps = {
