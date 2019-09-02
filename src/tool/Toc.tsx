@@ -66,7 +66,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
   public renderBaseList(parentId: string = null): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
     this.context.romapManager
-      .getInfoElements(infoLayer => infoLayer.parentId === parentId && infoLayer.reactElement.props.type === 'BASE')
+      .getInfoElements(infoLayer => infoLayer.parentId == parentId && infoLayer.reactElement.props.type === 'BASE')
       .forEach(infoLayer => {
         bases.push(
           <div key={infoLayer.id}>
@@ -92,7 +92,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
     const overlayTree: React.ReactNodeArray = [];
     this.context.romapManager
       .getInfoElements(
-        infoElement => infoElement.parentId === parentId && infoElement.reactElement.props.type === 'OVERLAY'
+        infoElement => infoElement.parentId == parentId && infoElement.reactElement.props.type === 'OVERLAY'
       )
       .forEach(infoElement => {
         const name = infoElement.reactElement.props.name || '';

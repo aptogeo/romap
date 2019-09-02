@@ -4,7 +4,6 @@ import OlGroupLayer from 'ol/layer/Group';
 import OlBaseLayer from 'ol/layer/Base';
 import OlView from 'ol/View';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
-import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
 import { IFeatureType } from './source';
 
 /**

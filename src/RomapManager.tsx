@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { RomapChild, IRomapChildProps } from './RomapChild';
 import { BaseTool, IBaseToolProps } from './tool/BaseTool';
+import { generateUUID } from './utils';
+import { BaseLayer, IBaseLayerProps, Vector as VectorLayer } from './layer';
+import { LocalVector as LocalVectorSource } from './source';
 
 export type status = 'add' | 'modif' | 'del';
 
@@ -16,11 +19,11 @@ export interface IInfoElement {
   /**
    * Parent layer id.
    */
-  parentId: Readonly<string>;
+  parentId?: Readonly<string>;
   /**
    * Status.
    */
-  status: Readonly<status>;
+  status?: Readonly<status>;
 }
 
 export interface RomapManagerState {
@@ -104,7 +107,23 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
         ...infoElement,
         reactElement: React.cloneElement(infoElement.reactElement, props)
       });
+    } else {
+      console.error(`Element not found for id ${props.id}`);
     }
+  }
+
+  public addOrUpdateLayer(cl: React.ClassType<IBaseLayerProps, BaseLayer<IBaseLayerProps, any, any, any>, any>, props: IBaseLayerProps) {
+    const id = props.id ? props.id : generateUUID();
+    const name = props.name ? props.name : id;
+    const source = props.source ? props.source : new LocalVectorSource({});
+    this.setInfoElement({
+      reactElement: React.createElement(VectorLayer, {
+        id,
+        name,
+        source,
+      }),
+      id
+    });
   }
 
   public activateTool(id: string) {

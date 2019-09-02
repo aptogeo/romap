@@ -330,11 +330,11 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     if (!this.props.showPan) {
       return null;
     }
-    const upTitle = this.context.getLocalizedText('upTitle', 'Pan up');
-    const downTitle = this.context.getLocalizedText('downTitle', 'Pan down');
-    const rightTitle = this.context.getLocalizedText('rightTitle', 'Pan right');
-    const leftTitle = this.context.getLocalizedText('leftTitle', 'Pan left');
-    const originTitle = this.context.getLocalizedText('originTitle', 'Zoom origin');
+    const upTitle = this.context.getLocalizedText('panzoom.up', 'Pan up');
+    const downTitle = this.context.getLocalizedText('panzoom.down', 'Pan down');
+    const rightTitle = this.context.getLocalizedText('panzoom.right', 'Pan right');
+    const leftTitle = this.context.getLocalizedText('panzoom.left', 'Pan left');
+    const originTitle = this.context.getLocalizedText('panzoom.origin', 'Zoom origin');
     let origin = null;
     if (this.props.showOrigin) {
       origin = (
@@ -358,8 +358,8 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     if (!this.props.showZoom) {
       return null;
     }
-    const zoomTitle = this.context.getLocalizedText('zoomTitle', 'Zoom in');
-    const unzoomTitle = this.context.getLocalizedText('unzoomTitle', 'Zoom out');
+    const zoomTitle = this.context.getLocalizedText('panzoom.zoom', 'Zoom in');
+    const unzoomTitle = this.context.getLocalizedText('panzoom.unzoom', 'Zoom out');
     let slider = null;
     if (this.props.showZoomSlider) {
       slider = (
@@ -391,7 +391,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     if (!this.props.showRotation) {
       return null;
     }
-    const rotateTitle = this.context.getLocalizedText('rotateTitle', 'Set map orientation to north up');
+    const rotateTitle = this.context.getLocalizedText('panzoom.rotate', 'Set map orientation to north up');
     return (
       <div>
         <ButtonRotate

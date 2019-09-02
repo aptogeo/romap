@@ -205,7 +205,7 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
             olMap: this.olMap,
             olGroup: this.olMap.getLayerGroup(),
             romapManager: this,
-            getLocalizedText: (code: string, defaultText: string) => {
+            getLocalizedText: (code: string, defaultText: string, data?: { [key: string]: string; }) => {
               return defaultText;
             }
           }}

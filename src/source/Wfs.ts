@@ -9,8 +9,6 @@ export class Wfs extends ExternalVector {
 
   protected type: IFeatureType<string>;
 
-  private geoJSONFormat = new OlGeoJSON();
-
   constructor(options: any = {}) {
     super({
       ...options,

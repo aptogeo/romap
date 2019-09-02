@@ -192,7 +192,7 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
     if (this.props.disabled === true) {
       return null;
     }
-    const scanlineTitle = this.context.getLocalizedText('scanlineTitle', 'Diagonal distance in map center');
+    const scanlineTitle = this.context.getLocalizedText('scanline.title', 'Diagonal distance in map center');
     return (
       <Container
         ref={divScaleLine => {

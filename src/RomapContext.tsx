@@ -20,7 +20,7 @@ export interface IMapContext {
   /**
    * Get localized text
    */
-  getLocalizedText: (code: string, defaultText: string) => string;
+  getLocalizedText: (code: string, defaultText: string, data?: { [key: string]: string; }) => string;
 }
 
 // Map context
@@ -28,7 +28,7 @@ export const mapContext = React.createContext<IMapContext>({
   olMap: null,
   olGroup: null,
   romapManager: null,
-  getLocalizedText: (code: string, defaultText: string) => {
+  getLocalizedText: (code: string, defaultText: string, data?: { [key: string]: string; }) => {
     return defaultText;
   }
 });
