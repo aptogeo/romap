@@ -124,7 +124,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
       }),
       originalReactElement: null,
       id: id,
-      parentId: 'map',
+      parentId: 'map'
     });
   }
 
@@ -138,8 +138,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     if (!props.activated) {
       if (!props.independant) {
         this.getInfoElements(
-          otherInfoElement =>
-            otherInfoElement.id != id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)
+          otherInfoElement => otherInfoElement.id != id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)
         ).forEach(otherInfoElement => {
           if (!(otherInfoElement.reactElement.props as IBaseToolProps).independant) {
             this.changeInfoElementProps(otherInfoElement.id, { activated: false });
@@ -162,8 +161,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
       if (!props.independant) {
         let defaultElement: IInfoElement;
         this.getInfoElements(
-          otherInfoElement =>
-            otherInfoElement.id != id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)
+          otherInfoElement => otherInfoElement.id != id && BaseTool.isPrototypeOf(otherInfoElement.reactElement.type)
         ).forEach(otherInfoElement => {
           if (!(otherInfoElement.reactElement.props as IBaseToolProps).independant) {
             this.changeInfoElementProps(otherInfoElement.id, { activated: false });
@@ -177,11 +175,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     }
   }
 
-  public updateFromChildren(
-    parentId: React.Key,
-    prevChildren: React.ReactNode,
-    nextChildren: React.ReactNode,
-  ) {
+  public updateFromChildren(parentId: React.Key, prevChildren: React.ReactNode, nextChildren: React.ReactNode) {
     const toDel = new Map<React.Key, React.ReactElement<any>>();
     // Previous children
     if (prevChildren) {
@@ -201,11 +195,11 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
           let id = child.props.id;
           // id is null: search element
           if (id == null) {
-            this.infoElements.forEach((infoElement) => {
+            this.infoElements.forEach(infoElement => {
               if (child === infoElement.originalReactElement) {
                 id = infoElement.reactElement.key;
               }
-            })
+            });
           }
           // id is null: generate
           if (id == null) {
@@ -219,7 +213,7 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
           if (infoElement != null) {
             props = infoElement.reactElement.props;
           }
-          const element = React.cloneElement(child, { ...props, key: id, id })
+          const element = React.cloneElement(child, { ...props, key: id, id });
           this.setInfoElement({
             reactElement: element,
             originalReactElement: child,

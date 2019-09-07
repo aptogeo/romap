@@ -87,10 +87,14 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
   public loadKMZ(file: File) {
     const zipFile = new JSZip();
     zipFile.loadAsync(file).then(zip => {
-      const promises = Object.keys(zip.files).map(name => zip.files[name]).map(entry => entry.async('blob').then(blob => ({
-        name: entry.name,
-        blob
-      })));
+      const promises = Object.keys(zip.files)
+        .map(name => zip.files[name])
+        .map(entry =>
+          entry.async('blob').then(blob => ({
+            name: entry.name,
+            blob
+          }))
+        );
       Promise.all(promises).then(elements => {
         const imageElements = elements.filter(element => /\.(jpe?g|png|gif|bmp)$/i.test(element.name));
         const docElement = elements.filter(element => element.name === 'doc.kml').pop();
@@ -110,12 +114,11 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
           this.setState({ file: null, type: null });
         };
         reader.readAsText(docElement.blob);
-      })
+      });
     });
   }
 
-  public loadZippedShapefile(file: File) {
-  }
+  public loadZippedShapefile(file: File) {}
 
   public renderHeaderContent(): React.ReactNode {
     const header = this.context.getLocalizedText('layerloader.title', 'Layer loader');

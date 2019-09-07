@@ -8,4 +8,4 @@ export interface IRomapChildProps {
   id?: React.Key;
 }
 
-export class RomapChild<P extends IRomapChildProps, S> extends React.Component<P, S> { }
+export class RomapChild<P extends IRomapChildProps, S> extends React.Component<P, S> {}
