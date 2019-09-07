@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { generateUUID } from './utils';
 
 export interface IRomapChildProps {
   /**
-   * Unique id.
+   * Id.
    */
-  id: string;
+  id?: React.Key;
 }
 
-export class RomapChild<P extends IRomapChildProps, S> extends React.Component<P, S> {}
+export class RomapChild<P extends IRomapChildProps, S> extends React.Component<P, S> { }

@@ -4,10 +4,6 @@ import { IMapContext, mapContext } from '../RomapContext';
 
 export interface IBaseToolProps extends IRomapChildProps {
   /**
-   * Unique id.
-   */
-  id: string;
-  /**
    * Activated.
    */
   activated?: boolean;

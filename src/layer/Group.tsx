@@ -29,12 +29,12 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
   }
 
   public componentDidMount() {
-    this.context.romapManager.updateFromChildren(null, this.props.children, null, this.props.id);
+    this.context.romapManager.updateFromChildren(this.props.id, null, this.props.children);
     super.componentDidMount();
   }
 
   public componentDidUpdate(prevProps: IGroupProps) {
-    this.context.romapManager.updateFromChildren(prevProps.children, this.props.children, null, null);
+    this.context.romapManager.updateFromChildren(this.props.id, prevProps.children, this.props.children);
     super.componentDidUpdate(prevProps);
   }
 
@@ -48,7 +48,7 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
     this.context.romapManager
       .getInfoElements(infoElement => infoElement.parentId == this.props.id)
       .forEach(infoElement => {
-        elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
+        elems.push(React.cloneElement(infoElement.reactElement));
       });
     return elems;
   }

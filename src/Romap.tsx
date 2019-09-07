@@ -122,7 +122,7 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
 
   public componentDidMount() {
     this.olMap.setTarget(this.divMap);
-    this.updateFromChildren(null, this.props.children, null, null);
+    this.updateFromChildren('map', null, this.props.children);
     // View
     if (this.props.initialViewCenter != null && this.props.initialViewZoom != null) {
       const view = new OlView({
@@ -137,7 +137,7 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
   }
 
   public componentDidUpdate(prevProps: IMapProps) {
-    this.updateFromChildren(prevProps.children, this.props.children, null, null);
+    this.updateFromChildren('map', prevProps.children, this.props.children);
   }
 
   public stopPropagationForComponents() {
@@ -174,16 +174,16 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
     // Layers
     this.getInfoElements().forEach(infoElement => {
       if (BaseLayer.isPrototypeOf(infoElement.reactElement.type)) {
-        elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
+        elems.push(infoElement.reactElement);
       }
     });
     // Containers & Tools
-    this.getInfoElements(infoElement => infoElement.parentId == null).forEach(infoElement => {
+    this.getInfoElements(infoElement => infoElement.parentId == 'map').forEach(infoElement => {
       if (
         BaseContainer.isPrototypeOf(infoElement.reactElement.type) ||
         BaseTool.isPrototypeOf(infoElement.reactElement.type)
       ) {
-        elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
+        elems.push(infoElement.reactElement);
       }
     });
     return elems;

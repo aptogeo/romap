@@ -7,31 +7,9 @@ import { Vector as VectorLayer } from '../layer';
 import { LocalVector, ExternalVector } from '../source';
 import KML from 'ol/format/KML';
 import Feature from 'ol/Feature';
-import Style from 'ol/style/Style';
-import Circle from 'ol/style/Circle';
-import Text from 'ol/style/Text';
-import Icon from 'ol/style/Icon';
-import Fill from 'ol/style/Fill';
-import Stroke from 'ol/style/Stroke';
+import * as JSZip from 'jszip';
 
-const fill = new Fill({
-  color: 'rgba(255,255,255,0.4)'
-});
-const stroke = new Stroke({
-  color: '#3399CC',
-  width: 1.25
-});
-const styles = [
-  new Style({
-    image: new Circle({
-      fill: fill,
-      stroke: stroke,
-      radius: 5
-    }),
-    fill: fill,
-    stroke: stroke
-  })
-];
+const kmlFormat = new KML({ extractStyles: true, showPointNames: false });
 
 const Container = styled.div`
   margin: 2px;
@@ -70,9 +48,17 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
   public handleFileSelectorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file: File = e.currentTarget.files[0];
     switch (this.state.type) {
-      case '.kml, .kmz':
+      case '.kml':
         this.setState({ file });
         this.loadKML(file);
+        break;
+      case '.kmz':
+        this.setState({ file });
+        this.loadKMZ(file);
+        break;
+      case '.zip':
+        this.setState({ file });
+        this.loadZippedShapefile(file);
         break;
       default:
         break;
@@ -83,23 +69,52 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
     const reader = new FileReader();
     reader.onload = () => {
       const kmlString = reader.result as string;
-      const kml = new KML();
-      const name = `${kml.readName(kmlString)} (${file.name})`;
-      const proj = kml.readProjection(kmlString);
-      const features: Feature[] = new KML().readFeatures(kmlString, {
-        dataProjection: proj,
+      const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
+      const features: Feature[] = kmlFormat.readFeatures(kmlString, {
         featureProjection: this.context.olMap.getView().getProjection()
       }) as Feature[];
-      const localVectorSource = new ExternalVector({});
+      const localVectorSource = new LocalVector({});
       localVectorSource.addFeatures(features);
-      this.context.romapManager.addOrUpdateLayer(VectorLayer, {
-        id: generateUUID(),
+      this.context.romapManager.addOrUpdateLayer(generateUUID(), VectorLayer, {
         source: localVectorSource,
         name
       });
       this.setState({ file: null, type: null });
     };
     reader.readAsText(file);
+  }
+
+  public loadKMZ(file: File) {
+    const zipFile = new JSZip();
+    zipFile.loadAsync(file).then(zip => {
+      const promises = Object.keys(zip.files).map(name => zip.files[name]).map(entry => entry.async('blob').then(blob => ({
+        name: entry.name,
+        blob
+      })));
+      Promise.all(promises).then(elements => {
+        const imageElements = elements.filter(element => /\.(jpe?g|png|gif|bmp)$/i.test(element.name));
+        const docElement = elements.filter(element => element.name === 'doc.kml').pop();
+        const reader = new FileReader();
+        reader.onload = () => {
+          const kmlString = reader.result as string;
+          const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
+          const features: Feature[] = kmlFormat.readFeatures(kmlString, {
+            featureProjection: this.context.olMap.getView().getProjection()
+          }) as Feature[];
+          const localVectorSource = new LocalVector({});
+          localVectorSource.addFeatures(features);
+          this.context.romapManager.addOrUpdateLayer(generateUUID(), VectorLayer, {
+            source: localVectorSource,
+            name
+          });
+          this.setState({ file: null, type: null });
+        };
+        reader.readAsText(docElement.blob);
+      })
+    });
+  }
+
+  public loadZippedShapefile(file: File) {
   }
 
   public renderHeaderContent(): React.ReactNode {
@@ -117,12 +132,16 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
       <Container className={`${this.props.className}`}>
         {!this.state.file && (
           <Selector
-            selectorTypes={[{ type: '.kml, .kmz', description: 'KML (.kml, .kmz)', showFileDropZone: true }]}
+            selectorTypes={[
+              { type: '.kml', description: 'KML (.kml)', showFileDropZone: true },
+              { type: '.kmz', description: 'KMZ (.kmz)', showFileDropZone: true },
+              { type: '.zip', description: 'Zipped Shapefile (.zip)', showFileDropZone: true }
+            ]}
             onFileSelected={this.handleFileSelectorChange}
             onTypeSelected={this.handleTypeSelectorChange}
           />
         )}
-        {this.state.file && <span>Loading...</span>}
+        {this.state.file && <span>{this.context.getLocalizedText('layerloader.loading', 'Loading...')}</span>}
       </Container>
     );
   }

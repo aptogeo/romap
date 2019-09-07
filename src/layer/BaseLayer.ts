@@ -89,20 +89,17 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
   }
 
   public updateProps(prevProps: P, nextProps: P) {
-    if (prevProps == null || prevProps.id !== nextProps.id) {
-      this.olLayer.set('id', nextProps.id);
-    }
     if (prevProps == null || prevProps.name !== nextProps.name) {
       this.olLayer.set('name', nextProps.name);
-      this.context.romapManager.changeInfoElementProps({ id: nextProps.id, name: nextProps.name });
+      this.context.romapManager.changeInfoElementProps(this.props.id, { name: nextProps.name });
     }
     if (prevProps == null || prevProps.type !== nextProps.type) {
       let type = nextProps.type;
       if (type !== 'BASE' && type !== 'OVERLAY') {
-        let type = 'OVERLAY';
+        type = 'OVERLAY';
       }
       this.olLayer.set('type', nextProps.type);
-      this.context.romapManager.changeInfoElementProps({ id: nextProps.id, type });
+      this.context.romapManager.changeInfoElementProps(this.props.id, { type });
     }
     if (prevProps == null || prevProps.visible !== nextProps.visible) {
       let visible = nextProps.visible;
@@ -113,7 +110,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
           visible = true;
         }
       }
-      this.context.romapManager.changeInfoElementProps({ id: nextProps.id, visible });
+      this.context.romapManager.changeInfoElementProps(this.props.id, { visible });
       this.olLayer.setVisible(visible);
     }
     if (prevProps == null || prevProps.opacity !== nextProps.opacity) {
@@ -125,7 +122,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
         opacity = 1;
       }
       this.olLayer.setOpacity(opacity);
-      this.context.romapManager.changeInfoElementProps({ id: nextProps.id, opacity });
+      this.context.romapManager.changeInfoElementProps(this.props.id, { opacity });
     }
     if (prevProps == null || !jsonEqual(prevProps.extent, nextProps.extent)) {
       let extent = nextProps.extent;
@@ -133,7 +130,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
         extent = undefined;
       }
       this.olLayer.setExtent(extent);
-      this.context.romapManager.changeInfoElementProps({ id: nextProps.id, extent });
+      this.context.romapManager.changeInfoElementProps(this.props.id, { extent });
     }
     if (prevProps == null || prevProps.order !== nextProps.order || prevProps.type !== nextProps.type) {
       let order = nextProps.order;
@@ -149,7 +146,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
       }
       this.olLayer.set('order', order);
       this.olLayer.setZIndex(zIndex);
-      this.context.romapManager.changeInfoElementProps({ id: nextProps.id, order });
+      this.context.romapManager.changeInfoElementProps(this.props.id, { order });
     }
   }
 
@@ -187,10 +184,10 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
       this.context.romapManager
         .getInfoElements(infoElement => {
           const props = infoElement.reactElement.props;
-          return props.type === 'BASE' && props.visible === true && props.id !== this.props.id;
+          return props.type === 'BASE' && props.visible === true && infoElement.id !== this.props.id;
         })
-        .forEach(infoLayer => {
-          this.context.romapManager.changeInfoElementProps({ id: infoLayer.id, visible: false });
+        .forEach(infoElement => {
+          this.context.romapManager.changeInfoElementProps(infoElement.id, { visible: false });
         });
     }
   };

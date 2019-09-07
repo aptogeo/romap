@@ -55,15 +55,15 @@ export class Toc extends BaseTool<ITocProps, {}> {
 
   public handleRadioChange = (e: React.ChangeEvent) => {
     const id = e.currentTarget.getAttribute('data-id');
-    this.context.romapManager.changeInfoElementProps({ id, visible: true });
+    this.context.romapManager.changeInfoElementProps(id, { visible: true });
   };
 
   public handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.currentTarget.getAttribute('data-id');
-    this.context.romapManager.changeInfoElementProps({ id, visible: e.currentTarget.checked });
+    this.context.romapManager.changeInfoElementProps(id, { visible: e.currentTarget.checked });
   };
 
-  public renderBaseList(parentId: string = null): React.ReactNodeArray {
+  public renderBaseList(parentId: React.Key = 'map'): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
     this.context.romapManager
       .getInfoElements(infoLayer => infoLayer.parentId == parentId && infoLayer.reactElement.props.type === 'BASE')
@@ -88,7 +88,7 @@ export class Toc extends BaseTool<ITocProps, {}> {
     return bases;
   }
 
-  public renderOverlayTree(parentId: string = null): React.ReactNodeArray {
+  public renderOverlayTree(parentId: React.Key = 'map'): React.ReactNodeArray {
     const overlayTree: React.ReactNodeArray = [];
     this.context.romapManager
       .getInfoElements(

@@ -15,11 +15,11 @@ export class BaseContainer<P extends IBaseContainerProps, S> extends RomapChild<
   public context: IMapContext;
 
   public componentDidMount() {
-    this.context.romapManager.updateFromChildren(null, this.props.children, null, this.props.id);
+    this.context.romapManager.updateFromChildren(this.props.id, null, this.props.children);
   }
 
   public componentDidUpdate(prevProps: IBaseContainerProps) {
-    this.context.romapManager.updateFromChildren(prevProps.children, this.props.children, null, null);
+    this.context.romapManager.updateFromChildren(this.props.id, prevProps.children, this.props.children);
   }
 
   public renderChildren(): React.ReactElement<IRomapChildProps>[] {
@@ -30,5 +30,9 @@ export class BaseContainer<P extends IBaseContainerProps, S> extends RomapChild<
         elems.push(React.cloneElement(infoElement.reactElement, { key: infoElement.id }));
       });
     return elems;
+  }
+
+  public render(): React.ReactNode {
+    return this.renderChildren();
   }
 }

@@ -33,35 +33,35 @@ export class SampleApp extends React.Component {
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <romap.Romap
           keyboardEventTarget={document}
-          /*initialViewCenter={[490000, 6800000]}*/
+          initialViewCenter={[490000, 6800000]}
           initialViewZoom={5}
-          /*initialViewProjection="EPSG:2154"*/
+          initialViewProjection="EPSG:2154"
           style={{ flex: '1 1 0' }}
           olMapStyle={{ height: 600 }}
         >
           <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
           <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
-          <romap.layer.Tile source={world2D} name="World 2D" /*type="BASE"*/ visible={true} id={generateUUID()} />
-          <romap.layer.Group name="Groupe 1" id={generateUUID()}>
-            <romap.layer.Image source={britishNationalGrid} name="British National Grid" id={generateUUID()} />
+          <romap.layer.Tile source={world2D} name="World 2D" type="BASE" visible={true} />
+          <romap.layer.Group name="Groupe 1">
+            <romap.layer.Image source={britishNationalGrid} name="British National Grid" />
           </romap.layer.Group>
-          <romap.layer.Tile source={toppStateSource} name="Topp States" id={generateUUID()} />
-          <romap.container.Control id={generateUUID()}>
-            <romap.tool.PanZoom id={generateUUID()} />
+          <romap.layer.Tile source={toppStateSource} name="Topp States" />
+          <romap.container.Control>
+            <romap.tool.PanZoom />
           </romap.container.Control>
-          <romap.container.Control id={generateUUID()}>
-            <romap.tool.ScaleLine id={generateUUID()} />
+          <romap.container.Control>
+            <romap.tool.ScaleLine />
           </romap.container.Control>
-          <romap.container.Control id={generateUUID()}>
-            <romap.tool.Toc id={generateUUID()} />
+          <romap.container.Control>
+            <romap.tool.Toc />
           </romap.container.Control>
-          <romap.tool.LayerLoader id={generateUUID()} />
-          <romap.container.Zone id={generateUUID()}>
-            <CounterButton id={generateUUID()} />
-            <CounterButton id={generateUUID()} />
-            <CounterButton id={generateUUID()} />
-            <CounterWindow id={generateUUID()} />
-            <QueryWindow id={generateUUID()} />
+          <romap.tool.LayerLoader />
+          <romap.container.Zone>
+            <CounterButton />
+            <CounterButton />
+            <CounterButton />
+            <CounterWindow />
+            <QueryWindow />
           </romap.container.Zone>
         </romap.Romap>
       </div>

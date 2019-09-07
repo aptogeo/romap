@@ -16,9 +16,6 @@ export class LocalVector extends Vector {
       return this.origstrategy_.call(this, extent, resolution);
     };
     this.on('addfeature', this.handleAddFeature);
-    this.oldProjectionCode = null;
-    this.actualProjectionCode = null;
-    this.label = options.label ? options.label : this.constructor.name;
   }
 
   private reproj() {
@@ -36,7 +33,11 @@ export class LocalVector extends Vector {
           const geom = originalGeometry.clone();
           geom.transform(feature.get('originalProjection'), this.actualProjectionCode);
           feature.set(feature.getGeometryName(), geom, true);
-          const extent = geom.getExtent();
+          const extent = geom.getExtent() as [number, number, number, number];
+          extents.push(extent);
+          features.push(feature);
+        } else {
+          const extent = feature.getGeometry().getExtent() as [number, number, number, number];
           extents.push(extent);
           features.push(feature);
         }
