@@ -1,6 +1,7 @@
 import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
 import OlSource from 'ol/source/Source';
+import { ObjectEvent } from 'ol/Object';
 import { walk } from '../utils';
 import { RomapChild, IRomapChildProps } from '../RomapChild';
 import { mapContext, IMapContext } from '../RomapContext';
@@ -177,7 +178,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     }
   }
 
-  private handleBaseLayerPropertychange = (event: any) => {
+  private handleBaseLayerPropertychange = (event: ObjectEvent) => {
     const key = event.key;
     const value = event.target.get(key);
     if (key === 'visible' && value === true && this.props.type === 'BASE') {

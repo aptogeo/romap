@@ -1,5 +1,6 @@
 import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
+import { MapBrowserEvent } from 'ol';
 import { IBaseWindowToolProps, BaseWindowTool } from '../tool';
 import { IMapContext, mapContext } from '../RomapContext';
 import { constructQueryRequestFromPixel, IQueryResponse, IExtended } from '../source';
@@ -30,7 +31,7 @@ export class QueryWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
     this.context.olMap.un('click', this.handleClick);
   }
 
-  public handleClick = (e: any) => {
+  public handleClick = (e: MapBrowserEvent) => {
     this.setState({ queryResponses: null });
     const queryRequest = constructQueryRequestFromPixel(e.pixel, 2, this.context.olMap);
     const promises: Array<Promise<IQueryResponse>> = [];

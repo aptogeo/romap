@@ -5,7 +5,7 @@ import { BaseLayer, IBaseLayerProps, Vector as VectorLayer } from './layer';
 import { LocalVector as LocalVectorSource } from './source';
 import { generateUUID } from './utils';
 
-export type status = 'add' | 'modif' | 'del';
+export type infoElementStatus = null | 'add' | 'modif' | 'del';
 
 export interface IInfoElement {
   /**
@@ -27,7 +27,7 @@ export interface IInfoElement {
   /**
    * Status.
    */
-  status?: Readonly<status>;
+  status: Readonly<infoElementStatus>;
 }
 
 export interface RomapManagerState {
@@ -124,7 +124,8 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
       }),
       originalReactElement: null,
       id: id,
-      parentId: 'map'
+      parentId: 'map',
+      status: null
     });
   }
 
@@ -189,7 +190,6 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     }
     // Next children
     if (nextChildren) {
-      let numRomapChild = 0;
       React.Children.map(nextChildren, (child: React.ReactElement<any>) => {
         if (RomapChild.isPrototypeOf(child.type)) {
           let id = child.props.id;
@@ -210,19 +210,20 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
           }
           const infoElement = this.getInfoElements(infoElement => infoElement.id == id).pop();
           let props = {};
+          let status: infoElementStatus = 'add';
           if (infoElement != null) {
             props = infoElement.reactElement.props;
+            status = infoElement.status;
           }
           const element = React.cloneElement(child, { ...props, key: id, id });
           this.setInfoElement({
             reactElement: element,
             originalReactElement: child,
-            status: 'add',
+            status,
             id,
             parentId
           });
         }
-        numRomapChild++;
       });
     }
     // Set status to 'del' removed children
