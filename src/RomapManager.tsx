@@ -197,11 +197,10 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
           if (id == null) {
             this.infoElements.forEach(infoElement => {
               if (child === infoElement.originalReactElement) {
-                id = infoElement.reactElement.key;
+                id = infoElement.id;
               }
             });
           }
-          // id is null: generate
           if (id == null) {
             id = generateUUID();
           }
@@ -210,16 +209,14 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
           }
           const infoElement = this.getInfoElements(infoElement => infoElement.id == id).pop();
           let props = {};
-          let status: infoElementStatus = 'add';
           if (infoElement != null) {
             props = infoElement.reactElement.props;
-            status = infoElement.status;
           }
           const element = React.cloneElement(child, { ...props, key: id, id });
           this.setInfoElement({
             reactElement: element,
             originalReactElement: child,
-            status,
+            status: null,
             id,
             parentId
           });
