@@ -239,7 +239,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     }
     const view = this.context.olMap.getView();
     const resolution = view.getResolution();
-    const position = 1 - (view as any).getValueForResolutionFunction()(resolution);
+    const position = 1 - view.getValueForResolutionFunction()(resolution);
     const computedBtnThumbStyle = window.getComputedStyle(this.btnThumb);
     const btnThumbHeight =
       this.btnThumb.offsetHeight +
@@ -315,12 +315,12 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
 
   public zoom(delta: number) {
     const view = this.context.olMap.getView();
-    const res = view.getResolution();
+    const zoom = view.getZoom();
     if (view.getAnimating()) {
       view.cancelAnimations();
     }
     view.animate({
-      resolution: view.constrainResolution(res, delta),
+      zoom: (view as any).getConstrainedZoom(zoom + delta),
       duration: 200,
       easing: inAndOut
     });

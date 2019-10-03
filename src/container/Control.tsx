@@ -46,7 +46,7 @@ export class Control extends BaseContainer<IControlProps, IControlState> {
   public createControl() {
     const control = new OlControl({
       element: this.controlDiv.children[0],
-      target: this.context.olMap.getOverlayContainer()
+      target: this.context.olMap.getOverlayContainerStopEvent()
     });
     this.context.olMap.addControl(control);
     this.setState({

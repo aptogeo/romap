@@ -19,6 +19,10 @@ export interface IOverlayProps extends IBaseContainerProps {
   /**
    * Autopan.
    */
+  stopEvent?: boolean;
+  /**
+   * Autopan.
+   */
   autoPan?: boolean;
 }
 
@@ -34,6 +38,7 @@ export class Overlay extends BaseContainer<IOverlayProps, IOverlayState> {
 
   public static defaultProps = {
     positioning: 'top-left',
+    stopEvent: false,
     autoPan: false
   };
 
@@ -79,7 +84,7 @@ export class Overlay extends BaseContainer<IOverlayProps, IOverlayState> {
   public createOverlay() {
     const overlay = new OlOverlay({
       element: this.overlayDiv.children[0],
-      stopEvent: false,
+      stopEvent: this.props.stopEvent,
       autoPan: this.props.autoPan
     });
     this.context.olMap.addOverlay(overlay);

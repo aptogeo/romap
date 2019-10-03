@@ -11,36 +11,36 @@ import { IBaseToolProps, BaseTool } from './tool/BaseTool';
 import { BaseContainer } from './container/BaseContainer';
 
 const GlobalStyle = createGlobalStyle`
-  .ol-unsupported {
-    display: none;
-  }
+.ol-unsupported {
+  display: none;
+}
 
-  .ol-viewport, .ol-unselectable {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-  }
+.ol-viewport, .ol-unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 
-  .ol-selectable {
-    -webkit-touch-callout: default;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-  }
+.ol-selectable {
+  -webkit-touch-callout: default;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
 
-  .ol-control {
-    position: absolute;
-  }
+.ol-control {
+  position: absolute;
+}
 
-  .ol-hidden {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s linear 0s, visibility 0s linear 0.25s;
-  }
+.ol-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s linear 0s, visibility 0s linear 0.25s;
+}
 `;
 
 export interface IMapProps {
@@ -117,7 +117,6 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
       zoom: 2
     });
     this.olMap.setView(this.olView);
-    this.stopPropagationForComponents();
   }
 
   public componentDidMount() {
@@ -138,25 +137,6 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
 
   public componentDidUpdate(prevProps: IMapProps) {
     this.updateFromChildren('map', prevProps.children, this.props.children);
-  }
-
-  public stopPropagationForComponents() {
-    // Stop event propagation for components
-    this.olMap.on('click', this.stopEventPropagation);
-    this.olMap.on('singleclick', this.stopEventPropagation);
-    this.olMap.on('dblclick', this.stopEventPropagation);
-    this.olMap.on('pointerdrag', this.stopEventPropagation);
-    this.olMap.on('wheel', this.stopEventPropagation);
-  }
-
-  public stopEventPropagation(event: any) {
-    if (event == null || event.originalEvent == null || event.originalEvent.target == null) {
-      return;
-    }
-    const elem = event.originalEvent.target;
-    if (elem.nodeName !== 'CANVAS' && elem.className !== 'ol-unselectable') {
-      event.stopPropagation();
-    }
   }
 
   public renderNonRomapChildren(): React.ReactNode {

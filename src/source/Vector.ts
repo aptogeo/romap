@@ -45,10 +45,10 @@ export abstract class Vector extends OlVector implements IVector {
         destGeometry = fromCircle(geometry as Circle);
       }
       const extent = destGeometry.getExtent();
-      const jsonGeom = (this.queryGeoJSONFormat.writeGeometryObject(destGeometry) as any) as Geometry;
+      const jsonGeom = this.queryGeoJSONFormat.writeGeometryObject(destGeometry) as Geometry;
       this.forEachFeatureIntersectingExtent(extent, (feature: OlFeature) => {
         if (features.length < limit) {
-          const jsonResGeom = (this.queryGeoJSONFormat.writeGeometryObject(feature.getGeometry()) as any) as Geometry;
+          const jsonResGeom = this.queryGeoJSONFormat.writeGeometryObject(feature.getGeometry()) as Geometry;
           if (!booleanDisjoint(jsonResGeom, jsonGeom)) {
             features.push(feature);
           }
