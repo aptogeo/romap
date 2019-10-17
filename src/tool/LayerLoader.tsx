@@ -2,9 +2,10 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { IBaseWindowToolProps, BaseWindowTool, IBaseWindowToolState } from './BaseWindowTool';
 import { Selector } from './common/Selector';
+import { WmsLoader } from './common/WmsLoader';
 import { generateUUID } from '../utils';
 import { Vector as VectorLayer } from '../layer';
-import { LocalVector, ExternalVector } from '../source';
+import { LocalVector } from '../source';
 import KML from 'ol/format/KML';
 import Feature from 'ol/Feature';
 import * as JSZip from 'jszip';
@@ -138,7 +139,8 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
             selectorTypes={[
               { type: '.kml', description: 'KML (.kml)', showFileDropZone: true },
               { type: '.kmz', description: 'KMZ (.kmz)', showFileDropZone: true },
-              { type: '.zip', description: 'Zipped Shapefile (.zip)', showFileDropZone: true }
+              { type: '.zip', description: 'Zipped Shapefile (.zip)', showFileDropZone: true },
+              { type: 'WMS', description: 'Web Map Service', content: <WmsLoader /> }
             ]}
             onFileSelected={this.handleFileSelectorChange}
             onTypeSelected={this.handleTypeSelectorChange}
