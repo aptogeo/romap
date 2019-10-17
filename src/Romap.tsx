@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
-import { mapContext } from './RomapContext';
+import { romapContext } from './RomapContext';
 import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
 import { RomapChild } from './RomapChild';
 import { RomapManager, RomapManagerState } from './RomapManager';
@@ -180,7 +180,7 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
           className={`${this.props.className}-olmap`}
           style={this.props.olMapStyle}
         />
-        <mapContext.Provider
+        <romapContext.Provider
           value={{
             olMap: this.olMap,
             olGroup: this.olMap.getLayerGroup(),
@@ -192,7 +192,7 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
         >
           {this.renderNonRomapChildren()}
           {this.renderRomapChildren()}
-        </mapContext.Provider>
+        </romapContext.Provider>
       </div>
     );
   }

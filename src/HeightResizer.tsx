@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mapContext, IMapContext } from './RomapContext';
+import { romapContext, IRomapContext } from './RomapContext';
 
 export interface IResizerProps {
   /**
@@ -13,14 +13,14 @@ export interface IResizerProps {
 }
 
 export class HeightResizer extends React.Component<IResizerProps, {}> {
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
   public static defaultProps = {
     heightPercent: 100,
     heightRemoval: '15px'
   };
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   public componentDidMount() {
     window.addEventListener('resize', this.updateSize);

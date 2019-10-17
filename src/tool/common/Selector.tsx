@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { mapContext } from '../../RomapContext';
+import { romapContext } from '../../RomapContext';
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +53,7 @@ export const Selector = (props: IFileSelectorProps) => {
   const inputFileRef = React.createRef<HTMLInputElement>();
 
   return (
-    <mapContext.Consumer>
+    <romapContext.Consumer>
       {context => (
         <Container className={className}>
           <select
@@ -92,6 +92,6 @@ export const Selector = (props: IFileSelectorProps) => {
           {selectorType && selectorType.content}
         </Container>
       )}
-    </mapContext.Consumer>
+    </romapContext.Consumer>
   );
 };

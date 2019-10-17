@@ -2,14 +2,14 @@ import * as React from 'react';
 import OlBaseLayer from 'ol/layer/Base';
 import { MapBrowserEvent } from 'ol';
 import { IBaseWindowToolProps, BaseWindowTool } from '../tool';
-import { IMapContext, mapContext } from '../RomapContext';
+import { IRomapContext, romapContext } from '../RomapContext';
 import { constructQueryRequestFromPixel, IQueryResponse, IExtended } from '../source';
 import { walk } from '../utils';
 
 export class QueryWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   public constructor(props: IBaseWindowToolProps) {
     super(props);

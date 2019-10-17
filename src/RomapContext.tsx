@@ -23,7 +23,7 @@ export interface IRomapContext {
   getLocalizedText: (code: string, defaultText: string, data?: { [key: string]: string }) => string;
 }
 
-// Map context
+// Romap context
 export const romapContext = React.createContext<IRomapContext>({
   olMap: null,
   olGroup: null,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RomapChild, IRomapChildProps } from '../RomapChild';
-import { IMapContext, mapContext } from '../RomapContext';
+import { IRomapContext, romapContext } from '../RomapContext';
 
 export interface IBaseContainerProps extends IRomapChildProps {
   /**
@@ -10,9 +10,9 @@ export interface IBaseContainerProps extends IRomapChildProps {
 }
 
 export class BaseContainer<P extends IBaseContainerProps, S> extends RomapChild<P, S> {
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   public componentDidMount() {
     this.context.romapManager.updateFromChildren(this.props.id, null, this.props.children);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import OlGroupLayer from 'ol/layer/Group';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
-import { mapContext, IMapContext } from '../RomapContext';
+import { romapContext, IRomapContext } from '../RomapContext';
 import { IRomapChildProps } from '../RomapChild';
 
 export interface IGroupProps extends IBaseLayerProps {
@@ -19,9 +19,9 @@ export interface IGroupState {
 }
 
 export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, null> {
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   public constructor(props: IGroupProps) {
     super(props);
@@ -59,14 +59,14 @@ export class Group extends BaseLayer<IGroupProps, IGroupState, OlGroupLayer, nul
     }
     return (
       <div>
-        <mapContext.Provider
+        <romapContext.Provider
           value={{
             ...this.context,
             olGroup: this.getOlLayer()
           }}
         >
           {this.renderChildren()}
-        </mapContext.Provider>
+        </romapContext.Provider>
       </div>
     );
   }

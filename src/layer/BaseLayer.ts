@@ -4,7 +4,7 @@ import OlSource from 'ol/source/Source';
 import { ObjectEvent } from 'ol/Object';
 import { walk } from '../utils';
 import { RomapChild, IRomapChildProps } from '../RomapChild';
-import { mapContext, IMapContext } from '../RomapContext';
+import { romapContext, IRomapContext } from '../RomapContext';
 import { jsonEqual } from '../utils';
 import { IExtended } from '../source';
 
@@ -45,13 +45,13 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
   P,
   S
 > {
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
   public static defaultProps = {
     type: 'OVERLAY'
   };
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   private olLayer: OLL = null;
 

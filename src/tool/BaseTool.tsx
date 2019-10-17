@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RomapChild, IRomapChildProps } from '../RomapChild';
-import { IMapContext, mapContext } from '../RomapContext';
+import { IRomapContext, romapContext } from '../RomapContext';
 
 export interface IBaseToolProps extends IRomapChildProps {
   /**
@@ -33,9 +33,9 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
     className: 'tool'
   };
 
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   /**
    * Activate tool.

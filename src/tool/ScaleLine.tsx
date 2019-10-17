@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { getPointResolution } from 'ol/proj';
 import OlUnits from 'ol/proj/Units';
-import { mapContext, IMapContext } from '../RomapContext';
+import { romapContext, IRomapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 const Container = styled.div`
@@ -78,7 +78,7 @@ export interface IScaleLineProps extends IBaseToolProps {
 }
 
 export class ScaleLine extends BaseTool<IScaleLineProps, any> {
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
   public static defaultProps = {
     ...BaseTool.defaultProps,
@@ -86,7 +86,7 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
     minWidth: 64
   };
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   /**
    * Div ScaleLine.

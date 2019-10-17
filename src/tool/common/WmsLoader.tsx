@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { mapContext } from '../../RomapContext';
+import { romapContext } from '../../RomapContext';
 
 const Container = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ export const WmsLoader = () => {
   const [capabilities, setCapabilities] = React.useState<any>(null);
 
   return (
-    <mapContext.Consumer>
+    <romapContext.Consumer>
       {context => (
         <Container>
           <label htmlFor="url">{context.getLocalizedText('wmsLoader.url', 'Enter WMS URL')}</label>
@@ -19,6 +19,6 @@ export const WmsLoader = () => {
           <button>{context.getLocalizedText('wmsLoader.load', 'Load capabilities')}</button>
         </Container>
       )}
-    </mapContext.Consumer>
+    </romapContext.Consumer>
   );
 };

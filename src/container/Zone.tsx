@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mapContext, IMapContext } from '../RomapContext';
+import { romapContext, IRomapContext } from '../RomapContext';
 import { BaseContainer, IBaseContainerProps } from './BaseContainer';
 
 export interface IZoneProps extends IBaseContainerProps {

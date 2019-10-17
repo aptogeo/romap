@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import OlView from 'ol/View';
 import { inAndOut } from 'ol/easing';
 import { cloneView } from '../utils';
-import { mapContext, IMapContext } from '../RomapContext';
+import { romapContext, IRomapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
 
 const Container = styled.div`
@@ -160,7 +160,7 @@ export interface IPanZoomProps extends IBaseToolProps {
 }
 
 export class PanZoom extends BaseTool<IPanZoomProps, any> {
-  public static contextType: React.Context<IMapContext> = mapContext;
+  public static contextType: React.Context<IRomapContext> = romapContext;
 
   public static defaultProps = {
     ...BaseTool.defaultProps,
@@ -172,7 +172,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     showRotation: true
   };
 
-  public context: IMapContext;
+  public context: IRomapContext;
 
   /**
    * Origin.
