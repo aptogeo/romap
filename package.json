@@ -1,20 +1,18 @@
 {
   "name": "romap",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "description": "OpenLayers with React",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "module": "lib/index.js",
-  "files": [
-    "lib",
-    "src"
-  ],
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "module": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.dev.config.js --content-base src --hot --inline",
     "prettier": "prettier --single-quote --print-width 120 --write --parser typescript '{src, test}/**/*.ts'; prettier --single-quote --print-width 120 --write --parser typescript '{src,test}/**/*.tsx'",
     "lint": "npm run prettier && tslint '{src, test}/**/.{ts,tsx}'",
-    "build": "rimraf lib && npm run lint && tsc -p tsconfig.json"
+    "build": "rimraf lib && npm run lint && tsc -p tsconfig.json && cp ./package.json lib",
+    "prepublishOnly": "[[ \"$PWD\" =~ /lib ]]",
+    "pub": "pushd ./ && npm run build && cd lib && npm publish && popd"
   },
   "husky": {
     "hooks": {

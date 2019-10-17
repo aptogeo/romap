@@ -3,8 +3,8 @@ import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
 import { RomapManager } from './RomapManager';
 
-// Map context interface
-export interface IMapContext {
+// Romap context interface
+export interface IRomapContext {
   /**
    * OpenLayers map
    */
@@ -24,7 +24,7 @@ export interface IMapContext {
 }
 
 // Map context
-export const mapContext = React.createContext<IMapContext>({
+export const romapContext = React.createContext<IRomapContext>({
   olMap: null,
   olGroup: null,
   romapManager: null,
