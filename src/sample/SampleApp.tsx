@@ -1,9 +1,13 @@
 import * as React from 'react';
 import * as romap from '../';
-import { generateUUID } from '../utils';
 import { CounterButton } from './CounterButton';
 import { CounterWindow } from './CounterWindow';
 import { QueryWindow } from './QueryWindow';
+import { TileArcGISRest, ImageStatic, TileWms } from '../source';
+import { LayerLoader, Toc, ScaleLine, PanZoom } from '../tool';
+import { Image, Tile, Group } from '../layer';
+import { Projection } from '../Projection';
+import { Control, Zone } from '../container';
 
 export class SampleApp extends React.Component {
   public render(): React.ReactNode {
@@ -12,19 +16,19 @@ export class SampleApp extends React.Component {
     const wkt27700 =
       'PROJCS["OSGB 1936 / British National Grid",GEOGCS["OSGB 1936",DATUM["OSGB_1936",SPHEROID["Airy 1830",6377563.396,299.3249646,AUTHORITY["EPSG","7001"]],AUTHORITY["EPSG","6277"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4277"]],UNIT["metre",1,AUTHORITY["EPSG","9001"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",49],PARAMETER["central_meridian",-2],PARAMETER["scale_factor",0.9996012717],PARAMETER["false_easting",400000],PARAMETER["false_northing",-100000],AUTHORITY["EPSG","27700"],AXIS["Easting",EAST],AXIS["Northing",NORTH]]';
 
-    const world2D = new romap.source.TileArcGISRest({
+    const world2D = new TileArcGISRest({
       url: 'https://services.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer',
       projection: 'EPSG:3857'
     });
 
-    const britishNationalGrid = new romap.source.ImageStatic({
+    const britishNationalGrid = new ImageStatic({
       url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/British_National_Grid.svg/2000px-British_National_Grid.svg.png',
       projection: 'EPSG:27700',
       imageExtent: [0, 0, 700000, 1300000]
     });
 
-    const toppStateSource = new romap.source.TileWms({
+    const toppStateSource = new TileWms({
       url: 'https://ahocevar.com/geoserver/wms',
       types: [{ id: 'topp:states' }]
     });
@@ -39,30 +43,30 @@ export class SampleApp extends React.Component {
           style={{ flex: '1 1 0' }}
           olMapStyle={{ height: 600 }}
         >
-          <romap.Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
-          <romap.Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
-          <romap.layer.Tile source={world2D} name="World 2D" type="BASE" visible={true} />
-          <romap.layer.Group name="Groupe 1">
-            <romap.layer.Image source={britishNationalGrid} name="British National Grid" />
-          </romap.layer.Group>
-          <romap.layer.Tile source={toppStateSource} name="Topp States" />
-          <romap.container.Control>
-            <romap.tool.PanZoom />
-          </romap.container.Control>
-          <romap.container.Control>
-            <romap.tool.ScaleLine />
-          </romap.container.Control>
-          <romap.container.Control>
-            <romap.tool.Toc />
-          </romap.container.Control>
-          <romap.tool.LayerLoader />
-          <romap.container.Zone>
+          <Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
+          <Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
+          <Tile source={world2D} name="World 2D" type="BASE" visible={true} />
+          <Group name="Groupe 1">
+            <Image source={britishNationalGrid} name="British National Grid" />
+          </Group>
+          <Tile source={toppStateSource} name="Topp States" />
+          <Control>
+            <PanZoom />
+          </Control>
+          <Control>
+            <ScaleLine />
+          </Control>
+          <Control>
+            <Toc />
+          </Control>
+          <LayerLoader />
+          <Zone>
             <CounterButton />
             <CounterButton />
             <CounterButton />
             <CounterWindow />
             <QueryWindow />
-          </romap.container.Zone>
+          </Zone>
         </romap.Romap>
       </div>
     );

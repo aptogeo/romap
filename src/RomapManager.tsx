@@ -182,8 +182,17 @@ export class RomapManager<P, S extends RomapManagerState> extends React.Componen
     if (prevChildren) {
       React.Children.map(prevChildren, (child: React.ReactElement<any>) => {
         if (RomapChild.isPrototypeOf(child.type)) {
-          if (child.props.id != null) {
-            toDel.set(child.props.id, child);
+          let id = child.props.id;
+          // id is null: search element
+          if (id == null) {
+            this.infoElements.forEach(infoElement => {
+              if (child === infoElement.originalReactElement) {
+                id = infoElement.id;
+              }
+            });
+          }
+          if (id != null) {
+            toDel.set(id, child);
           }
         }
       });

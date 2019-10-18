@@ -84,6 +84,10 @@ export interface IMapProps {
    * Initial view projection.
    */
   initialViewProjection?: OlProjection | string;
+  /*
+   * Ignore default interactions.
+   */
+  ignoreDefaultInteractions?: boolean;
 }
 
 export class Romap extends RomapManager<IMapProps, RomapManagerState> {
@@ -108,10 +112,18 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
 
   constructor(props: IMapProps) {
     super(props);
-    this.olMap = new OlMap({
-      controls: [],
-      keyboardEventTarget: props.keyboardEventTarget
-    });
+    if (props.ignoreDefaultInteractions === true) {
+      this.olMap = new OlMap({
+        controls: [],
+        interactions: [],
+        keyboardEventTarget: props.keyboardEventTarget
+      });
+    } else {
+      this.olMap = new OlMap({
+        controls: [],
+        keyboardEventTarget: props.keyboardEventTarget
+      });
+    }
     this.olView = new OlView({
       center: [0, 0],
       zoom: 2

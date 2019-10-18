@@ -17,7 +17,7 @@ export class HeightResizer extends React.Component<IResizerProps, {}> {
 
   public static defaultProps = {
     heightPercent: 100,
-    heightRemoval: '15px'
+    heightRemoval: '0px'
   };
 
   public context: IRomapContext;
