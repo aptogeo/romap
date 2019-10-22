@@ -49,7 +49,7 @@ export class BaseLayer<
   S,
   OLL extends OlBaseLayer,
   OLS extends OlSource
-  > extends React.Component<P, S> {
+> extends React.Component<P, S> {
   public static contextType: React.Context<IRomapContext> = romapContext;
 
   public static defaultProps = {

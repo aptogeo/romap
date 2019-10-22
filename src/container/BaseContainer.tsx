@@ -10,7 +10,6 @@ export interface IBaseContainerProps {
   children: React.ReactNode;
 }
 
-
 export interface IBaseContaineState {
   /**
    * Changed counter.
@@ -33,8 +32,10 @@ export class BaseContainer<P extends IBaseContainerProps, S extends IBaseContain
   }
 
   public refresh = () => {
-    this.setState((prevState: IBaseContaineState) => { return { changedCounter: prevState.changedCounter + 1 } });
-  }
+    this.setState((prevState: IBaseContaineState) => {
+      return { changedCounter: prevState.changedCounter + 1 };
+    });
+  };
 
   public renderChildren(): React.ReactElement<any>[] {
     const elems: React.ReactElement<any>[] = [];

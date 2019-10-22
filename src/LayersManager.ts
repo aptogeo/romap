@@ -94,10 +94,18 @@ export class LayersManager {
   public updateLayerProps(uid: React.Key, props: any, refreshIfChanging = true) {
     const layerElement = this.getLayerElements(layerElement => layerElement.uid == uid).pop();
     if (layerElement != null) {
-      this.setLayerElement({
-        ...layerElement,
-        reactElement: React.cloneElement(layerElement.reactElement, { ...layerElement.reactElement.props, ...props, uid, key: uid })
-      }, refreshIfChanging);
+      this.setLayerElement(
+        {
+          ...layerElement,
+          reactElement: React.cloneElement(layerElement.reactElement, {
+            ...layerElement.reactElement.props,
+            ...props,
+            uid,
+            key: uid
+          })
+        },
+        refreshIfChanging
+      );
     } else {
       console.error(`Element not found for uid ${uid}`);
     }
@@ -165,11 +173,14 @@ export class LayersManager {
               toDel.delete(uid);
             }
             const layerElement = this.getLayerElements(layerElement => layerElement.uid == uid).pop();
-            this.setLayerElement({
-              reactElement: nextChild,
-              status: 'react',
-              uid
-            }, layerElement == null);
+            this.setLayerElement(
+              {
+                reactElement: nextChild,
+                status: 'react',
+                uid
+              },
+              layerElement == null
+            );
             if (layerElement != null) {
               this.updateLayerProps(uid, layerElement.reactElement.props, false);
               this.setOlLayer(uid, layerElement.olLayer);

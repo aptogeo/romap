@@ -90,7 +90,6 @@ export interface IRomapProps {
   ignoreDefaultInteractions?: boolean;
 }
 
-
 export interface IRomapState {
   /**
    * Changed counter.
@@ -175,8 +174,10 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
   }
 
   public refresh = () => {
-    this.setState((prevState: IRomapState) => { return { changedCounter: prevState.changedCounter + 1 } });
-  }
+    this.setState((prevState: IRomapState) => {
+      return { changedCounter: prevState.changedCounter + 1 };
+    });
+  };
 
   public renderProjections(): React.ReactElement<IBaseToolProps>[] {
     const elems: React.ReactElement<IBaseToolProps>[] = [];

@@ -90,10 +90,13 @@ export class ToolsManager {
   public updateToolProps(uid: React.Key, props: any, refreshIfChanging = true) {
     const toolElement = this.getToolElements(toolElement => toolElement.uid == uid).pop();
     if (toolElement != null) {
-      this.setToolElement({
-        ...toolElement,
-        reactElement: React.cloneElement(toolElement.reactElement, { ...props, uid, key: uid })
-      }, refreshIfChanging);
+      this.setToolElement(
+        {
+          ...toolElement,
+          reactElement: React.cloneElement(toolElement.reactElement, { ...props, uid, key: uid })
+        },
+        refreshIfChanging
+      );
     } else {
       console.error(`Element not found for uid ${uid}`);
     }
@@ -191,13 +194,16 @@ export class ToolsManager {
               toDel.delete(uid);
             }
             const toolElement = this.getToolElements(toolElement => toolElement.uid == uid).pop();
-            this.setToolElement({
-              reactElement: nextChild,
-              status: 'react',
-              uid
-            }, toolElement == null);
+            this.setToolElement(
+              {
+                reactElement: nextChild,
+                status: 'react',
+                uid
+              },
+              toolElement == null
+            );
             if (toolElement != null) {
-              this.updateToolProps(uid, toolElement.reactElement.props, false)
+              this.updateToolProps(uid, toolElement.reactElement.props, false);
             }
           }
         }

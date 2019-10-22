@@ -16,8 +16,7 @@ export interface IZoneProps extends IBaseContainerProps {
   style?: React.CSSProperties;
 }
 
-export interface IZoneState extends IBaseContaineState {
-}
+export interface IZoneState extends IBaseContaineState {}
 
 export class Zone extends BaseContainer<IZoneProps, IZoneState> {
   public static defaultProps = {
