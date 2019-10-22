@@ -71,11 +71,11 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
               <PanZoom uid="PanZoom" />
               <ScaleLine uid="ScaleLine" />
               <Zone>
-                <CounterButton uid="CounterButton1"/>
-                <CounterButton uid="CounterButton2"/>
-                <CounterButton uid="CounterButton3"/>
-                <CounterWindow uid="CounterWindow"/>
-                <QueryWindow uid="QueryWindow"/>
+                <CounterButton uid="CounterButton1" />
+                <CounterButton uid="CounterButton2" />
+                <CounterButton uid="CounterButton3" />
+                <CounterWindow uid="CounterWindow" />
+                <QueryWindow uid="QueryWindow" />
               </Zone>
             </Zone>
           )}
