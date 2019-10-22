@@ -45,6 +45,10 @@ const GlobalStyle = createGlobalStyle`
 
 export interface IRomapProps {
   /**
+  * unique id is mandatory.
+  */
+  uid: React.Key;
+  /**
    * Children.
    */
   children: React.ReactNode;
@@ -147,8 +151,8 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
       zoom: 2
     });
     this.olMap.setView(this.olView);
-    this.layersManager = new LayersManager('map', this.refresh);
-    this.toolsManager = new ToolsManager('map', this.refresh);
+    this.layersManager = new LayersManager(props.uid, this.refresh);
+    this.toolsManager = new ToolsManager(props.uid, this.refresh);
   }
 
   public componentDidMount() {

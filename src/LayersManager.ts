@@ -24,17 +24,17 @@ export interface ILayerElement {
   olLayer?: OlBaseLayer;
 }
 
-const layerMaps = new Map<string, Map<React.Key, ILayerElement>>();
+const layerMaps = new Map<React.Key, Map<React.Key, ILayerElement>>();
 
 export class LayersManager {
-  private id: string;
+  private uid: React.Key;
 
   private refresh: () => void;
 
-  constructor(id: string, refresh: () => void) {
-    this.id = id;
+  constructor(uid: React.Key, refresh: () => void) {
+    this.uid = uid;
     this.refresh = refresh;
-    layerMaps.set(id, new Map<React.Key, ILayerElement>());
+    layerMaps.set(uid, new Map<React.Key, ILayerElement>());
   }
 
   /**
@@ -44,7 +44,7 @@ export class LayersManager {
     filterFn?: (value: ILayerElement, index: number, array: ILayerElement[]) => boolean,
     thisFilterArg?: any
   ): ILayerElement[] {
-    const layerMap = layerMaps.get(this.id);
+    const layerMap = layerMaps.get(this.uid);
     if (layerMap == null) {
       return [];
     }
@@ -56,7 +56,7 @@ export class LayersManager {
    * Set layerElement
    */
   private setLayerElement(layerElement: ILayerElement, refreshIfChanging = true) {
-    const layerMap = layerMaps.get(this.id);
+    const layerMap = layerMaps.get(this.uid);
     if (layerMap == null) {
       return false;
     }

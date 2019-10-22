@@ -20,17 +20,17 @@ export interface IToolElement {
   status: Readonly<toolElementStatus>;
 }
 
-const toolMaps = new Map<string, Map<React.Key, IToolElement>>();
+const toolMaps = new Map<React.Key, Map<React.Key, IToolElement>>();
 
 export class ToolsManager {
-  private id: string;
+  private uid: React.Key;
 
   private refresh: () => void;
 
-  constructor(id: string, refresh: () => void) {
-    this.id = id;
+  constructor(uid: React.Key, refresh: () => void) {
+    this.uid = uid;
     this.refresh = refresh;
-    toolMaps.set(id, new Map<React.Key, IToolElement>());
+    toolMaps.set(uid, new Map<React.Key, IToolElement>());
   }
 
   /**
@@ -40,7 +40,7 @@ export class ToolsManager {
     filterFn?: (value: IToolElement, index: number, array: IToolElement[]) => boolean,
     thisFilterArg?: any
   ): IToolElement[] {
-    const toolMap = toolMaps.get(this.id);
+    const toolMap = toolMaps.get(this.uid);
     if (toolMap == null) {
       return [];
     }
@@ -52,7 +52,7 @@ export class ToolsManager {
    * Set toolElement
    */
   private setToolElement(toolElement: IToolElement, refreshIfChanging = true) {
-    const toolMap = toolMaps.get(this.id);
+    const toolMap = toolMaps.get(this.uid);
     if (toolMap == null) {
       return false;
     }
