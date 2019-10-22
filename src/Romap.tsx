@@ -2,7 +2,6 @@ import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
-import OlProjection from 'ol/proj/Projection';
 import { romapContext } from './RomapContext';
 import { IBaseToolProps, BaseTool } from './tool/BaseTool';
 import { BaseContainer } from './container/BaseContainer';
@@ -43,6 +42,8 @@ const GlobalStyle = createGlobalStyle`
 }
 `;
 
+export type afterInitialization = (olMap: OlMap) => void;
+
 export interface IRomapProps {
   /**
    * unique id is mandatory.
@@ -68,30 +69,14 @@ export interface IRomapProps {
    * Keyboard Event Target.
    */
   keyboardEventTarget?: any;
-  /**
-   * Initial view center.
-   */
-  initialViewCenter?: [number, number];
-  /*
-   * Initial view zoom.
-   */
-  initialViewZoom?: number;
-  /*
-   * Initial view resolution.
-   */
-  initialViewResolution?: number;
-  /*
-   * Initial view rotation.
-   */
-  initialViewRotation?: number;
-  /*
-   * Initial view projection.
-   */
-  initialViewProjection?: OlProjection | string;
   /*
    * Ignore default interactions.
    */
   ignoreDefaultInteractions?: boolean;
+  /**
+   * After initialization calback.
+   */
+  afterInitialization: afterInitialization;
 }
 
 export interface IRomapState {
@@ -110,11 +95,6 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
    * OpenLayers map.
    */
   private olMap: OlMap;
-
-  /**
-   * OpenLayers view.
-   */
-  private olView: OlView;
 
   /**
    * Div.
@@ -146,11 +126,10 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
         keyboardEventTarget: props.keyboardEventTarget
       });
     }
-    this.olView = new OlView({
+    this.olMap.setView(new OlView({
       center: [0, 0],
       zoom: 2
-    });
-    this.olMap.setView(this.olView);
+    }));
     this.layersManager = new LayersManager(props.uid, this.refresh);
     this.toolsManager = new ToolsManager(props.uid, this.refresh);
   }
@@ -159,16 +138,8 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
     this.olMap.setTarget(this.divMap);
     this.layersManager.fromChildren(this.props.children);
     this.toolsManager.fromChildren(this.props.children);
-    // View
-    if (this.props.initialViewCenter != null && this.props.initialViewZoom != null) {
-      const view = new OlView({
-        center: this.props.initialViewCenter,
-        zoom: this.props.initialViewZoom,
-        resolution: this.props.initialViewResolution,
-        rotation: this.props.initialViewRotation,
-        projection: this.props.initialViewProjection
-      });
-      this.olMap.setView(view);
+    if (this.props.afterInitialization) {
+      this.props.afterInitialization.call(this, this.olMap);
     }
   }
 

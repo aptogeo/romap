@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Romap } from '../Romap';
+import OlMap from 'ol/Map';
+import OlView from 'ol/View';
 import { CounterButton } from './CounterButton';
 import { CounterWindow } from './CounterWindow';
 import { QueryWindow } from './QueryWindow';
@@ -52,10 +54,14 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
       <Romap
         uid="map"
         keyboardEventTarget={document}
-        initialViewCenter={[490000, 6800000]}
-        initialViewZoom={5}
-        initialViewProjection="EPSG:2154"
         olMapStyle={{ position: 'absolute', width: 'calc(100% - 15px)', height: 'calc(100% - 15px)' }}
+        afterInitialization={(olMap: OlMap) => {
+          olMap.setView(new OlView({
+            center: [490000, 6800000],
+            zoom: 5,
+            projection: "EPSG:2154"
+          }));
+        }}
       >
         <Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />
         <Projection code="EPSG:27700" name="OSGB 1936 / British National Grid " wkt={wkt27700} />
