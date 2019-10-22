@@ -56,11 +56,13 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
         keyboardEventTarget={document}
         olMapStyle={{ position: 'absolute', width: 'calc(100% - 15px)', height: 'calc(100% - 15px)' }}
         afterInitialization={(olMap: OlMap) => {
-          olMap.setView(new OlView({
-            center: [490000, 6800000],
-            zoom: 5,
-            projection: "EPSG:2154"
-          }));
+          olMap.setView(
+            new OlView({
+              center: [490000, 6800000],
+              zoom: 5,
+              projection: 'EPSG:2154'
+            })
+          );
         }}
       >
         <Projection code="EPSG:2154" name="RGF93 / Lambert-93" wkt={wkt2154} />

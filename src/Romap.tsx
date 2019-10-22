@@ -126,10 +126,12 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
         keyboardEventTarget: props.keyboardEventTarget
       });
     }
-    this.olMap.setView(new OlView({
-      center: [0, 0],
-      zoom: 2
-    }));
+    this.olMap.setView(
+      new OlView({
+        center: [0, 0],
+        zoom: 2
+      })
+    );
     this.layersManager = new LayersManager(props.uid, this.refresh);
     this.toolsManager = new ToolsManager(props.uid, this.refresh);
   }
