@@ -45,8 +45,8 @@ const GlobalStyle = createGlobalStyle`
 
 export interface IRomapProps {
   /**
-  * unique id is mandatory.
-  */
+   * unique id is mandatory.
+   */
   uid: React.Key;
   /**
    * Children.
@@ -217,7 +217,7 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
 
   public render(): React.ReactNode {
     return (
-      <div className={this.props.className} style={this.props.style}>
+      <div key={this.props.uid} className={this.props.className} style={this.props.style}>
         <GlobalStyle />
         {this.renderProjections()}
         <div

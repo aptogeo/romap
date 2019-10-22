@@ -68,7 +68,7 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
             <Toc uid="Toc" />
             <PanZoom uid="PanZoom" />
             <ScaleLine uid="ScaleLine" />
-            <Zone style={{ position: 'absolute', top: 'calc(100% - 70px)' }} >
+            <Zone style={{ position: 'absolute', top: 'calc(100% - 70px)' }}>
               <CounterButton uid="CounterButton1" />
               <CounterButton uid="CounterButton2" />
               <CounterButton uid="CounterButton3" />
@@ -77,7 +77,7 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
             </Zone>
           </Zone>
         )}
-        <Zone style={{ position: 'absolute', top: 'calc(100% - 40px)' }} >
+        <Zone style={{ position: 'absolute', top: 'calc(100% - 40px)' }}>
           <HideToolsButton uid="HideToolsButton" hideTools={this.state.hideTools} setHideTools={this.setHideTools} />
         </Zone>
       </Romap>
