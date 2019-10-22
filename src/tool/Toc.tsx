@@ -53,49 +53,40 @@ export class Toc extends BaseTool<ITocProps, {}> {
 
   public context: IRomapContext;
 
-  public handleRadioChange = (e: React.ChangeEvent) => {
-    const id = e.currentTarget.getAttribute('data-id');
-    this.context.romapManager.changeInfoElementProps(id, { visible: true });
+  public handleRadioChange = (key: React.Key) => (e: React.ChangeEvent) => {
+    this.context.layersManager.updateLayerProps(key, { visible: true });
   };
 
-  public handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const id = e.currentTarget.getAttribute('data-id');
-    this.context.romapManager.changeInfoElementProps(id, { visible: e.currentTarget.checked });
+  public handleCheckboxChange = (key: React.Key) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.context.layersManager.updateLayerProps(key, { visible: e.currentTarget.checked });
   };
 
   public renderBaseList(parentId: React.Key = 'map'): React.ReactNodeArray {
     const bases: React.ReactNodeArray = [];
-    this.context.romapManager
-      .getInfoElements(infoLayer => infoLayer.parentId == parentId && infoLayer.reactElement.props.type === 'BASE')
-      .forEach(infoLayer => {
+    this.context.layersManager
+      .getLayerElements(layerElement => layerElement.reactElement.props.type === 'BASE')
+      .forEach(layerElement => {
         bases.push(
-          <div key={infoLayer.id}>
+          <div key={layerElement.uid}>
             <input
               type="radio"
               name="radiotoc"
-              checked={infoLayer.reactElement.props.visible ? true : false}
-              onChange={this.handleRadioChange}
-              data-id={infoLayer.id}
+              checked={layerElement.reactElement.props.visible !== false ? true : false}
+              onChange={this.handleRadioChange(layerElement.uid)}
             />
-            <label title={infoLayer.reactElement.props.name}>{infoLayer.reactElement.props.name}</label>
+            <label title={layerElement.reactElement.props.name}>{layerElement.reactElement.props.name}</label>
           </div>
         );
-        const subBaseList = this.renderBaseList(infoLayer.id);
-        if (subBaseList) {
-          bases.push(subBaseList);
-        }
       });
     return bases;
   }
 
   public renderOverlayTree(parentId: React.Key = 'map'): React.ReactNodeArray {
     const overlayTree: React.ReactNodeArray = [];
-    this.context.romapManager
-      .getInfoElements(
-        infoElement => infoElement.parentId == parentId && infoElement.reactElement.props.type === 'OVERLAY'
-      )
-      .forEach(infoElement => {
-        const name = infoElement.reactElement.props.name || '';
+    this.context.layersManager
+      .getLayerElements(layerElement => layerElement.reactElement.props.type === 'OVERLAY')
+      .forEach(layerElement => {
+        const name = layerElement.reactElement.props.name || '';
         let truncName = name;
         if (truncName.length > 15) {
           truncName = truncName.substring(0, 14) + '…';
@@ -103,33 +94,17 @@ export class Toc extends BaseTool<ITocProps, {}> {
         const input = (
           <input
             type="checkbox"
-            checked={infoElement.reactElement.props.visible ? true : false}
-            onChange={this.handleCheckboxChange}
-            data-id={infoElement.id}
+            checked={layerElement.reactElement.props.visible !== false ? true : false}
+            onChange={this.handleCheckboxChange(layerElement.uid)}
           />
         );
         const label = <label title={name}>{truncName}</label>;
-        if (infoElement.reactElement.props.type === 'OVERLAY') {
-          const subOverlayTree = this.renderOverlayTree(infoElement.id);
-          if (subOverlayTree == null || subOverlayTree.length === 0) {
-            overlayTree.push(
-              <div key={infoElement.id}>
-                {input}
-                {label}
-              </div>
-            );
-          } else {
-            overlayTree.push(
-              <div key={infoElement.id}>
-                <SpanParentSubTree>
-                  {input}
-                  {label}
-                </SpanParentSubTree>
-                <DivSubTree>{subOverlayTree}</DivSubTree>
-              </div>
-            );
-          }
-        }
+        overlayTree.push(
+          <div key={layerElement.uid}>
+            {input}
+            {label}
+          </div>
+        );
       });
     return overlayTree;
   }

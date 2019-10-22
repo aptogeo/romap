@@ -1,7 +1,7 @@
 import * as React from 'react';
 import OlOverlay from 'ol/Overlay';
 import { romapContext, IRomapContext } from '../RomapContext';
-import { BaseContainer, IBaseContainerProps } from './BaseContainer';
+import { BaseContainer, IBaseContainerProps, IBaseContaineState } from './BaseContainer';
 
 export interface IOverlayProps extends IBaseContainerProps {
   /**
@@ -26,7 +26,7 @@ export interface IOverlayProps extends IBaseContainerProps {
   autoPan?: boolean;
 }
 
-export interface IOverlayState {
+export interface IOverlayState extends IBaseContaineState {
   /**
    * Overlay.
    */
@@ -62,17 +62,17 @@ export class Overlay extends BaseContainer<IOverlayProps, IOverlayState> {
   constructor(props: IOverlayProps) {
     super(props);
     this.state = {
+      changedCounter: 0,
       overlay: null
     };
   }
 
   public componentDidMount() {
-    super.componentDidMount();
     this.createOverlay();
   }
 
-  public componentDidUpdate(prevProps: IOverlayProps) {
-    super.componentDidUpdate(prevProps);
+  public componentDidUpdate(prevProps: IOverlayProps, prevState: IOverlayState, snapshot: any) {
+    super.componentDidUpdate(prevProps, prevState, snapshot);
     this.state.overlay.setPositioning(this.props.positioning as any);
     this.computePosition();
   }

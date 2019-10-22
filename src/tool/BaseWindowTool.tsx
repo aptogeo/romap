@@ -117,7 +117,7 @@ export class BaseWindowTool<
     }
   }
 
-  public componentDidUpdate(prevProps: P) {
+  public componentDidUpdate(prevProps: P, prevState: S, snapshot: any) {
     const boundingRect: any = this.windowElement ? this.windowElement.getBoundingClientRect() : {};
     if (boundingRect.height !== 0 && boundingRect.width !== 0 && !this.state.bounds) {
       this.setState({

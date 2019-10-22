@@ -1,7 +1,8 @@
 import * as React from 'react';
 import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
-import { RomapManager } from './RomapManager';
+import { LayersManager } from './LayersManager';
+import { ToolsManager } from './ToolsManager';
 
 // Romap context interface
 export interface IRomapContext {
@@ -14,9 +15,13 @@ export interface IRomapContext {
    */
   olGroup: OlGroupLayer;
   /**
-   * InfoLayer Manager
+   * Layers manager
    */
-  romapManager: RomapManager<any, any>;
+  layersManager: LayersManager;
+  /**
+   * Tools manager
+   */
+  toolsManager: ToolsManager;
   /**
    * Get localized text
    */
@@ -27,7 +32,8 @@ export interface IRomapContext {
 export const romapContext = React.createContext<IRomapContext>({
   olMap: null,
   olGroup: null,
-  romapManager: null,
+  layersManager: null,
+  toolsManager: null,
   getLocalizedText: (code: string, defaultText: string, data?: { [key: string]: string }) => {
     return defaultText;
   }

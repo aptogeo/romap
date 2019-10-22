@@ -29,7 +29,7 @@ export class HeightResizer extends React.Component<IResizerProps, {}> {
     }, 1000);
   }
 
-  public componentDidUpdate() {
+  public componentDidUpdate(prevProps: IResizerProps, prevState: {}, snapshot: any) {
     this.updateSize();
   }
 

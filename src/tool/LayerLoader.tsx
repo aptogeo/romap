@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { IBaseWindowToolProps, BaseWindowTool, IBaseWindowToolState } from './BaseWindowTool';
 import { Selector } from './common/Selector';
 import { WmsLoader } from './common/WmsLoader';
-import { generateUUID } from '../utils';
+import { uid } from '../utils';
 import { Vector as VectorLayer } from '../layer';
 import { LocalVector } from '../source';
 import KML from 'ol/format/KML';
@@ -76,7 +76,8 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
       }) as Feature[];
       const localVectorSource = new LocalVector({});
       localVectorSource.addFeatures(features);
-      this.context.romapManager.addOrUpdateLayer(generateUUID(), VectorLayer, {
+      this.context.layersManager.createAndAddLayer(VectorLayer, {
+        uid: uid(),
         source: localVectorSource,
         name
       });
@@ -108,7 +109,8 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
           }) as Feature[];
           const localVectorSource = new LocalVector({});
           localVectorSource.addFeatures(features);
-          this.context.romapManager.addOrUpdateLayer(generateUUID(), VectorLayer, {
+          this.context.layersManager.createAndAddLayer(VectorLayer, {
+            uid: uid(),
             source: localVectorSource,
             name
           });

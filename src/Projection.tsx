@@ -50,6 +50,6 @@ export class Projection extends React.Component<IProjectionProps, any> {
   }
 
   public render(): React.ReactNode {
-    return null;
+    return <div id={`projection_${this.projectionInfo.code}`} key={`projection_${this.projectionInfo.code}`}></div >;
   }
 }

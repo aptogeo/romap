@@ -4,11 +4,11 @@ import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlProjection from 'ol/proj/Projection';
 import { romapContext } from './RomapContext';
-import { BaseLayer, IBaseLayerProps } from './layer/BaseLayer';
-import { RomapChild } from './RomapChild';
-import { RomapManager, RomapManagerState } from './RomapManager';
 import { IBaseToolProps, BaseTool } from './tool/BaseTool';
 import { BaseContainer } from './container/BaseContainer';
+import { LayersManager } from './LayersManager';
+import { ToolsManager } from './ToolsManager';
+import { Projection } from './Projection';
 
 const GlobalStyle = createGlobalStyle`
 .ol-unsupported {
@@ -43,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
 }
 `;
 
-export interface IMapProps {
+export interface IRomapProps {
   /**
    * Children.
    */
@@ -90,7 +90,15 @@ export interface IMapProps {
   ignoreDefaultInteractions?: boolean;
 }
 
-export class Romap extends RomapManager<IMapProps, RomapManagerState> {
+
+export interface IRomapState {
+  /**
+   * Changed counter.
+   */
+  changedCounter: number;
+}
+
+export class Romap extends React.Component<IRomapProps, IRomapState> {
   public static defaultProps = {
     className: 'map'
   };
@@ -110,8 +118,19 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
    */
   private divMap: any;
 
-  constructor(props: IMapProps) {
+  /**
+   * Layers manager.
+   */
+  private layersManager: LayersManager;
+
+  /**
+   * Tools manager.
+   */
+  private toolsManager: ToolsManager;
+
+  constructor(props: IRomapProps) {
     super(props);
+    this.state = { changedCounter: 0 };
     if (props.ignoreDefaultInteractions === true) {
       this.olMap = new OlMap({
         controls: [],
@@ -129,11 +148,14 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
       zoom: 2
     });
     this.olMap.setView(this.olView);
+    this.layersManager = new LayersManager('map', this.refresh);
+    this.toolsManager = new ToolsManager('map', this.refresh);
   }
 
   public componentDidMount() {
     this.olMap.setTarget(this.divMap);
-    this.updateFromChildren('map', null, this.props.children);
+    this.layersManager.fromChildren(this.props.children);
+    this.toolsManager.fromChildren(this.props.children);
     // View
     if (this.props.initialViewCenter != null && this.props.initialViewZoom != null) {
       const view = new OlView({
@@ -147,35 +169,42 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
     }
   }
 
-  public componentDidUpdate(prevProps: IMapProps) {
-    this.updateFromChildren('map', prevProps.children, this.props.children);
+  public componentDidUpdate(prevProps: IRomapProps, prevState: IRomapState, snapshot: any) {
+    this.layersManager.fromChildren(this.props.children);
+    this.toolsManager.fromChildren(this.props.children);
   }
 
-  public renderNonRomapChildren(): React.ReactNode {
-    const elems: React.ReactElement<IBaseLayerProps>[] = [];
+  public refresh = () => {
+    this.setState((prevState: IRomapState) => { return { changedCounter: prevState.changedCounter + 1 } });
+  }
+
+  public renderProjections(): React.ReactElement<IBaseToolProps>[] {
+    const elems: React.ReactElement<IBaseToolProps>[] = [];
+    // Projection
     React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
-      if (!RomapChild.isPrototypeOf(child.type)) {
+      if (child != null && Projection === child.type) {
         elems.push(child);
       }
     });
     return elems;
   }
 
-  public renderRomapChildren(): React.ReactElement<IBaseToolProps>[] {
-    const elems: React.ReactElement<IBaseToolProps>[] = [];
+  public renderChildren(): React.ReactElement<any>[] {
+    const elems: React.ReactElement<any>[] = [];
     // Layers
-    this.getInfoElements().forEach(infoElement => {
-      if (BaseLayer.isPrototypeOf(infoElement.reactElement.type)) {
-        elems.push(infoElement.reactElement);
+    this.layersManager.getLayerElements().forEach(layerElement => {
+      elems.push(layerElement.reactElement);
+    });
+    // Tools
+    React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
+      if (child != null && BaseTool.isPrototypeOf(child.type)) {
+        elems.push(child);
       }
     });
-    // Containers & Tools
-    this.getInfoElements(infoElement => infoElement.parentId == 'map').forEach(infoElement => {
-      if (
-        BaseContainer.isPrototypeOf(infoElement.reactElement.type) ||
-        BaseTool.isPrototypeOf(infoElement.reactElement.type)
-      ) {
-        elems.push(infoElement.reactElement);
+    // Containers
+    React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
+      if (child != null && BaseContainer.isPrototypeOf(child.type)) {
+        elems.push(child);
       }
     });
     return elems;
@@ -185,6 +214,7 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
     return (
       <div className={this.props.className} style={this.props.style}>
         <GlobalStyle />
+        {this.renderProjections()}
         <div
           ref={divMap => {
             this.divMap = divMap;
@@ -196,14 +226,14 @@ export class Romap extends RomapManager<IMapProps, RomapManagerState> {
           value={{
             olMap: this.olMap,
             olGroup: this.olMap.getLayerGroup(),
-            romapManager: this,
+            layersManager: this.layersManager,
+            toolsManager: this.toolsManager,
             getLocalizedText: (code: string, defaultText: string, data?: { [key: string]: string }) => {
               return defaultText;
             }
           }}
         >
-          {this.renderNonRomapChildren()}
-          {this.renderRomapChildren()}
+          {this.renderChildren()}
         </romapContext.Provider>
       </div>
     );

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import OlControl from 'ol/control/Control';
 import { romapContext, IRomapContext } from '../RomapContext';
-import { BaseContainer, IBaseContainerProps } from './BaseContainer';
+import { BaseContainer, IBaseContainerProps, IBaseContaineState } from './BaseContainer';
 
 export interface IControlProps extends IBaseContainerProps {
   /**
@@ -10,7 +10,7 @@ export interface IControlProps extends IBaseContainerProps {
   children: React.ReactNode;
 }
 
-export interface IControlState {
+export interface IControlState extends IBaseContaineState {
   /**
    * Control.
    */
@@ -30,12 +30,12 @@ export class Control extends BaseContainer<IControlProps, IControlState> {
   constructor(props: IControlProps) {
     super(props);
     this.state = {
+      changedCounter: 0,
       control: null
     };
   }
 
   public componentDidMount() {
-    super.componentDidMount();
     this.createControl();
   }
 

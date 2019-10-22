@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { RomapChild, IRomapChildProps } from '../RomapChild';
 import { IRomapContext, romapContext } from '../RomapContext';
 
-export interface IBaseToolProps extends IRomapChildProps {
+export interface IBaseToolProps {
+  /**
+   * Unique id is mandatory.
+   */
+  uid: React.Key;
   /**
    * Activated.
    */
@@ -25,7 +28,7 @@ export interface IBaseToolProps extends IRomapChildProps {
   className?: string;
 }
 
-export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
+export class BaseTool<P extends IBaseToolProps, S> extends React.Component<P, S> {
   public static defaultProps = {
     activated: false,
     defaultActivated: false,
@@ -42,7 +45,7 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
    */
   public activate() {
     if (!this.props.independant) {
-      this.context.romapManager.activateTool(this.props.id);
+      this.context.toolsManager.activateTool(this.props.uid);
     }
   }
 
@@ -51,7 +54,7 @@ export class BaseTool<P extends IBaseToolProps, S> extends RomapChild<P, S> {
    */
   public deactivate() {
     if (!this.props.independant) {
-      this.context.romapManager.deactivateTool(this.props.id);
+      this.context.toolsManager.deactivateTool(this.props.uid);
     }
   }
 

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { romapContext, IRomapContext } from '../RomapContext';
-import { BaseContainer, IBaseContainerProps } from './BaseContainer';
+import { BaseContainer, IBaseContainerProps, IBaseContaineState } from './BaseContainer';
 
 export interface IZoneProps extends IBaseContainerProps {
   /**
@@ -17,10 +16,17 @@ export interface IZoneProps extends IBaseContainerProps {
   style?: React.CSSProperties;
 }
 
-export class Zone extends BaseContainer<IZoneProps, {}> {
+export interface IZoneState extends IBaseContaineState {
+}
+
+export class Zone extends BaseContainer<IZoneProps, IZoneState> {
   public static defaultProps = {
     className: 'zone'
   };
+
+  constructor(props: IZoneProps) {
+    super(props);
+  }
 
   public render(): React.ReactNode {
     const className = `${this.props.className}`;

@@ -116,6 +116,9 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
   };
 
   public onResolutionChange = () => {
+    if (this.divScaleLine == null) {
+      return;
+    }
     const view = this.context.olMap.getView();
     if (view == null) {
       return;

@@ -3,14 +3,17 @@ import OlBaseLayer from 'ol/layer/Base';
 import OlSource from 'ol/source/Source';
 import { ObjectEvent } from 'ol/Object';
 import { walk } from '../utils';
-import { RomapChild, IRomapChildProps } from '../RomapChild';
 import { romapContext, IRomapContext } from '../RomapContext';
 import { jsonEqual } from '../utils';
 import { IExtended } from '../source';
 
 let globalOrder = 0;
 
-export interface IBaseLayerProps extends IRomapChildProps {
+export interface IBaseLayerProps {
+  /**
+   * unique id is mandatory.
+   */
+  uid: React.Key;
   /**
    * Name.
    */
@@ -41,10 +44,12 @@ export interface IBaseLayerProps extends IRomapChildProps {
   source?: IExtended;
 }
 
-export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OLS extends OlSource> extends RomapChild<
-  P,
-  S
-> {
+export class BaseLayer<
+  P extends IBaseLayerProps,
+  S,
+  OLL extends OlBaseLayer,
+  OLS extends OlSource
+  > extends React.Component<P, S> {
   public static contextType: React.Context<IRomapContext> = romapContext;
 
   public static defaultProps = {
@@ -56,7 +61,11 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
   private olLayer: OLL = null;
 
   public componentDidMount() {
-    this.olLayer = this.createOlLayer();
+    this.olLayer = this.context.layersManager.getOlLayer(this.props.uid) as OLL;
+    if (this.olLayer == null) {
+      this.olLayer = this.createOlLayer();
+    }
+    this.context.layersManager.setOlLayer(this.props.uid, this.olLayer);
     this.updateProps(null, this.props);
     // Add OlLayer to map
     if (this.props.type === 'BASE') {
@@ -68,7 +77,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     this.internalAddEvents();
   }
 
-  public componentDidUpdate(prevProps: P) {
+  public componentDidUpdate(prevProps: P, prevState: S, snapshot: any) {
     this.updateProps(prevProps, this.props);
   }
 
@@ -90,9 +99,10 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
   }
 
   public updateProps(prevProps: P, nextProps: P) {
+    let props = {};
     if (prevProps == null || prevProps.name !== nextProps.name) {
       this.olLayer.set('name', nextProps.name);
-      this.context.romapManager.changeInfoElementProps(this.props.id, { name: nextProps.name });
+      props = { ...props, name: nextProps.name };
     }
     if (prevProps == null || prevProps.type !== nextProps.type) {
       let type = nextProps.type;
@@ -100,7 +110,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
         type = 'OVERLAY';
       }
       this.olLayer.set('type', nextProps.type);
-      this.context.romapManager.changeInfoElementProps(this.props.id, { type });
+      props = { ...props, type };
     }
     if (prevProps == null || prevProps.visible !== nextProps.visible) {
       let visible = nextProps.visible;
@@ -111,8 +121,8 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
           visible = true;
         }
       }
-      this.context.romapManager.changeInfoElementProps(this.props.id, { visible });
       this.olLayer.setVisible(visible);
+      props = { ...props, visible };
     }
     if (prevProps == null || prevProps.opacity !== nextProps.opacity) {
       let opacity = nextProps.opacity;
@@ -123,7 +133,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
         opacity = 1;
       }
       this.olLayer.setOpacity(opacity);
-      this.context.romapManager.changeInfoElementProps(this.props.id, { opacity });
+      props = { ...props, opacity };
     }
     if (prevProps == null || !jsonEqual(prevProps.extent, nextProps.extent)) {
       let extent = nextProps.extent;
@@ -131,7 +141,7 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
         extent = undefined;
       }
       this.olLayer.setExtent(extent);
-      this.context.romapManager.changeInfoElementProps(this.props.id, { extent });
+      props = { ...props, extent };
     }
     if (prevProps == null || prevProps.order !== nextProps.order || prevProps.type !== nextProps.type) {
       let order = nextProps.order;
@@ -147,7 +157,10 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
       }
       this.olLayer.set('order', order);
       this.olLayer.setZIndex(zIndex);
-      this.context.romapManager.changeInfoElementProps(this.props.id, { order });
+      props = { ...props, order };
+    }
+    if (Object.entries(props).length > 0) {
+      this.context.layersManager.updateLayerProps(this.props.uid, props);
     }
   }
 
@@ -182,13 +195,13 @@ export class BaseLayer<P extends IBaseLayerProps, S, OLL extends OlBaseLayer, OL
     const key = event.key;
     const value = event.target.get(key);
     if (key === 'visible' && value === true && this.props.type === 'BASE') {
-      this.context.romapManager
-        .getInfoElements(infoElement => {
-          const props = infoElement.reactElement.props;
-          return props.type === 'BASE' && props.visible === true && infoElement.id !== this.props.id;
+      this.context.layersManager
+        .getLayerElements(layerElement => {
+          const props = layerElement.reactElement.props;
+          return props.type === 'BASE' && props.visible === true && layerElement.uid !== this.props.uid;
         })
-        .forEach(infoElement => {
-          this.context.romapManager.changeInfoElementProps(infoElement.id, { visible: false });
+        .forEach(layerElement => {
+          this.context.layersManager.updateLayerProps(layerElement.uid, { visible: false });
         });
     }
   };

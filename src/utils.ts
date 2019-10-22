@@ -1,4 +1,3 @@
-import * as React from 'react';
 import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
 import OlBaseLayer from 'ol/layer/Base';
@@ -71,30 +70,48 @@ export function revertCoordinate(geometry: OlSimpleGeometry) {
  * @param obj1 object 1
  * @param obj2 object 2
  */
-export function jsonEqual(obj1: any, obj2: any): boolean {
+export function jsonEqual(obj1: any, obj2: any, ignore?: string[]): boolean {
   if (obj1 === obj2) {
     return true;
   }
   if (obj1 == null || obj2 == null) {
     return false;
   }
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
+  let str1 = '';
+  let obj = { ...obj1 };
+  if (ignore != null) {
+    for (const key of ignore) {
+      obj[key] = null;
+    }
+  }
+  try {
+    str1 = JSON.stringify(obj);
+  } catch (error) {
+    console.error(error, obj);
+  }
+  let str2 = '';
+  obj = { ...obj2 };
+  if (ignore != null) {
+    for (const key of ignore) {
+      obj[key] = null;
+    }
+  }
+  try {
+    str2 = JSON.stringify(obj);
+  } catch (error) {
+    console.error(error, obj);
+  }
+  return str1 === str2;
 }
 
 /**
- * Generate UUID.
+ * Generate unique id.
  */
-export function generateUUID(): string {
-  let d = new Date().getTime();
-  if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-    d += performance.now(); //use high-precision timer if available
-  }
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
+export function uid(): React.Key {
+  globalKey++;
+  return globalKey;
 }
+let globalKey = 0;
 
 /**
  * Generate LAYERS param from IFeatureType array.
