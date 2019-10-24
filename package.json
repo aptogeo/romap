@@ -1,6 +1,6 @@
 {
   "name": "romap",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "OpenLayers with React",
   "main": "index.js",
   "typings": "index.d.ts",
