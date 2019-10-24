@@ -42,7 +42,7 @@ const GlobalStyle = createGlobalStyle`
 }
 `;
 
-export type afterInitialization = (olMap: OlMap) => void;
+export type after = (olMap: OlMap) => void;
 
 export interface IRomapProps {
   /**
@@ -74,9 +74,13 @@ export interface IRomapProps {
    */
   ignoreDefaultInteractions?: boolean;
   /**
-   * After initialization calback.
+   * After mount callback.
    */
-  afterInitialization: afterInitialization;
+  afterMount?: after;
+  /**
+   * After update callback.
+   */
+  afterUpdate?: after;
 }
 
 export interface IRomapState {
@@ -140,14 +144,17 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
     this.olMap.setTarget(this.divMap);
     this.layersManager.fromChildren(this.props.children);
     this.toolsManager.fromChildren(this.props.children);
-    if (this.props.afterInitialization) {
-      this.props.afterInitialization.call(this, this.olMap);
+    if (this.props.afterMount) {
+      this.props.afterMount.call(this, this.olMap);
     }
   }
 
   public componentDidUpdate(prevProps: IRomapProps, prevState: IRomapState, snapshot: any) {
     this.layersManager.fromChildren(this.props.children);
     this.toolsManager.fromChildren(this.props.children);
+    if (this.props.afterUpdate) {
+      this.props.afterUpdate.call(this, this.olMap);
+    }
   }
 
   public refresh = () => {

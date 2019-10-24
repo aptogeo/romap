@@ -55,7 +55,7 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
         uid="map"
         keyboardEventTarget={document}
         olMapStyle={{ position: 'absolute', width: 'calc(100% - 15px)', height: 'calc(100% - 15px)' }}
-        afterInitialization={(olMap: OlMap) => {
+        afterMount={(olMap: OlMap) => {
           olMap.setView(
             new OlView({
               center: [490000, 6800000],
@@ -76,6 +76,7 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
             <Toc uid="Toc" />
             <PanZoom uid="PanZoom" />
             <ScaleLine uid="ScaleLine" />
+            <LayerLoader uid="LayerLoader" />
             <Zone style={{ position: 'absolute', top: 'calc(100% - 70px)' }}>
               <CounterButton uid="CounterButton1" />
               <CounterButton uid="CounterButton2" />
