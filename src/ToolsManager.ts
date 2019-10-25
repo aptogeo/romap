@@ -93,7 +93,12 @@ export class ToolsManager {
       this.setToolElement(
         {
           ...toolElement,
-          reactElement: React.cloneElement(toolElement.reactElement, { ...props, uid, key: uid })
+          reactElement: React.cloneElement(toolElement.reactElement, {
+            ...toolElement.reactElement.props,
+             ...props, 
+             uid,
+              key: uid
+             })
         },
         refreshIfChanging
       );
@@ -196,7 +201,7 @@ export class ToolsManager {
             const toolElement = this.getToolElements(toolElement => toolElement.uid == uid).pop();
             this.setToolElement(
               {
-                reactElement: nextChild,
+                reactElement: React.cloneElement(nextChild, {...nextChild.props, key: uid}),
                 status: 'react',
                 uid
               },

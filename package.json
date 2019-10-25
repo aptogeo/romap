@@ -59,8 +59,7 @@
     "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
-    "@turf/boolean-disjoint": "^6.0.2",
-    "@turf/helpers": "^6.1.4",
+    "@turf/turf": "^5.1.6",
     "bhreq": "0.0.12",
     "jszip": "^3.2.2",
     "react": "^16.10.2",

@@ -76,13 +76,13 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
             <Toc uid="Toc" />
             <PanZoom uid="PanZoom" />
             <ScaleLine uid="ScaleLine" />
-            <LayerLoader uid="LayerLoader" />
             <Zone style={{ position: 'absolute', top: 'calc(100% - 70px)' }}>
               <CounterButton uid="CounterButton1" />
               <CounterButton uid="CounterButton2" />
               <CounterButton uid="CounterButton3" />
               <CounterWindow uid="CounterWindow" />
               <QueryWindow uid="QueryWindow" />
+              <LayerLoader uid="LayerLoader" />
             </Zone>
           </Zone>
         )}

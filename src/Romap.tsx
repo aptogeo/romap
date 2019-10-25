@@ -181,10 +181,8 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
       elems.push(layerElement.reactElement);
     });
     // Tools
-    React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
-      if (child != null && BaseTool.isPrototypeOf(child.type)) {
-        elems.push(child);
-      }
+    this.toolsManager.getToolElements().forEach(toolElement => {
+      elems.push(toolElement.reactElement);
     });
     // Containers
     React.Children.map(this.props.children, (child: React.ReactElement<any>) => {

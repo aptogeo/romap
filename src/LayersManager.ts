@@ -175,7 +175,7 @@ export class LayersManager {
             const layerElement = this.getLayerElements(layerElement => layerElement.uid == uid).pop();
             this.setLayerElement(
               {
-                reactElement: nextChild,
+                reactElement: React.cloneElement(nextChild, {...nextChild.props, key: uid}),
                 status: 'react',
                 uid
               },
