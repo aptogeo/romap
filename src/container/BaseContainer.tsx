@@ -42,7 +42,12 @@ export class BaseContainer<P extends IBaseContainerProps, S extends IBaseContain
     // Tools
     React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
       if (child != null && BaseTool.isPrototypeOf(child.type)) {
-        elems.push(child);
+        if (child != null && BaseTool.isPrototypeOf(child.type)) {
+          const toolElement = this.context.toolsManager.getToolElements(toolElement => toolElement.uid == child.props.uid).pop();
+          if (toolElement != null) {
+            elems.push(toolElement.reactElement);
+          }
+        }
       }
     });
     // Containers
