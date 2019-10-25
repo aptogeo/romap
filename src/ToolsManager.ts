@@ -103,7 +103,7 @@ export class ToolsManager {
             uid,
             key: uid
           }),
-          updatedProps: {...toolElement.updatedProps, ...props}
+          updatedProps: { ...toolElement.updatedProps, ...props }
         },
         refreshIfChanging
       );

@@ -107,7 +107,7 @@ export class LayersManager {
             uid,
             key: uid
           }),
-          updatedProps: {...layerElement.updatedProps, ...props}
+          updatedProps: { ...layerElement.updatedProps, ...props }
         },
         refreshIfChanging
       );
