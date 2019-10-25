@@ -15,6 +15,10 @@ export interface ILayerElement {
    */
   uid: Readonly<React.Key>;
   /**
+   * Updated props.
+   */
+  updatedProps: any;
+  /**
    * Status.
    */
   status: Readonly<layerElementStatus>;
@@ -102,7 +106,8 @@ export class LayersManager {
             ...props,
             uid,
             key: uid
-          })
+          }),
+          updatedProps: {...layerElement.updatedProps, ...props}
         },
         refreshIfChanging
       );
@@ -150,6 +155,7 @@ export class LayersManager {
     this.setLayerElement({
       reactElement,
       uid: props.uid,
+      updatedProps: {},
       status: 'ext'
     });
   }
@@ -173,10 +179,12 @@ export class LayersManager {
               toDel.delete(uid);
             }
             const layerElement = this.getLayerElements(layerElement => layerElement.uid == uid).pop();
+            const props = { ...nextChild.props, ...(layerElement != null ? layerElement.updatedProps : {}), key: uid };
             this.setLayerElement(
               {
-                reactElement: React.cloneElement(nextChild, { ...nextChild.props, key: uid }),
+                reactElement: React.cloneElement(nextChild, props),
                 status: 'react',
+                updatedProps: layerElement != null ? layerElement.updatedProps : {},
                 uid
               },
               layerElement == null

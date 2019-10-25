@@ -15,6 +15,10 @@ export interface IToolElement {
    */
   uid: Readonly<React.Key>;
   /**
+   * Updated props.
+   */
+  updatedProps: any;
+  /**
    * Status.
    */
   status: Readonly<toolElementStatus>;
@@ -98,7 +102,8 @@ export class ToolsManager {
             ...props,
             uid,
             key: uid
-          })
+          }),
+          updatedProps: {...toolElement.updatedProps, ...props}
         },
         refreshIfChanging
       );
@@ -121,6 +126,7 @@ export class ToolsManager {
     this.setToolElement({
       reactElement,
       uid: props.uid,
+      updatedProps: {},
       status: 'ext'
     });
   }
@@ -199,17 +205,16 @@ export class ToolsManager {
               toDel.delete(uid);
             }
             const toolElement = this.getToolElements(toolElement => toolElement.uid == uid).pop();
+            const props = { ...nextChild.props, ...(toolElement != null ? toolElement.updatedProps : {}), key: uid };
             this.setToolElement(
               {
-                reactElement: React.cloneElement(nextChild, { ...nextChild.props, key: uid }),
+                reactElement: React.cloneElement(nextChild, props),
                 status: 'react',
+                updatedProps: toolElement != null ? toolElement.updatedProps : {},
                 uid
               },
               toolElement == null
             );
-            if (toolElement != null) {
-              this.updateToolProps(uid, toolElement.reactElement.props, false);
-            }
           }
         }
         if (nextChild != null && BaseContainer.isPrototypeOf(nextChild.type)) {

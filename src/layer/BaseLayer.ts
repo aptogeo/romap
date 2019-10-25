@@ -99,18 +99,15 @@ export class BaseLayer<
   }
 
   public updateProps(prevProps: P, nextProps: P) {
-    let props = {};
     if (prevProps == null || prevProps.name !== nextProps.name) {
       this.olLayer.set('name', nextProps.name);
-      props = { ...props, name: nextProps.name };
     }
     if (prevProps == null || prevProps.type !== nextProps.type) {
       let type = nextProps.type;
       if (type !== 'BASE' && type !== 'OVERLAY') {
         type = 'OVERLAY';
       }
-      this.olLayer.set('type', nextProps.type);
-      props = { ...props, type };
+      this.olLayer.set('type', type);
     }
     if (prevProps == null || prevProps.visible !== nextProps.visible) {
       let visible = nextProps.visible;
@@ -122,7 +119,9 @@ export class BaseLayer<
         }
       }
       this.olLayer.setVisible(visible);
-      props = { ...props, visible };
+      if (nextProps.type === 'BASE') {
+        this.context.layersManager.updateLayerProps(this.props.uid, { visible });
+      }
     }
     if (prevProps == null || prevProps.opacity !== nextProps.opacity) {
       let opacity = nextProps.opacity;
@@ -133,7 +132,6 @@ export class BaseLayer<
         opacity = 1;
       }
       this.olLayer.setOpacity(opacity);
-      props = { ...props, opacity };
     }
     if (prevProps == null || !jsonEqual(prevProps.extent, nextProps.extent)) {
       let extent = nextProps.extent;
@@ -141,7 +139,6 @@ export class BaseLayer<
         extent = undefined;
       }
       this.olLayer.setExtent(extent);
-      props = { ...props, extent };
     }
     if (prevProps == null || prevProps.order !== nextProps.order || prevProps.type !== nextProps.type) {
       let order = nextProps.order;
@@ -157,10 +154,6 @@ export class BaseLayer<
       }
       this.olLayer.set('order', order);
       this.olLayer.setZIndex(zIndex);
-      props = { ...props, order };
-    }
-    if (Object.entries(props).length > 0) {
-      this.context.layersManager.updateLayerProps(this.props.uid, props);
     }
   }
 
