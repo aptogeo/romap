@@ -43,7 +43,9 @@ export class BaseContainer<P extends IBaseContainerProps, S extends IBaseContain
     React.Children.map(this.props.children, (child: React.ReactElement<any>) => {
       if (child != null && BaseTool.isPrototypeOf(child.type)) {
         if (child != null && BaseTool.isPrototypeOf(child.type)) {
-          const toolElement = this.context.toolsManager.getToolElements(toolElement => toolElement.uid == child.props.uid).pop();
+          const toolElement = this.context.toolsManager
+            .getToolElements(toolElement => toolElement.uid == child.props.uid)
+            .pop();
           if (toolElement != null) {
             elems.push(toolElement.reactElement);
           }
