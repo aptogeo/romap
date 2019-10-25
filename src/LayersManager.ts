@@ -180,15 +180,12 @@ export class LayersManager {
             }
             const layerElement = this.getLayerElements(layerElement => layerElement.uid == uid).pop();
             const props = { ...nextChild.props, ...(layerElement != null ? layerElement.updatedProps : {}), key: uid };
-            this.setLayerElement(
-              {
-                reactElement: React.cloneElement(nextChild, props),
-                status: 'react',
-                updatedProps: layerElement != null ? layerElement.updatedProps : {},
-                uid
-              },
-              layerElement == null
-            );
+            this.setLayerElement({
+              reactElement: React.cloneElement(nextChild, props),
+              status: 'react',
+              updatedProps: layerElement != null ? layerElement.updatedProps : {},
+              uid
+            });
             if (layerElement != null) {
               this.updateLayerProps(uid, layerElement.reactElement.props, false);
               this.setOlLayer(uid, layerElement.olLayer);

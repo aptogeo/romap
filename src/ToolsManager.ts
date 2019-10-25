@@ -206,15 +206,12 @@ export class ToolsManager {
             }
             const toolElement = this.getToolElements(toolElement => toolElement.uid == uid).pop();
             const props = { ...nextChild.props, ...(toolElement != null ? toolElement.updatedProps : {}), key: uid };
-            this.setToolElement(
-              {
-                reactElement: React.cloneElement(nextChild, props),
-                status: 'react',
-                updatedProps: toolElement != null ? toolElement.updatedProps : {},
-                uid
-              },
-              toolElement == null
-            );
+            this.setToolElement({
+              reactElement: React.cloneElement(nextChild, props),
+              status: 'react',
+              updatedProps: toolElement != null ? toolElement.updatedProps : {},
+              uid
+            });
           }
         }
         if (nextChild != null && BaseContainer.isPrototypeOf(nextChild.type)) {
