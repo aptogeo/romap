@@ -6,6 +6,9 @@ import OlProjection from 'ol/proj/Projection';
 import { fromExtent } from 'ol/geom/Polygon';
 
 export interface IExtended extends OlSource {
+  getSourceTypeName(): string;
+  getSourceOptions(): any;
+  isSnapshotable(): boolean;
   query(identifyRequest: IQueryRequest): Promise<IQueryResponse>;
 }
 

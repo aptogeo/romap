@@ -8,6 +8,7 @@ import { BaseContainer } from './container/BaseContainer';
 import { LayersManager } from './LayersManager';
 import { ToolsManager } from './ToolsManager';
 import { Projection } from './Projection';
+import { ISnapshotGetter, ISnapshot } from './ISnapshot';
 
 const GlobalStyle = createGlobalStyle`
 .ol-unsupported {
@@ -81,6 +82,10 @@ export interface IRomapProps {
    * After update callback.
    */
   afterUpdate?: after;
+  /**
+   * Snapshot getter.
+   */
+  snapshotGetter?: ISnapshotGetter;
 }
 
 export interface IRomapState {
@@ -136,7 +141,7 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
         zoom: 2
       })
     );
-    this.layersManager = new LayersManager(props.uid, this.refresh);
+    this.layersManager = new LayersManager(props.uid, this.olMap, this.refresh, this.props.snapshotGetter);
     this.toolsManager = new ToolsManager(props.uid, this.refresh);
   }
 

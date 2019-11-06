@@ -4,14 +4,29 @@ import { IQueryRequest, IQueryResponse, IFeatureType } from './IExtended';
 import { IImage } from './IImage';
 
 export class ImageArcGISRest extends OlImageArcGISRest implements IImage {
+  protected options: any;
+
   protected label: string;
 
   protected type: IFeatureType<number>[];
 
   constructor(options: any = {}) {
     super(options);
+    this.options = options;
     this.type = options.type ? options.type : null;
     this.label = options.label ? options.label : this.constructor.name;
+  }
+
+  public getSourceTypeName(): string {
+    return 'ImageArcGISRest';
+  }
+
+  public getSourceOptions(): any {
+    return this.options;
+  }
+
+  public isSnapshotable(): any {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
   }
 
   query(request: IQueryRequest): Promise<IQueryResponse> {

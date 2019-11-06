@@ -1,5 +1,4 @@
 export * from './BaseLayer';
-export * from './Drawing';
 export * from './Heatmap';
 export * from './Image';
 export * from './Tile';

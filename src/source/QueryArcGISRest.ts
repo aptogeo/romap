@@ -4,6 +4,8 @@ import { ExternalVector } from './ExternalVector';
 import { IFeatureType } from './IExtended';
 
 export class QueryArcGISRest extends ExternalVector {
+  protected options: any;
+
   protected where: string;
 
   private esriJSONFormat = new OlEsriJSON();
@@ -12,10 +14,23 @@ export class QueryArcGISRest extends ExternalVector {
 
   constructor(options: any = {}) {
     super(options);
+    this.options = options;
     this.type = options.type ? options.type : null;
     this.label = options.label ? options.label : this.constructor.name;
   }
 
+  public getSourceTypeName(): string {
+    return 'QueryArcGISRest';
+  }
+
+  public getSourceOptions(): any {
+    return this.options;
+  }
+
+  public isSnapshotable(): any {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
+  }
+  
   public load(extent: [number, number, number, number], projectionCode: string) {
     const srid = projectionCode.split(':').pop();
     const geometry = encodeURIComponent(

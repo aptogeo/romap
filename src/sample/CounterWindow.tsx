@@ -27,7 +27,7 @@ export class CounterWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
     return <span>Counter</span>;
   }
 
-  public renderTool(): any {
+  public renderTool(): React.ReactNode {
     return <span>count: {String(this.state.count)}</span>;
   }
 }

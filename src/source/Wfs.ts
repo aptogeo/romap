@@ -5,6 +5,8 @@ import { ExternalVector } from './ExternalVector';
 import { IFeatureType } from './IExtended';
 
 export class Wfs extends ExternalVector {
+  protected options: any;
+
   protected label: string;
 
   protected type: IFeatureType<string>;
@@ -21,7 +23,20 @@ export class Wfs extends ExternalVector {
         )},${projection.getCode()}`;
       }
     });
+    this.options = options;
     this.type = options.type ? options.type : null;
     this.label = options.label ? options.label : this.constructor.name;
+  }
+
+  public getSourceTypeName(): string {
+    return 'Wfs';
+  }
+
+  public getSourceOptions(): any {
+    return this.options;
+  }
+  
+  public isSnapshotable(): any {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
   }
 }

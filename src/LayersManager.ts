@@ -1,7 +1,10 @@
 import * as React from 'react';
+import OlMap from 'ol/Map';
 import OlBaseLayer from 'ol/layer/Base';
-import { BaseLayer, IBaseLayerProps } from './layer';
+import { BaseLayer, IBaseLayerProps, Vector, Tile, Image } from './layer';
 import { jsonEqual } from './utils';
+import { ISnapshotGetter, ISnapshot, ISnapshotLayer } from './ISnapshot';
+import { IExtended, ExternalVector, ImageStatic, ImageWms, LocalVector, QueryArcGISRest, TileArcGISRest, TileWms, Wfs, Xyz, ImageArcGISRest } from './source';
 
 export type layerElementStatus = null | 'react' | 'ext' | 'del';
 
@@ -33,13 +36,67 @@ const layerMaps = new Map<React.Key, Map<React.Key, ILayerElement>>();
 export class LayersManager {
   private uid: React.Key;
 
+  private olMap: OlMap;
+
   private refresh: () => void;
 
-  constructor(uid: React.Key, refresh: () => void) {
+  private snapshotGetter: ISnapshotGetter;
+
+  constructor(uid: React.Key, olMap: OlMap, refresh: () => void, snapshotGetter: ISnapshotGetter) {
     this.uid = uid;
+    this.olMap = olMap;
     this.refresh = refresh;
+    this.snapshotGetter = snapshotGetter;
+    if (this.snapshotGetter) {
+      this.snapshotGetter.getSnapshot = this.getSnapshot;
+    }
     layerMaps.set(uid, new Map<React.Key, ILayerElement>());
   }
+
+  /**
+   * Get Openlayers map.
+   */
+  public getOlMap(): OlMap {
+    return this.olMap;
+  }
+
+  /**
+   * Get snapshot.
+   */
+  public getSnapshot = (): ISnapshot => {
+    const view = this.olMap.getView();
+    const center = view.getCenter();
+    const layers: Array<ISnapshotLayer> = [];
+    this.getLayerElements().map(layerElement => {
+      const props = { ...layerElement.reactElement.props, ...layerElement.updatedProps };
+      const source = props['source'];
+      if (source != null && 'getSourceTypeName' in source && 'getSourceOptions' in source && 'isSnapshotable' in source) {
+        if ((source as IExtended).isSnapshotable()) {
+          props['source'] = undefined;
+          props['children'] = undefined;
+          layers.push({
+            getSourceTypeName: (source as IExtended).getSourceTypeName(),
+            getSourceOptions: (source as IExtended).getSourceOptions(),
+            props
+          });
+        }
+      }
+    });
+    return {
+      view: {
+        center: [center[0], center[1]],
+        zoom: view.getZoom(),
+        projectionCode: view.getProjection().getCode()
+      },
+      layers
+    };
+  };
+
+  /**
+   * Reload from snapshot.
+   */
+  public reloadFromSnapshot = (snapshot: ISnapshot) => {
+  };
 
   /**
    * Get infoElements
@@ -160,6 +217,63 @@ export class LayersManager {
     });
   }
 
+  /**
+   * Create and add layer props
+   */
+  public createAndAddLayerFromSource(
+    getSourceTypeName: string,
+    getSourceOptions: any,
+    props: IBaseLayerProps
+  ): IExtended {
+    let source: IExtended;
+    switch (getSourceTypeName) {
+      case 'ExternalVector':
+        source = new ExternalVector(getSourceOptions)
+        this.createAndAddLayer(Vector, { ...props, source });
+        break;
+      case 'ImageArcGISRest':
+        source = new ImageArcGISRest(getSourceOptions)
+        this.createAndAddLayer(Image, { ...props, source });
+        break;
+      case 'ImageStatic':
+        source = new ImageStatic(getSourceOptions)
+        this.createAndAddLayer(Image, { ...props, source });
+        break;
+      case 'ImageWms':
+        source = new ImageWms(getSourceOptions)
+        this.createAndAddLayer(Image, { ...props, source });
+        break;
+      case 'LocalVector':
+        source = new LocalVector(getSourceOptions)
+        this.createAndAddLayer(Vector, { ...props, source });
+        break;
+      case 'QueryArcGISRest':
+        source = new QueryArcGISRest(getSourceOptions)
+        this.createAndAddLayer(Vector, { ...props, source });
+        break;
+      case 'TileArcGISRest':
+        source = new TileArcGISRest(getSourceOptions)
+        this.createAndAddLayer(Tile, { ...props, source });
+        break;
+      case 'TileWms':
+        source = new TileWms(getSourceOptions)
+        this.createAndAddLayer(Tile, { ...props, source });
+        break;
+      case 'Wfs':
+        source = new Wfs(getSourceOptions)
+        this.createAndAddLayer(Vector, { ...props, source });
+        break;
+      case 'Xyz':
+        source = new Xyz(getSourceOptions)
+        this.createAndAddLayer(Tile, { ...props, source });
+        break;
+    }
+    return source;
+  }
+
+  /**
+   * Update from children
+   */
   public fromChildren(nextChildren: React.ReactNode) {
     const toDel = new Set<React.Key>();
     // Old children

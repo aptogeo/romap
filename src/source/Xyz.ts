@@ -4,21 +4,36 @@ import { IQueryRequest, IQueryResponse, IFeatureType } from './IExtended';
 import { ITileImage } from './ITileImage';
 
 export class Xyz extends OlXyz implements ITileImage {
+  protected options: any;
+
   protected label: string;
 
   protected type: IFeatureType<number>[];
 
   constructor(options: any = {}) {
     super(options);
+    this.options = options;
     this.type = options.type ? options.type : null;
     this.label = options.label ? options.label : this.constructor.name;
   }
 
-  query(request: IQueryRequest): Promise<IQueryResponse> {
+  public query(request: IQueryRequest): Promise<IQueryResponse> {
     const features = [] as OlFeature[];
     return Promise.resolve({
       request,
       features
     });
+  }
+
+  public getSourceTypeName(): string {
+    return 'Xyz';
+  }
+
+  public getSourceOptions(): any {
+    return this.options;
+  }
+
+  public isSnapshotable(): any {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
   }
 }

@@ -10,6 +10,8 @@ import { IQueryRequest, IQueryResponse } from './IExtended';
 import { IVector } from './IVector';
 
 export abstract class Vector extends OlVector implements IVector {
+  protected options: any;
+
   protected label: string;
 
   protected oldProjectionCode: string;
@@ -20,7 +22,20 @@ export abstract class Vector extends OlVector implements IVector {
 
   constructor(options: any = {}) {
     super(options);
+    this.options = options;
     this.label = options.label ? options.label : this.constructor.name;
+  }
+
+  public getSourceTypeName(): string {
+    return 'Vector';
+  }
+
+  public getSourceOptions(): any {
+    return this.options;
+  }
+
+  public isSnapshotable(): any {
+    return this.options.snapshotable == null ? false : this.options.snapshotable; // false by default
   }
 
   public loadFeatures(extent: [number, number, number, number], resolution: number, projection: OlProjection) {
@@ -31,7 +46,7 @@ export abstract class Vector extends OlVector implements IVector {
     super.loadFeatures(extent, resolution, projection);
   }
 
-  query(request: IQueryRequest): Promise<IQueryResponse> {
+  public query(request: IQueryRequest): Promise<IQueryResponse> {
     const { mapProjection, geometry, geometryProjection, limit } = request;
     const features = [] as OlFeature[];
     let destGeometry = null;

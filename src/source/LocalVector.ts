@@ -2,12 +2,15 @@ import OlFeature from 'ol/Feature';
 import { Vector } from './Vector';
 
 export class LocalVector extends Vector {
+  protected options: any;
+
   private strategy_: (extent: [number, number, number, number], resolution: number) => any;
 
   private origstrategy_: (extent: [number, number, number, number], resolution: number) => any;
 
   constructor(options?: any) {
     super({ ...options, useSpatialIndex: true });
+    this.options = options;
     this.origstrategy_ = this.strategy_;
     this.strategy_ = (extent: [number, number, number, number], resolution: number) => {
       if (this.oldProjectionCode !== this.actualProjectionCode) {
@@ -16,6 +19,18 @@ export class LocalVector extends Vector {
       return this.origstrategy_.call(this, extent, resolution);
     };
     this.on('addfeature', this.handleAddFeature);
+  }
+
+  public getSourceTypeName(): string {
+    return 'LocalVector';
+  }
+
+  public getSourceOptions(): any {
+    return this.options;
+  }
+
+  public isSnapshotable(): any {
+    return this.options.snapshotable == null ? false : this.options.snapshotable; // false by default
   }
 
   private reproj() {

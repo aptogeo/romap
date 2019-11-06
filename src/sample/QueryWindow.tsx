@@ -62,7 +62,7 @@ export class QueryWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
     return <span>Query</span>;
   }
 
-  public renderTool(): any {
+  public renderTool(): React.ReactNode {
     return (
       <div>
         {this.state && this.state.queryResponse && <div>{JSON.stringify(this.state.queryResponses)}</div>}
