@@ -174,6 +174,9 @@ export class ToolsManager {
     }
   }
 
+  /**
+   * Update from children
+   */
   public fromChildren(nextChildren: React.ReactNode) {
     const toDel = new Set<React.Key>();
     // Old children
@@ -192,6 +195,10 @@ export class ToolsManager {
   }
 
   private fromSubChildren(children: React.ReactNode, toDel: Set<React.Key>) {
+    const toolMap = toolMaps.get(this.uid);
+    if (toolMap == null) {
+      return;
+    }
     // Next children
     if (children) {
       React.Children.map(children, (nextChild: React.ReactElement<any>) => {
@@ -201,17 +208,22 @@ export class ToolsManager {
           if (uid == null) {
             console.error('Unique id is mandatory');
           } else {
-            if (toDel.has(uid)) {
-              toDel.delete(uid);
+            const toolElement = toolMap.get(uid);
+            if (toolElement == null || toolElement.status === 'react') {
+              if (toDel.has(uid)) {
+                toDel.delete(uid);
+              }
+              const props = { ...nextChild.props, ...(toolElement != null ? toolElement.updatedProps : {}), key: uid };
+              this.setToolElement({
+                reactElement: React.cloneElement(nextChild, props),
+                status: 'react',
+                updatedProps: toolElement != null ? toolElement.updatedProps : {},
+                uid
+              });
+              if (toolElement != null) {
+                this.updateToolProps(uid, toolElement.reactElement.props, false);
+              }
             }
-            const toolElement = this.getToolElements(toolElement => toolElement.uid == uid).pop();
-            const props = { ...nextChild.props, ...(toolElement != null ? toolElement.updatedProps : {}), key: uid };
-            this.setToolElement({
-              reactElement: React.cloneElement(nextChild, props),
-              status: 'react',
-              updatedProps: toolElement != null ? toolElement.updatedProps : {},
-              uid
-            });
           }
         }
         if (nextChild != null && BaseContainer.isPrototypeOf(nextChild.type)) {

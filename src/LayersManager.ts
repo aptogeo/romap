@@ -1,9 +1,10 @@
 import * as React from 'react';
 import OlMap from 'ol/Map';
+import OlView from 'ol/View';
 import OlBaseLayer from 'ol/layer/Base';
 import { BaseLayer, IBaseLayerProps, Vector, Tile, Image } from './layer';
 import { jsonEqual } from './utils';
-import { ISnapshotGetter, ISnapshot, ISnapshotLayer } from './ISnapshot';
+import { ISnapshotGetter, ISnapshot, ISnapshotLayer, ISnapshotProjection } from './ISnapshot';
 import {
   IExtended,
   ExternalVector,
@@ -17,6 +18,7 @@ import {
   Xyz,
   ImageArcGISRest
 } from './source';
+import { getProjectionInfos, addProjection } from './Projection';
 
 export type layerElementStatus = null | 'react' | 'ext' | 'del';
 
@@ -76,8 +78,25 @@ export class LayersManager {
    * Get snapshot.
    */
   public getSnapshot = (): ISnapshot => {
-    const view = this.olMap.getView();
-    const center = view.getCenter();
+    // View
+    const olView = this.olMap.getView();
+    const view = {
+      center: olView.getCenter() as [number, number],
+      zoom: olView.getZoom(),
+      projectionCode: olView.getProjection().getCode()
+    };
+    // Projections
+    const projections: Array<ISnapshotProjection> = [];
+    getProjectionInfos().map(projectionInfo => {
+      projections.push({
+        code: projectionInfo.code,
+        name: projectionInfo.name,
+        lonLatValidity: projectionInfo.lonLatValidity,
+        remarks: projectionInfo.remarks,
+        wkt: projectionInfo.wkt
+      });
+    });
+    // Layers
     const layers: Array<ISnapshotLayer> = [];
     this.getLayerElements().map(layerElement => {
       const props = { ...layerElement.reactElement.props, ...layerElement.updatedProps };
@@ -100,11 +119,8 @@ export class LayersManager {
       }
     });
     return {
-      view: {
-        center: [center[0], center[1]],
-        zoom: view.getZoom(),
-        projectionCode: view.getProjection().getCode()
-      },
+      view,
+      projections,
       layers
     };
   };
@@ -112,7 +128,36 @@ export class LayersManager {
   /**
    * Reload from snapshot.
    */
-  public reloadFromSnapshot = (snapshot: ISnapshot) => {};
+  public reloadFromSnapshot = (snapshot: ISnapshot) => {
+    // Remove old
+    this.getLayerElements().map(layerElement => {
+      this.setLayerElement(
+        {
+          ...layerElement,
+          status: 'del'
+        },
+        false
+      );
+    });
+    // Projections
+    snapshot.projections.forEach(projection => {
+      addProjection(projection.code, projection.wkt, projection.lonLatValidity, projection.name, projection.remarks);
+    });
+    // View
+    this.olMap.setView(
+      new OlView({
+        center: snapshot.view.center,
+        zoom: snapshot.view.zoom,
+        projection: snapshot.view.projectionCode
+      })
+    );
+    // Layers
+    snapshot.layers.forEach(layer => {
+      this.createAndAddLayerFromSource(layer.getSourceTypeName, layer.getSourceOptions, layer.props);
+    });
+    // Refresh
+    this.refresh();
+  };
 
   /**
    * Get infoElements
@@ -148,11 +193,16 @@ export class LayersManager {
       }
     } else {
       if (layerElement.status === 'del') {
-        layerMap.set(layerElement.uid, {
-          ...layerElement,
-          status: 'del'
-        });
-        changed = true;
+        if (found.status === 'react') {
+          layerMap.set(layerElement.uid, {
+            ...layerElement,
+            status: 'del'
+          });
+          changed = true;
+        } else if (found.status === 'ext') {
+          layerMap.delete(layerElement.uid);
+          changed = true;
+        }
       } else {
         layerMap.set(layerElement.uid, {
           ...layerElement
@@ -291,6 +341,10 @@ export class LayersManager {
    * Update from children
    */
   public fromChildren(nextChildren: React.ReactNode) {
+    const layerMap = layerMaps.get(this.uid);
+    if (layerMap == null) {
+      return;
+    }
     const toDel = new Set<React.Key>();
     // Old children
     this.getLayerElements(layerElement => layerElement.status === 'react').map(layerElement => {
@@ -305,20 +359,26 @@ export class LayersManager {
           if (uid == null) {
             console.error('Unique id is mandatory');
           } else {
-            if (toDel.has(uid)) {
-              toDel.delete(uid);
-            }
-            const layerElement = this.getLayerElements(layerElement => layerElement.uid == uid).pop();
-            const props = { ...nextChild.props, ...(layerElement != null ? layerElement.updatedProps : {}), key: uid };
-            this.setLayerElement({
-              reactElement: React.cloneElement(nextChild, props),
-              status: 'react',
-              updatedProps: layerElement != null ? layerElement.updatedProps : {},
-              uid
-            });
-            if (layerElement != null) {
-              this.updateLayerProps(uid, layerElement.reactElement.props, false);
-              this.setOlLayer(uid, layerElement.olLayer);
+            const layerElement = layerMap.get(uid);
+            if (layerElement == null || layerElement.status === 'react') {
+              if (toDel.has(uid)) {
+                toDel.delete(uid);
+              }
+              const props = {
+                ...nextChild.props,
+                ...(layerElement != null ? layerElement.updatedProps : {}),
+                key: uid
+              };
+              this.setLayerElement({
+                reactElement: React.cloneElement(nextChild, props),
+                status: 'react',
+                updatedProps: layerElement != null ? layerElement.updatedProps : {},
+                uid
+              });
+              if (layerElement != null) {
+                this.updateLayerProps(uid, layerElement.reactElement.props, false);
+                this.setOlLayer(uid, layerElement.olLayer);
+              }
             }
           }
         }

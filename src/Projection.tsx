@@ -10,6 +10,39 @@ export function getProjectionInfo(code: string): ProjectionInfo {
   return projMap.get(code);
 }
 
+export function getProjectionInfos(): ProjectionInfo[] {
+  const projectionInfos: ProjectionInfo[] = [];
+  projMap.forEach(projectionInfo => {
+    projectionInfos.push(projectionInfo);
+  });
+  return projectionInfos;
+}
+
+export function addProjection(
+  code: string,
+  wkt?: string,
+  lonLatValidity?: number[],
+  name?: string,
+  remarks?: string
+): ProjectionInfo {
+  const projectionInfo = new ProjectionInfo();
+  projectionInfo.code = code;
+  projectionInfo.wkt = wkt;
+  projectionInfo.lonLatValidity = lonLatValidity;
+  projectionInfo.name = name;
+  projectionInfo.remarks = remarks;
+  proj4.defs(projectionInfo.code, projectionInfo.wkt);
+  console.info('Register projection ' + projectionInfo.code + ' - ' + projectionInfo.name);
+  register(proj4);
+  projectionInfo.olProjection = getOlProjection(projectionInfo.code);
+  if (Array.isArray(projectionInfo.lonLatValidity)) {
+    const extent = transformExtent(projectionInfo.lonLatValidity, 'EPSG:4326', projectionInfo.olProjection);
+    projectionInfo.olProjection.setExtent(extent);
+  }
+  projMap.set(projectionInfo.code, projectionInfo);
+  return projectionInfo;
+}
+
 export class ProjectionInfo {
   public code: string;
   public wkt: string;
@@ -32,21 +65,7 @@ export class Projection extends React.Component<IProjectionProps, any> {
 
   constructor(props: IProjectionProps) {
     super(props);
-    this.projectionInfo = new ProjectionInfo();
-    this.projectionInfo.code = props.code;
-    this.projectionInfo.wkt = props.wkt;
-    this.projectionInfo.lonLatValidity = props.lonLatValidity;
-    this.projectionInfo.name = props.name;
-    this.projectionInfo.remarks = props.remarks;
-    proj4.defs(this.projectionInfo.code, this.projectionInfo.wkt);
-    console.info('Register projection ' + this.projectionInfo.code + ' - ' + this.projectionInfo.name);
-    register(proj4);
-    this.projectionInfo.olProjection = getOlProjection(this.projectionInfo.code);
-    if (Array.isArray(this.projectionInfo.lonLatValidity)) {
-      const extent = transformExtent(this.projectionInfo.lonLatValidity, 'EPSG:4326', this.projectionInfo.olProjection);
-      this.projectionInfo.olProjection.setExtent(extent);
-    }
-    projMap.set(this.projectionInfo.code, this.projectionInfo);
+    this.projectionInfo = addProjection(props.code, props.wkt, props.lonLatValidity, props.name, props.remarks);
   }
 
   public render(): React.ReactNode {
