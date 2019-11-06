@@ -30,7 +30,7 @@ export class QueryArcGISRest extends ExternalVector {
   public isSnapshotable(): any {
     return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
   }
-  
+
   public load(extent: [number, number, number, number], projectionCode: string) {
     const srid = projectionCode.split(':').pop();
     const geometry = encodeURIComponent(

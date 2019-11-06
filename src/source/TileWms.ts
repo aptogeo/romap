@@ -29,7 +29,7 @@ export class TileWms extends OlTileWMS implements ITileImage {
   public isSnapshotable(): any {
     return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
   }
-  
+
   public query(request: IQueryRequest): Promise<IQueryResponse> {
     const features = [] as OlFeature[];
     return Promise.resolve({

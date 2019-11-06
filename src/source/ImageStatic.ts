@@ -28,7 +28,6 @@ export class ImageStatic extends OlImageStatic implements IImage {
     return this.options.snapshotable == null ? false : this.options.snapshotable; // false by default
   }
 
-
   getProjection() {
     if (this.projectionCode != null) {
       return getProjection(this.projectionCode);

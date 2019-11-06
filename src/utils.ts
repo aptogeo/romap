@@ -120,11 +120,13 @@ export function uid(): React.Key {
   if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
     d += performance.now(); //use high-precision timer if available
   }
-  return 'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function (c) {
-    var r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  }) + globalKey.toString(16);
+  return (
+    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function(c) {
+      var r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    }) + globalKey.toString(16)
+  );
 }
 let globalKey = 0;
 
@@ -148,9 +150,16 @@ export function loadKML(file: File, layersManager: LayersManager) {
     const kmlString = reader.result as string;
     const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
     const features: Feature[] = kmlFormat.readFeatures(kmlString, {
-      featureProjection: layersManager.getOlMap().getView().getProjection()
+      featureProjection: layersManager
+        .getOlMap()
+        .getView()
+        .getProjection()
     }) as Feature[];
-    const localVectorSource = layersManager.createAndAddLayerFromSource('LocalVector', {}, {uid: uid(), name}) as LocalVector;
+    const localVectorSource = layersManager.createAndAddLayerFromSource(
+      'LocalVector',
+      {},
+      { uid: uid(), name }
+    ) as LocalVector;
     localVectorSource.addFeatures(features);
   };
   reader.readAsText(file);
@@ -178,9 +187,16 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
         const kmlString = reader.result as string;
         const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
         const features: Feature[] = kmlFormat.readFeatures(kmlString, {
-          featureProjection: layersManager.getOlMap().getView().getProjection()
+          featureProjection: layersManager
+            .getOlMap()
+            .getView()
+            .getProjection()
         }) as Feature[];
-        const localVectorSource = layersManager.createAndAddLayerFromSource('LocalVector', {}, {uid: uid(), name}) as LocalVector;
+        const localVectorSource = layersManager.createAndAddLayerFromSource(
+          'LocalVector',
+          {},
+          { uid: uid(), name }
+        ) as LocalVector;
         localVectorSource.addFeatures(features);
       };
       reader.readAsText(docElement.blob);
@@ -191,5 +207,4 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
 /**
  * Load zipped Shapefile from file.
  */
-export function loadZippedShapefile(file: File, layersManager: LayersManager) {
-}
+export function loadZippedShapefile(file: File, layersManager: LayersManager) {}

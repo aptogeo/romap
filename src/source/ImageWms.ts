@@ -25,11 +25,11 @@ export class ImageWms extends OlImageWMS implements IImage {
   public getSourceOptions(): any {
     return this.options;
   }
-  
+
   public isSnapshotable(): any {
     return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
   }
-  
+
   query(request: IQueryRequest): Promise<IQueryResponse> {
     const features = [] as OlFeature[];
     return Promise.resolve({

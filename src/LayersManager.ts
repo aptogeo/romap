@@ -4,7 +4,19 @@ import OlBaseLayer from 'ol/layer/Base';
 import { BaseLayer, IBaseLayerProps, Vector, Tile, Image } from './layer';
 import { jsonEqual } from './utils';
 import { ISnapshotGetter, ISnapshot, ISnapshotLayer } from './ISnapshot';
-import { IExtended, ExternalVector, ImageStatic, ImageWms, LocalVector, QueryArcGISRest, TileArcGISRest, TileWms, Wfs, Xyz, ImageArcGISRest } from './source';
+import {
+  IExtended,
+  ExternalVector,
+  ImageStatic,
+  ImageWms,
+  LocalVector,
+  QueryArcGISRest,
+  TileArcGISRest,
+  TileWms,
+  Wfs,
+  Xyz,
+  ImageArcGISRest
+} from './source';
 
 export type layerElementStatus = null | 'react' | 'ext' | 'del';
 
@@ -70,7 +82,12 @@ export class LayersManager {
     this.getLayerElements().map(layerElement => {
       const props = { ...layerElement.reactElement.props, ...layerElement.updatedProps };
       const source = props['source'];
-      if (source != null && 'getSourceTypeName' in source && 'getSourceOptions' in source && 'isSnapshotable' in source) {
+      if (
+        source != null &&
+        'getSourceTypeName' in source &&
+        'getSourceOptions' in source &&
+        'isSnapshotable' in source
+      ) {
         if ((source as IExtended).isSnapshotable()) {
           props['source'] = undefined;
           props['children'] = undefined;
@@ -95,8 +112,7 @@ export class LayersManager {
   /**
    * Reload from snapshot.
    */
-  public reloadFromSnapshot = (snapshot: ISnapshot) => {
-  };
+  public reloadFromSnapshot = (snapshot: ISnapshot) => {};
 
   /**
    * Get infoElements
@@ -228,43 +244,43 @@ export class LayersManager {
     let source: IExtended;
     switch (getSourceTypeName) {
       case 'ExternalVector':
-        source = new ExternalVector(getSourceOptions)
+        source = new ExternalVector(getSourceOptions);
         this.createAndAddLayer(Vector, { ...props, source });
         break;
       case 'ImageArcGISRest':
-        source = new ImageArcGISRest(getSourceOptions)
+        source = new ImageArcGISRest(getSourceOptions);
         this.createAndAddLayer(Image, { ...props, source });
         break;
       case 'ImageStatic':
-        source = new ImageStatic(getSourceOptions)
+        source = new ImageStatic(getSourceOptions);
         this.createAndAddLayer(Image, { ...props, source });
         break;
       case 'ImageWms':
-        source = new ImageWms(getSourceOptions)
+        source = new ImageWms(getSourceOptions);
         this.createAndAddLayer(Image, { ...props, source });
         break;
       case 'LocalVector':
-        source = new LocalVector(getSourceOptions)
+        source = new LocalVector(getSourceOptions);
         this.createAndAddLayer(Vector, { ...props, source });
         break;
       case 'QueryArcGISRest':
-        source = new QueryArcGISRest(getSourceOptions)
+        source = new QueryArcGISRest(getSourceOptions);
         this.createAndAddLayer(Vector, { ...props, source });
         break;
       case 'TileArcGISRest':
-        source = new TileArcGISRest(getSourceOptions)
+        source = new TileArcGISRest(getSourceOptions);
         this.createAndAddLayer(Tile, { ...props, source });
         break;
       case 'TileWms':
-        source = new TileWms(getSourceOptions)
+        source = new TileWms(getSourceOptions);
         this.createAndAddLayer(Tile, { ...props, source });
         break;
       case 'Wfs':
-        source = new Wfs(getSourceOptions)
+        source = new Wfs(getSourceOptions);
         this.createAndAddLayer(Vector, { ...props, source });
         break;
       case 'Xyz':
-        source = new Xyz(getSourceOptions)
+        source = new Xyz(getSourceOptions);
         this.createAndAddLayer(Tile, { ...props, source });
         break;
     }

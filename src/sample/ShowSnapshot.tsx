@@ -15,7 +15,7 @@ export class ShowSnapshot extends BaseWindowTool<IBaseWindowToolProps, any> {
   public handleRefeshButtonClick = (event: any) => {
     event.preventDefault();
     const snapshot = this.context.layersManager.getSnapshot();
-    this.setState({ snapshot })
+    this.setState({ snapshot });
   };
 
   public renderHeaderContent(): React.ReactNode {

@@ -35,7 +35,7 @@ export class Wfs extends ExternalVector {
   public getSourceOptions(): any {
     return this.options;
   }
-  
+
   public isSnapshotable(): any {
     return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
   }
