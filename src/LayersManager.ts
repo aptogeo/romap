@@ -273,7 +273,7 @@ export class LayersManager {
   ) {
     const reactElement = React.createElement(cl, {
       ...props,
-      uid: props.uid
+      key: props.uid
     });
     this.setLayerElement({
       reactElement,

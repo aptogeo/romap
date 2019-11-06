@@ -71,11 +71,16 @@ export class ToolsManager {
       }
     } else {
       if (toolElement.status === 'del') {
-        toolMap.set(toolElement.uid, {
-          ...toolElement,
-          status: 'del'
-        });
-        changed = true;
+        if (found.status === 'react') {
+          toolMap.set(toolElement.uid, {
+            ...toolElement,
+            status: 'del'
+          });
+          changed = true;
+        } else if (found.status === 'ext') {
+          toolMap.delete(toolElement.uid);
+          changed = true;
+        }
       } else {
         toolMap.set(toolElement.uid, {
           ...toolElement
@@ -220,9 +225,6 @@ export class ToolsManager {
                 updatedProps: toolElement != null ? toolElement.updatedProps : {},
                 uid
               });
-              if (toolElement != null) {
-                this.updateToolProps(uid, toolElement.reactElement.props, false);
-              }
             }
           }
         }
