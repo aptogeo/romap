@@ -36,7 +36,11 @@ export class Wfs extends ExternalVector {
     return this.options;
   }
 
-  public isSnapshotable(): any {
+  public isSnapshotable(): boolean {
     return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
+  }
+
+  public isListable(): boolean {
+    return this.options.listable == null ? true : this.options.listable; // true by default
   }
 }

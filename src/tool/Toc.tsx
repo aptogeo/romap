@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { romapContext, IRomapContext } from '../RomapContext';
 import { BaseTool, IBaseToolProps } from './BaseTool';
+import { IExtended } from '../source';
 
 const Container = styled.div`
   top: 15px;
@@ -66,17 +67,27 @@ export class Toc extends BaseTool<ITocProps, {}> {
     this.context.layersManager
       .getLayerElements(layerElement => layerElement.reactElement.props.type === 'BASE')
       .forEach(layerElement => {
-        bases.push(
-          <div key={layerElement.uid}>
-            <input
-              type="radio"
-              name="radiotoc"
-              checked={layerElement.reactElement.props.visible !== false ? true : false}
-              onChange={this.handleRadioChange(layerElement.uid)}
-            />
-            <label title={layerElement.reactElement.props.name}>{layerElement.reactElement.props.name}</label>
-          </div>
-        );
+        const source = layerElement.reactElement.props['source'];
+        if (source != null && 'isListable' in source) {
+          if ((source as IExtended).isListable()) {
+            const name = layerElement.reactElement.props.name || '';
+            let truncName = name;
+            if (truncName.length > 15) {
+              truncName = truncName.substring(0, 14) + '…';
+            }
+            bases.push(
+              <div key={layerElement.uid}>
+                <input
+                  type="radio"
+                  name="radiotoc"
+                  checked={layerElement.reactElement.props.visible !== false ? true : false}
+                  onChange={this.handleRadioChange(layerElement.uid)}
+                />
+                <label title={name}>{truncName}</label>
+              </div>
+            );
+          }
+        }
       });
     return bases;
   }
@@ -86,25 +97,30 @@ export class Toc extends BaseTool<ITocProps, {}> {
     this.context.layersManager
       .getLayerElements(layerElement => layerElement.reactElement.props.type === 'OVERLAY')
       .forEach(layerElement => {
-        const name = layerElement.reactElement.props.name || '';
-        let truncName = name;
-        if (truncName.length > 15) {
-          truncName = truncName.substring(0, 14) + '…';
+        const source = layerElement.reactElement.props['source'];
+        if (source != null && 'isListable' in source) {
+          if ((source as IExtended).isListable()) {
+            const name = layerElement.reactElement.props.name || '';
+            let truncName = name;
+            if (truncName.length > 15) {
+              truncName = truncName.substring(0, 14) + '…';
+            }
+            const input = (
+              <input
+                type="checkbox"
+                checked={layerElement.reactElement.props.visible !== false ? true : false}
+                onChange={this.handleCheckboxChange(layerElement.uid)}
+              />
+            );
+            const label = <label title={name}>{truncName}</label>;
+            overlayTree.push(
+              <div key={layerElement.uid}>
+                {input}
+                {label}
+              </div>
+            );
+          }
         }
-        const input = (
-          <input
-            type="checkbox"
-            checked={layerElement.reactElement.props.visible !== false ? true : false}
-            onChange={this.handleCheckboxChange(layerElement.uid)}
-          />
-        );
-        const label = <label title={name}>{truncName}</label>;
-        overlayTree.push(
-          <div key={layerElement.uid}>
-            {input}
-            {label}
-          </div>
-        );
       });
     return overlayTree;
   }

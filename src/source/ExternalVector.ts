@@ -8,15 +8,19 @@ export class ExternalVector extends Vector {
     this.options = options;
   }
 
-  public isSnapshotable(): any {
-    return this.options.snapshotable == null ? false : this.options.snapshotable; // false by default
-  }
-
   public getSourceTypeName(): string {
     return 'ExternalVector';
   }
 
   public getSourceOptions(): any {
     return this.options;
+  }
+
+  public isSnapshotable(): boolean {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
+  }
+
+  public isListable(): boolean {
+    return this.options.listable == null ? true : this.options.listable; // true by default
   }
 }

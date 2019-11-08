@@ -24,7 +24,7 @@ export class QueryWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
     }
   }
 
-  public componentDidUpdate(prevProps: IBaseWindowToolProps, prevState: any, snapshot: any) {
+  public componentDidUpdate(prevProps: IBaseWindowToolProps, prevState: any, snap: any) {
     if (this.props.activated) {
       this.context.olMap.on('click', this.handleClick);
     } else {

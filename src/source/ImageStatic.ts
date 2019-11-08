@@ -24,8 +24,12 @@ export class ImageStatic extends OlImageStatic implements IImage {
     return this.options;
   }
 
-  public isSnapshotable(): any {
-    return this.options.snapshotable == null ? false : this.options.snapshotable; // false by default
+  public isSnapshotable(): boolean {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
+  }
+
+  public isListable(): boolean {
+    return this.options.listable == null ? true : this.options.listable; // true by default
   }
 
   getProjection() {

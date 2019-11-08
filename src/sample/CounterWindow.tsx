@@ -11,7 +11,7 @@ export class CounterWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
     }
   }
 
-  public componentDidUpdate(prevProps: IBaseWindowToolProps, prevState: any, snapshot: any) {
+  public componentDidUpdate(prevProps: IBaseWindowToolProps, prevState: any, snap: any) {
     if (this.props.activated && !prevProps.activated) {
       this.setState({
         count: this.state.count + 1

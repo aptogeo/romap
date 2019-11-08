@@ -1,5 +1,7 @@
 import OlFeature from 'ol/Feature';
 import { Vector } from './Vector';
+import OlWkt from 'ol/format/WKT';
+
 
 export class LocalVector extends Vector {
   protected options: any;
@@ -8,8 +10,12 @@ export class LocalVector extends Vector {
 
   private origstrategy_: (extent: [number, number, number, number], resolution: number) => any;
 
-  constructor(options?: any) {
+  private wktFormat = new OlWkt();
+
+  constructor(options: any = {}) {
     super({ ...options, useSpatialIndex: true });
+    const features = options['features']; // TODO load features
+    options['features'] = undefined;
     this.options = options;
     this.origstrategy_ = this.strategy_;
     this.strategy_ = (extent: [number, number, number, number], resolution: number) => {
@@ -26,11 +32,31 @@ export class LocalVector extends Vector {
   }
 
   public getSourceOptions(): any {
-    return this.options;
+    const options = this.options;
+    const features: any[] = [];
+    this.forEachFeature((feature: OlFeature) => {
+      const originalProjectionCode = feature.get('originalProjectionCode');
+      const originalGeometry = feature.get('originalGeometry');
+      const properties = {...feature.getProperties()};
+      properties['originalProjectionCode'] = undefined;
+      properties['originalGeometry'] = undefined;
+      properties['geometry'] = undefined;
+      features.push({
+        projectionCode: originalProjectionCode,
+        wkt: this.wktFormat.writeGeometry(originalGeometry),
+        properties
+      })
+    })
+    options['features'] = features;
+    return options;
   }
 
-  public isSnapshotable(): any {
-    return this.options.snapshotable == null ? false : this.options.snapshotable; // false by default
+  public isSnapshotable(): boolean {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
+  }
+
+  public isListable(): boolean {
+    return this.options.listable == null ? true : this.options.listable; // true by default
   }
 
   private reproj() {

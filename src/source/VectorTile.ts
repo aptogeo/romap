@@ -6,7 +6,7 @@ export abstract class VectorTile extends OlVectorTile implements IExtended {
 
   protected label: string;
 
-  constructor(options?: any) {
+  constructor(options: any = {}) {
     super(options);
     this.options = options;
     this.label = options.label ? options.label : this.constructor.name;
@@ -20,8 +20,12 @@ export abstract class VectorTile extends OlVectorTile implements IExtended {
     return this.options;
   }
 
-  public isSnapshotable(): any {
-    return this.options.snapshotable == null ? false : this.options.snapshotable; // false by default
+  public isSnapshotable(): boolean {
+    return this.options.snapshotable == null ? true : this.options.snapshotable; // true by default
+  }
+
+  public isListable(): boolean {
+    return this.options.listable == null ? true : this.options.listable; // true by default
   }
 
   public query(request: IQueryRequest): Promise<IQueryResponse> {

@@ -9,6 +9,7 @@ export interface IExtended extends OlSource {
   getSourceTypeName(): string;
   getSourceOptions(): any;
   isSnapshotable(): boolean;
+  isListable(): boolean;
   query(identifyRequest: IQueryRequest): Promise<IQueryResponse>;
 }
 

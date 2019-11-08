@@ -11,7 +11,7 @@ export class CounterButton extends BaseButtonTool<IBaseButtonToolProps, any> {
     }
   }
 
-  public componentDidUpdate(prevProps: IBaseButtonToolProps, prevState: any, snapshot: any) {
+  public componentDidUpdate(prevProps: IBaseButtonToolProps, prevState: any, snap: any) {
     if (this.props.activated && !prevProps.activated) {
       this.setState({
         count: this.state.count + 1

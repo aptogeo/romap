@@ -99,7 +99,7 @@ export class LayersManager {
     // Layers
     const layers: Array<ISnapshotLayer> = [];
     this.getLayerElements().map(layerElement => {
-      const props = { ...layerElement.reactElement.props, ...layerElement.updatedProps };
+      const props = { ...layerElement.reactElement.props };
       const source = props['source'];
       if (
         source != null &&
@@ -291,6 +291,10 @@ export class LayersManager {
     getSourceOptions: any,
     props: IBaseLayerProps
   ): IExtended {
+    const layerElement = this.getLayerElements(layerElement => layerElement.uid == props.uid).pop();
+    if (layerElement != null && layerElement.olLayer != null && 'getSource' in layerElement.olLayer) {
+      return (layerElement.olLayer as any).getSource();
+    }
     let source: IExtended;
     switch (getSourceTypeName) {
       case 'ExternalVector':
@@ -376,7 +380,6 @@ export class LayersManager {
                 uid
               });
               if (layerElement != null) {
-                this.updateLayerProps(uid, layerElement.reactElement.props, false);
                 this.setOlLayer(uid, layerElement.olLayer);
               }
             }
