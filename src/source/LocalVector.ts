@@ -2,7 +2,6 @@ import OlFeature from 'ol/Feature';
 import { Vector } from './Vector';
 import OlWkt from 'ol/format/WKT';
 
-
 export class LocalVector extends Vector {
   protected options: any;
 
@@ -37,7 +36,7 @@ export class LocalVector extends Vector {
     this.forEachFeature((feature: OlFeature) => {
       const originalProjectionCode = feature.get('originalProjectionCode');
       const originalGeometry = feature.get('originalGeometry');
-      const properties = {...feature.getProperties()};
+      const properties = { ...feature.getProperties() };
       properties['originalProjectionCode'] = undefined;
       properties['originalGeometry'] = undefined;
       properties['geometry'] = undefined;
@@ -45,8 +44,8 @@ export class LocalVector extends Vector {
         projectionCode: originalProjectionCode,
         wkt: this.wktFormat.writeGeometry(originalGeometry),
         properties
-      })
-    })
+      });
+    });
     options['features'] = features;
     return options;
   }
