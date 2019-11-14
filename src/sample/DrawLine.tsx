@@ -5,6 +5,7 @@ import { IRomapContext, romapContext } from '../RomapContext';
 import { LocalVector } from '../source';
 import Draw from 'ol/interaction/Draw';
 import GeometryType from 'ol/geom/GeometryType';
+import { getDefaultLayerStyles } from '../utils';
 
 const Container = styled.div`
   margin: 2px;
@@ -22,24 +23,29 @@ export class DrawLine extends BaseButtonTool<IBaseButtonToolProps, any> {
 
   public componentDidUpdate(prevProps: IBaseButtonToolProps, prevState: any, snap: any) {
     if (this.props.activated && !prevProps.activated) {
-      const localVectorSource = this.context.layersManager.createAndAddLayerFromSource(
-        'LocalVector',
-        {},
-        { uid: 'drawline_tool_layer', name: 'Line' }
-      ) as LocalVector;
-      if (draw == null) {
-        draw = new Draw({
-          source: localVectorSource,
-          type: GeometryType.LINE_STRING
-        });
-        this.context.olMap.addInteraction(draw);
-      }
-      draw.setActive(true);
+      draw = this.buildDrawInteraction();
+      this.context.olMap.addInteraction(draw);
     } else {
       if (draw != null) {
-        draw.setActive(false);
+        this.context.olMap.removeInteraction(draw);
+        draw = null;
       }
     }
+  }
+
+  public buildDrawInteraction(): Draw {
+    const props = {
+      uid: 'drawline_tool_layer', name: 'Line', layerStyles: getDefaultLayerStyles()
+     };
+    const localVectorSource = this.context.layersManager.createAndAddLayerFromSource(
+      'LocalVector',
+      {},
+      props
+    ) as LocalVector;
+    return new Draw({
+      source: localVectorSource,
+      type: GeometryType.LINE_STRING
+    });
   }
 
   public renderTool(): any {

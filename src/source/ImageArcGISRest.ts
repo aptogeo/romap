@@ -6,15 +6,9 @@ import { IImage } from './IImage';
 export class ImageArcGISRest extends OlImageArcGISRest implements IImage {
   protected options: any;
 
-  protected label: string;
-
-  protected type: IFeatureType<number>[];
-
   constructor(options: any = {}) {
     super(options);
     this.options = options;
-    this.type = options.type ? options.type : null;
-    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public getSourceTypeName(): string {

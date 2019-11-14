@@ -3,7 +3,7 @@ import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlBaseLayer from 'ol/layer/Base';
 import { BaseLayer, IBaseLayerProps, Vector, Tile, Image } from './layer';
-import { jsonEqual } from './utils';
+import { jsonEqual, walk } from './utils';
 import { ISnapshotGetter, ISnapshot, ISnapshotLayer, ISnapshotProjection } from './ISnapshot';
 import {
   IExtended,
@@ -246,6 +246,7 @@ export class LayersManager {
     const layerElement = this.getLayerElements(layerElement => layerElement.uid == uid).pop();
     if (layerElement != null) {
       layerElement.olLayer = olLayer;
+      layerElement.olLayer.set('uid', uid, true);
     } else {
       console.error(`Element not found for uid ${uid}`);
     }
@@ -292,8 +293,20 @@ export class LayersManager {
     props: IBaseLayerProps
   ): IExtended {
     const layerElement = this.getLayerElements(layerElement => layerElement.uid == props.uid).pop();
-    if (layerElement != null && layerElement.olLayer != null && 'getSource' in layerElement.olLayer) {
-      return (layerElement.olLayer as any).getSource();
+    if (layerElement != null) {
+      if (layerElement.olLayer != null) {
+        return 'getSource' in layerElement.olLayer ? (layerElement.olLayer as any).getSource() : null;
+      } else {
+        let found: OlBaseLayer;
+        walk(this.olMap, (currentOlLayer: OlBaseLayer) => {
+          if (currentOlLayer.get('uid') === props.uid) {
+            this.setOlLayer(props.uid, currentOlLayer);
+            found = currentOlLayer;
+          }
+          return true;
+        });
+        return found != null && 'getSource' in found ? (found as any).getSource() : null;
+      }
     }
     let source: IExtended;
     switch (getSourceTypeName) {

@@ -8,6 +8,7 @@ import { LayersManager } from './LayersManager';
 import KML from 'ol/format/KML';
 import Feature from 'ol/Feature';
 import * as JSZip from 'jszip';
+import { LayerStyles } from './LayerStyles';
 
 const kmlFormat = new KML({ extractStyles: true, showPointNames: false });
 
@@ -121,7 +122,7 @@ export function uid(): React.Key {
     d += performance.now(); //use high-precision timer if available
   }
   return (
-    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function(c) {
+    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function (c) {
       var r = (d + Math.random() * 16) % 16 | 0;
       d = Math.floor(d / 16);
       return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
@@ -139,6 +140,36 @@ export function getLayersFromTypes(types: IFeatureType<string>[]): string {
   } else {
     return types.map(t => t.id).join(',');
   }
+}
+
+
+export function getDefaultLayerStyles(): LayerStyles {
+  return [
+    {
+      type: 'circle',
+      paint: {
+        'circle-color': 'rgba(127, 127, 127, 0.2)',
+        'circle-stroke-color': 'rgba(0, 0, 0, 0.9)',
+        'circle-radius': 3,
+        'circle-stroke-width': 2
+      }
+    },
+    {
+      type: 'line',
+      paint: {
+        'line-color': 'rgba(0, 0, 255, 0.9)',
+        'line-cap': 'butt',
+        'line-join': 'miter',
+        'line-width': 2
+      }
+    },
+    {
+      type: 'fill',
+      paint: {
+        'fill-color': 'rgba(127, 127, 127, 0.2)'
+      }
+    }
+  ];
 }
 
 /**
@@ -192,10 +223,13 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
             .getView()
             .getProjection()
         }) as Feature[];
+        const props = {
+          uid: uid(), name, layerStyles: getDefaultLayerStyles()
+        };
         const localVectorSource = layersManager.createAndAddLayerFromSource(
           'LocalVector',
           {},
-          { uid: uid(), name }
+          props
         ) as LocalVector;
         localVectorSource.addFeatures(features);
       };
@@ -207,4 +241,4 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
 /**
  * Load zipped Shapefile from file.
  */
-export function loadZippedShapefile(file: File, layersManager: LayersManager) {}
+export function loadZippedShapefile(file: File, layersManager: LayersManager) { }

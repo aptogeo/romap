@@ -62,6 +62,7 @@
     "@turf/turf": "^5.1.6",
     "bhreq": "0.0.12",
     "jszip": "^3.2.2",
+    "ol-mapbox-style": "^5.0.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-draggable": "^4.1.0",

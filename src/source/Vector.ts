@@ -12,8 +12,6 @@ import { IVector } from './IVector';
 export abstract class Vector extends OlVector implements IVector {
   protected options: any;
 
-  protected label: string;
-
   protected oldProjectionCode: string;
 
   protected actualProjectionCode: string;
@@ -23,7 +21,6 @@ export abstract class Vector extends OlVector implements IVector {
   constructor(options: any = {}) {
     super(options);
     this.options = options;
-    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public getSourceTypeName(): string {
@@ -41,7 +38,7 @@ export abstract class Vector extends OlVector implements IVector {
   public isListable(): boolean {
     return this.options.listable == null ? true : this.options.listable; // true by default
   }
-
+  
   public loadFeatures(extent: [number, number, number, number], resolution: number, projection: OlProjection) {
     if (projection != null && this.oldProjectionCode !== projection.getCode()) {
       this.oldProjectionCode = this.actualProjectionCode;

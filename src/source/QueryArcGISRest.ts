@@ -6,17 +6,11 @@ import { IFeatureType } from './IExtended';
 export class QueryArcGISRest extends ExternalVector {
   protected options: any;
 
-  protected where: string;
-
   private esriJSONFormat = new OlEsriJSON();
-
-  protected type: IFeatureType<number>;
 
   constructor(options: any = {}) {
     super(options);
     this.options = options;
-    this.type = options.type ? options.type : null;
-    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public getSourceTypeName(): string {
@@ -41,8 +35,8 @@ export class QueryArcGISRest extends ExternalVector {
       `{"xmin":${extent[0]},"ymin":${extent[1]},"xmax":${extent[2]},"ymax":${extent[3]},"spatialReference":{"wkid":${srid}}}`
     );
     let url = `${this.getUrl()}/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${geometry}&geometryType=esriGeometryEnvelope&inSR=${srid}&outFields=*&outSR=${srid}`;
-    if (this.where) {
-      url += `&where=${this.where}`;
+    if (this.options.where) {
+      url += `&where=${this.options.where}`;
     }
     return send({ url, contentType: 'application/json' }).then(
       (response: IResponse) => this.esriJSONFormat.readFeatures(response.body),

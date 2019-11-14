@@ -6,15 +6,9 @@ import { ITileImage } from './ITileImage';
 export class TileArcGISRest extends OlTileArcGISRest implements ITileImage {
   protected options: any;
 
-  protected label: string;
-
-  protected type: IFeatureType<number>[];
-
   constructor(options: any = {}) {
     super(options);
     this.options = options;
-    this.type = options.type ? options.type : null;
-    this.label = options.label ? options.label : this.constructor.name;
   }
 
   public getSourceTypeName(): string {

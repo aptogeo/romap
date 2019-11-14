@@ -2,6 +2,9 @@ import * as React from 'react';
 import OlVectorLayer from 'ol/layer/Vector';
 import { BaseLayer, IBaseLayerProps } from './BaseLayer';
 import { IVector } from '../source';
+import { LayerStyles } from '../LayerStyles';
+import { jsonEqual } from '../utils';
+import { applyStyle } from 'ol-mapbox-style';
 
 export interface IVectorProps extends IBaseLayerProps {
   /**
@@ -9,9 +12,9 @@ export interface IVectorProps extends IBaseLayerProps {
    */
   source: IVector;
   /**
-   * Style.
+   * Layer styles.
    */
-  style?: any;
+  layerStyles: LayerStyles;
 }
 
 export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, IVector> {
@@ -24,8 +27,8 @@ export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, IVector> 
     if (prevProps == null || prevProps.source !== nextProps.source) {
       this.setSource(nextProps.source);
     }
-    if (prevProps == null || prevProps.style != nextProps.style) {
-      this.setStyle(nextProps.style);
+    if (prevProps == null || !jsonEqual(prevProps.layerStyles, nextProps.layerStyles)) {
+      this.setLayerStyles(nextProps.uid, nextProps.layerStyles);
     }
   }
 
@@ -36,10 +39,20 @@ export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, IVector> 
     this.getOlLayer().setSource(source);
   }
 
-  public setStyle(style: any) {
-    if (style == null) {
-      style = undefined;
+  public setLayerStyles(id: React.Key, layerStyles: LayerStyles) {
+    if (layerStyles == null) {
+      this.getOlLayer().setStyle(undefined);
+      return;
     }
-    this.getOlLayer().setStyle(style);
+    const mbstyle = {
+      version: 8,
+      sources: {} as any,
+      layers: [] as any[]
+    };
+    mbstyle.sources[id] = { type: 'vector' };
+    layerStyles.forEach((style) => {
+      mbstyle.layers.push({ ...style, source: id });
+    });
+    applyStyle(this.getOlLayer(), mbstyle, id);
   }
 }

@@ -12,7 +12,7 @@ export class LocalVector extends Vector {
   private wktFormat = new OlWkt();
 
   constructor(options: any = {}) {
-    super({ ...options, useSpatialIndex: true });
+    super({ ...options, useSpatialIndex: true, features: undefined });
     const features = options['features']; // TODO load features
     options['features'] = undefined;
     this.options = options;
@@ -23,6 +23,23 @@ export class LocalVector extends Vector {
       }
       return this.origstrategy_.call(this, extent, resolution);
     };
+    if (features != null) {
+      // Load features from snapshot
+      features.forEach((feature: any) => {
+        const projectionCode = feature.projectionCode;
+        const wkt = feature.wkt;
+        const properties = feature.properties;
+        const geometry = this.wktFormat.readGeometry(wkt);
+        const olFeature = new OlFeature(geometry);
+        olFeature.setProperties(properties);
+        olFeature.set('originalProjectionCode', projectionCode, true);
+        olFeature.set('originalGeometry', geometry, true);
+        geometry.set('feature', olFeature, true);
+        olFeature.once('change:geometry', this.handleChangeFeatureGeometry);
+        geometry.once('change', this.handleChangeGeometry);
+        this.addFeature(olFeature);
+      });
+    }
     this.on('addfeature', this.handleAddFeature);
   }
 
@@ -90,16 +107,16 @@ export class LocalVector extends Vector {
     }
   }
 
-  private setOriginal(feature: any) {
-    if (feature.getGeometry() == null) {
+  private setOriginal(olFeature: OlFeature) {
+    if (olFeature.getGeometry() == null) {
       return;
     }
-    const geometry = feature.getGeometry();
-    feature.set('originalProjectionCode', this.actualProjectionCode, true);
-    feature.set('originalGeometry', geometry, true);
-    geometry.set('feature', feature, true);
-    feature.once('change:geometry', this.handleChangeFeatureGeometry, this);
-    geometry.once('change', this.handleChangeGeometry, this);
+    const geometry = olFeature.getGeometry();
+    olFeature.set('originalProjectionCode', this.actualProjectionCode, true);
+    olFeature.set('originalGeometry', geometry, true);
+    geometry.set('feature', olFeature, true);
+    olFeature.once('change:geometry', this.handleChangeFeatureGeometry);
+    geometry.once('change', this.handleChangeGeometry);
   }
 
   private handleAddFeature = (event: any) => {
