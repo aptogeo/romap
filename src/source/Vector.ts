@@ -38,7 +38,7 @@ export abstract class Vector extends OlVector implements IVector {
   public isListable(): boolean {
     return this.options.listable == null ? true : this.options.listable; // true by default
   }
-  
+
   public loadFeatures(extent: [number, number, number, number], resolution: number, projection: OlProjection) {
     if (projection != null && this.oldProjectionCode !== projection.getCode()) {
       this.oldProjectionCode = this.actualProjectionCode;

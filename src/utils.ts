@@ -122,7 +122,7 @@ export function uid(): React.Key {
     d += performance.now(); //use high-precision timer if available
   }
   return (
-    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function (c) {
+    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function(c) {
       var r = (d + Math.random() * 16) % 16 | 0;
       d = Math.floor(d / 16);
       return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
@@ -141,7 +141,6 @@ export function getLayersFromTypes(types: IFeatureType<string>[]): string {
     return types.map(t => t.id).join(',');
   }
 }
-
 
 export function getDefaultLayerStyles(): LayerStyles {
   return [
@@ -224,13 +223,11 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
             .getProjection()
         }) as Feature[];
         const props = {
-          uid: uid(), name, layerStyles: getDefaultLayerStyles()
+          uid: uid(),
+          name,
+          layerStyles: getDefaultLayerStyles()
         };
-        const localVectorSource = layersManager.createAndAddLayerFromSource(
-          'LocalVector',
-          {},
-          props
-        ) as LocalVector;
+        const localVectorSource = layersManager.createAndAddLayerFromSource('LocalVector', {}, props) as LocalVector;
         localVectorSource.addFeatures(features);
       };
       reader.readAsText(docElement.blob);
@@ -241,4 +238,4 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
 /**
  * Load zipped Shapefile from file.
  */
-export function loadZippedShapefile(file: File, layersManager: LayersManager) { }
+export function loadZippedShapefile(file: File, layersManager: LayersManager) {}

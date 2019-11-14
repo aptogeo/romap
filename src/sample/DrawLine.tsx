@@ -35,8 +35,10 @@ export class DrawLine extends BaseButtonTool<IBaseButtonToolProps, any> {
 
   public buildDrawInteraction(): Draw {
     const props = {
-      uid: 'drawline_tool_layer', name: 'Line', layerStyles: getDefaultLayerStyles()
-     };
+      uid: 'drawline_tool_layer',
+      name: 'Line',
+      layerStyles: getDefaultLayerStyles()
+    };
     const localVectorSource = this.context.layersManager.createAndAddLayerFromSource(
       'LocalVector',
       {},

@@ -11,7 +11,7 @@ export interface IVectorTileProps extends IBaseLayerProps {
    * Source.
    */
   source: IVectorTile;
-    /**
+  /**
    * Layer styles.
    */
   layerStyles: LayerStyles;
@@ -50,7 +50,7 @@ export class VectorTile extends BaseLayer<IVectorTileProps, {}, OlVectorTileLaye
       layers: [] as any[]
     };
     mbstyle.sources[id] = { type: 'vector' };
-    layerStyles.forEach((style) => {
+    layerStyles.forEach(style => {
       mbstyle.layers.push({ ...style, source: id });
     });
     applyStyle(this.getOlLayer(), mbstyle, id);

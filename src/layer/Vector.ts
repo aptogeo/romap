@@ -50,7 +50,7 @@ export class Vector extends BaseLayer<IVectorProps, {}, OlVectorLayer, IVector> 
       layers: [] as any[]
     };
     mbstyle.sources[id] = { type: 'vector' };
-    layerStyles.forEach((style) => {
+    layerStyles.forEach(style => {
       mbstyle.layers.push({ ...style, source: id });
     });
     applyStyle(this.getOlLayer(), mbstyle, id);

@@ -25,7 +25,7 @@ export abstract class VectorTile extends OlVectorTile implements IExtended {
   public isListable(): boolean {
     return this.options.listable == null ? true : this.options.listable; // true by default
   }
-  
+
   public query(request: IQueryRequest): Promise<IQueryResponse> {
     return Promise.resolve({
       request,
