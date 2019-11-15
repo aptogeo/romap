@@ -1,6 +1,6 @@
 {
   "name": "romap",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "OpenLayers with React",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -63,8 +63,8 @@
     "bhreq": "0.0.12",
     "jszip": "^3.2.2",
     "ol-mapbox-style": "^5.0.2",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-draggable": "^4.1.0",
     "styled-components": "^4.4.1"
   },
