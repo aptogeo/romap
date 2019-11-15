@@ -4,7 +4,7 @@ import { IBaseButtonToolProps, BaseButtonTool } from '../tool';
 export class CounterButton extends BaseButtonTool<IBaseButtonToolProps, any> {
   public constructor(props: IBaseButtonToolProps) {
     super(props);
-      this.state = { count: 0 };
+    this.state = { count: 0 };
   }
 
   public toolDidActivate(): void {

@@ -125,7 +125,7 @@ export class BaseWindowTool<
       this.setState({
         bounds: {
           top: -boundingRect.top,
-          bottom: window.innerHeight - boundingRect.top- boundingRect.height,
+          bottom: window.innerHeight - boundingRect.top - boundingRect.height,
           left: -boundingRect.left,
           right: window.innerWidth - boundingRect.right
         }

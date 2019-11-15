@@ -4,7 +4,7 @@ import { IBaseWindowToolProps, BaseWindowTool } from '../tool';
 export class CounterWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
   public constructor(props: IBaseWindowToolProps) {
     super(props);
-      this.state = { count: 0 };
+    this.state = { count: 0 };
   }
 
   public toolDidActivate(): void {

@@ -39,13 +39,14 @@ export const WmsLoader = () => {
   const handleButtonClick = (event: any) => {
     let capUrl = url;
     if (gisProxyUrl !== '') {
-      capUrl = `${gisProxyUrl}/${btoa(url).replace('=', '%3D').replace('/', '%2F').replace('+', '%2B')}?service=WMS&version=1.3.0&request=GetCapabilities`;
+      capUrl = `${gisProxyUrl}/${btoa(url)
+        .replace('=', '%3D')
+        .replace('/', '%2F')
+        .replace('+', '%2B')}?service=WMS&version=1.3.0&request=GetCapabilities`;
     }
-    return send({ url: capUrl }).then(
-      (response: IResponse) => {
-        setCapabilities(parser.read(response.body));
-      }
-    );
+    return send({ url: capUrl }).then((response: IResponse) => {
+      setCapabilities(parser.read(response.body));
+    });
   };
 
   const handleCheckboxChange = (name: string) => (e: any) => {
@@ -56,23 +57,34 @@ export const WmsLoader = () => {
     }
   };
 
-  const handleAddButtonClick = (event: any) => {
-  };
+  const handleAddButtonClick = (event: any) => {};
 
   return (
     <romapContext.Consumer>
       {context => (
         <Container>
-          {capabilities == null &&
+          {capabilities == null && (
             <React.Fragment>
-              <label htmlFor="url">{context.getLocalizedText('wmsLoader.url', 'Enter WMS URL (required, example: http://172.20.0.3:8080/geoserver/wms)')}</label>
+              <label htmlFor="url">
+                {context.getLocalizedText(
+                  'wmsLoader.url',
+                  'Enter WMS URL (required, example: http://172.20.0.3:8080/geoserver/wms)'
+                )}
+              </label>
               <input id="url" type="text" value={url} onChange={handleUrlChange}></input>
-              <label htmlFor="gisProxyUrl">{context.getLocalizedText('wmsLoader.gisProxyUrl', 'Enter Gis Proxy URL (optional, example: http://localhost:8181)')}</label>
+              <label htmlFor="gisProxyUrl">
+                {context.getLocalizedText(
+                  'wmsLoader.gisProxyUrl',
+                  'Enter Gis Proxy URL (optional, example: http://localhost:8181)'
+                )}
+              </label>
               <input id="gisProxyUrl" type="text" value={gisProxyUrl} onChange={handleGisProxyUrlChange}></input>
-              <button onClick={handleButtonClick}>{context.getLocalizedText('wmsLoader.load', 'Load capabilities')}</button>
+              <button onClick={handleButtonClick}>
+                {context.getLocalizedText('wmsLoader.load', 'Load capabilities')}
+              </button>
             </React.Fragment>
-          }
-          {capabilities != null &&
+          )}
+          {capabilities != null && (
             <React.Fragment>
               <LayerContainer>
                 {capabilities.Capability.Layer.Layer.map((layer: any) => {
@@ -90,9 +102,11 @@ export const WmsLoader = () => {
                   );
                 })}
               </LayerContainer>
-              <button onClick={handleAddButtonClick}>{context.getLocalizedText('wmsLoader.add', 'Add selected')}</button>
+              <button onClick={handleAddButtonClick}>
+                {context.getLocalizedText('wmsLoader.add', 'Add selected')}
+              </button>
             </React.Fragment>
-          }
+          )}
         </Container>
       )}
     </romapContext.Consumer>
