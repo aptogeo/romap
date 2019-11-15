@@ -73,6 +73,23 @@ export function revertCoordinate(geometry: OlSimpleGeometry) {
 }
 
 /**
+ * Get replacer for stringify.
+ */
+function getCircularReplacer() {
+  const seen: any[] = [];
+  return (key: string, value: any) => {
+    if (typeof value === 'object' && value !== null) {
+      const idx = seen.indexOf(value);
+      if (idx !== -1) {
+        return `[Circular ~.${idx}]`;
+      }
+      seen.push(value);
+    }
+    return value;
+  };
+}
+
+/**
  * Perform JSON equal.
  * @param obj1 object 1
  * @param obj2 object 2
@@ -93,7 +110,7 @@ export function jsonEqual(obj1: any, obj2: any, ignore?: string[]): boolean {
     }
   }
   try {
-    str1 = JSON.stringify(obj);
+    str1 = JSON.stringify(obj, getCircularReplacer());
   } catch (error) {
     console.error(error, obj);
   }
@@ -105,7 +122,7 @@ export function jsonEqual(obj1: any, obj2: any, ignore?: string[]): boolean {
     }
   }
   try {
-    str2 = JSON.stringify(obj);
+    str2 = JSON.stringify(obj, getCircularReplacer());
   } catch (error) {
     console.error(error, obj);
   }
