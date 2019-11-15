@@ -7,12 +7,11 @@ import { CounterWindow } from './CounterWindow';
 import { QueryWindow } from './QueryWindow';
 import { HideToolsButton } from './HideToolsButton';
 import { TileArcGISRest, ImageStatic, TileWms, Xyz } from '../source';
-import { Toc, ScaleLine, PanZoom } from '../tool';
+import { Toc, ScaleLine, PanZoom, LayerLoader } from '../tool';
 import { Image, Tile } from '../layer';
 import { Projection } from '../Projection';
 import { Control, Zone } from '../container';
 import { ShowSnapshot } from './ShowSnapshot';
-import { LayerLoader } from './LayerLoader';
 import { DrawLine } from './DrawLine';
 
 const wkt2154 =
@@ -27,6 +26,7 @@ const osm = new Xyz({
 
 const world2D = new TileArcGISRest({
   url: 'https://services.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer',
+  // url: 'http://localhost:8181/aHR0cHM6Ly9zZXJ2aWNlcy5hcmNnaXNvbmxpbmUuY29tL2FyY2dpcy9yZXN0L3NlcnZpY2VzL0VTUklfSW1hZ2VyeV9Xb3JsZF8yRA%3D%3D/MapServer',
   projection: 'EPSG:3857'
 });
 

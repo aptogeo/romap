@@ -21,19 +21,23 @@ export class DrawLine extends BaseButtonTool<IBaseButtonToolProps, any> {
 
   public context: IRomapContext;
 
-  public componentDidUpdate(prevProps: IBaseButtonToolProps, prevState: any, snap: any) {
-    if (this.props.activated && !prevProps.activated) {
-      draw = this.buildDrawInteraction();
+  public toolDidActivate(): void {
+    if (draw == null) {
+      console.log("add interaction");
+      draw = this.buildDrawInteractionAndLayer();
       this.context.olMap.addInteraction(draw);
-    } else {
-      if (draw != null) {
-        this.context.olMap.removeInteraction(draw);
-        draw = null;
-      }
     }
   }
 
-  public buildDrawInteraction(): Draw {
+  public toolDidDeactivate(): void {
+    if (draw != null) {
+      console.log("remove interaction");
+      this.context.olMap.removeInteraction(draw);
+      draw = null;
+    }
+  }
+
+  public buildDrawInteractionAndLayer(): Draw {
     const props = {
       uid: 'drawline_tool_layer',
       name: 'Line',

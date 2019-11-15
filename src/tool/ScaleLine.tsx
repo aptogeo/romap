@@ -103,7 +103,7 @@ export class ScaleLine extends BaseTool<IScaleLineProps, any> {
    */
   private divScaleLineLabel: any;
 
-  public componentDidMount() {
+  public toolDidConstruct() {
     this.context.olMap.on('change:view', this.onViewChange);
     setTimeout(() => {
       this.onViewChange();

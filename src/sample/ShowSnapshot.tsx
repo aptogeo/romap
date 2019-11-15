@@ -19,16 +19,9 @@ export class ShowSnapshot extends BaseWindowTool<IBaseWindowToolProps, any> {
     this.state = { snapshot: '' };
   }
 
-  public componentDidMount() {
+  public toolDidActivate() {
     const snapshot = JSON.stringify(this.context.layersManager.getSnapshot());
     this.setState({ snapshot });
-  }
-
-  public componentDidUpdate(prevProps: IBaseWindowToolProps, prevState: any, snap: any) {
-    const snapshot = JSON.stringify(this.context.layersManager.getSnapshot());
-    if (prevState.snapshot !== snapshot) {
-      this.setState({ snapshot });
-    }
   }
 
   public handleGetButtonClick = (event: any) => {

@@ -40,6 +40,33 @@ export class BaseTool<P extends IBaseToolProps, S> extends React.Component<P, S>
 
   public context: IRomapContext;
 
+  public componentDidMount() {
+    this.toolDidConstruct();
+    if (this.props.activated == true) {
+      this.toolDidActivate();
+    } else {
+      this.toolDidDeactivate();
+    }
+  }
+
+  public componentDidUpdate(prevProps: P, prevState: S, snap: any) {
+    if (this.props.activated == true && prevProps.activated != true) {
+      this.toolDidActivate();
+    }
+    if (this.props.activated != true && prevProps.activated == true) {
+      this.toolDidDeactivate();
+    }
+  }
+
+  public toolDidConstruct(): void {
+  }
+
+  public toolDidActivate(): void {
+  }
+
+  public toolDidDeactivate(): void {
+  }
+
   /**
    * Activate tool.
    */

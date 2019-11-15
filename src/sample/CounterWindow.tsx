@@ -4,19 +4,13 @@ import { IBaseWindowToolProps, BaseWindowTool } from '../tool';
 export class CounterWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
   public constructor(props: IBaseWindowToolProps) {
     super(props);
-    if (props.activated) {
-      this.state = { count: 1 };
-    } else {
       this.state = { count: 0 };
-    }
   }
 
-  public componentDidUpdate(prevProps: IBaseWindowToolProps, prevState: any, snap: any) {
-    if (this.props.activated && !prevProps.activated) {
-      this.setState({
-        count: this.state.count + 1
-      });
-    }
+  public toolDidActivate(): void {
+    this.setState({
+      count: this.state.count + 1
+    });
   }
 
   public renderHeaderContent(): React.ReactNode {

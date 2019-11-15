@@ -199,7 +199,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
    */
   private btnThumb: any;
 
-  public componentDidMount() {
+  public toolDidConstruct() {
     setTimeout(() => {
       this.origin = cloneView(this.context.olMap.getView());
       this.onViewChange();

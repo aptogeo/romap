@@ -71,8 +71,8 @@ export class Overlay extends BaseContainer<IOverlayProps, IOverlayState> {
     this.createOverlay();
   }
 
-  public componentDidUpdate(prevProps: IOverlayProps, prevState: IOverlayState, snapshot: any) {
-    super.componentDidUpdate(prevProps, prevState, snapshot);
+  public componentDidUpdate(prevProps: IOverlayProps, prevState: IOverlayState, snap: any) {
+    super.componentDidUpdate(prevProps, prevState, snap);
     this.state.overlay.setPositioning(this.props.positioning as any);
     this.computePosition();
   }

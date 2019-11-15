@@ -112,17 +112,21 @@ export class BaseWindowTool<
   }
 
   public componentDidMount() {
+    super.componentDidMount();
     if (this.props.defaultOpened) {
       this.open();
     }
   }
 
-  public componentDidUpdate(prevProps: P, prevState: S, snapshot: any) {
+  public componentDidUpdate(prevProps: P, prevState: S, snap: any) {
+    super.componentDidUpdate(prevProps, prevState, snap);
     const boundingRect: any = this.windowElement ? this.windowElement.getBoundingClientRect() : {};
     if (boundingRect.height !== 0 && boundingRect.width !== 0 && !this.state.bounds) {
       this.setState({
         bounds: {
           top: -boundingRect.top,
+          bottom: window.innerHeight - boundingRect.top- boundingRect.height,
+          left: -boundingRect.left,
           right: window.innerWidth - boundingRect.right
         }
       });
@@ -191,6 +195,7 @@ export class BaseWindowTool<
   };
 
   public handleWindowClick = () => {
+    this.setState({ zIndex: topZIndex++ });
     this.activate();
   };
 

@@ -154,7 +154,7 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
     }
   }
 
-  public componentDidUpdate(prevProps: IRomapProps, prevState: IRomapState, snapshot: any) {
+  public componentDidUpdate(prevProps: IRomapProps, prevState: IRomapState, snap: any) {
     this.layersManager.fromChildren(this.props.children);
     this.toolsManager.fromChildren(this.props.children);
     if (this.props.afterUpdate) {

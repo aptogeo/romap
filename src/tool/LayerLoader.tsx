@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { IBaseWindowToolProps, BaseWindowTool, IBaseWindowToolState } from '../tool/BaseWindowTool';
-import { Selector } from '../tool/common/Selector';
-import { WmsLoader } from '../tool/common/WmsLoader';
+import { IBaseWindowToolProps, BaseWindowTool, IBaseWindowToolState } from './BaseWindowTool';
+import { Selector } from './common/Selector';
+import { WmsLoader } from './common/WmsLoader';
 import { loadKML, loadKMZ, loadZippedShapefile } from '../utils';
 
 const Container = styled.div`

@@ -16,23 +16,11 @@ export class QueryWindow extends BaseWindowTool<IBaseWindowToolProps, any> {
     this.state = { queryResponses: null };
   }
 
-  public componentDidMount() {
-    if (this.props.activated) {
-      this.context.olMap.on('click', this.handleClick);
-    } else {
-      this.context.olMap.un('click', this.handleClick);
-    }
+  public toolDidActivate(): void {
+    this.context.olMap.on('click', this.handleClick);
   }
 
-  public componentDidUpdate(prevProps: IBaseWindowToolProps, prevState: any, snap: any) {
-    if (this.props.activated) {
-      this.context.olMap.on('click', this.handleClick);
-    } else {
-      this.context.olMap.un('click', this.handleClick);
-    }
-  }
-
-  public componentWillUnmount() {
+  public toolDidDeactivate(): void {
     this.context.olMap.un('click', this.handleClick);
   }
 
