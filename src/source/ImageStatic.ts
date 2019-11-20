@@ -43,7 +43,11 @@ export class ImageStatic extends OlImageStatic implements IImage {
   query(request: IQueryRequest): Promise<IQueryResponse> {
     return Promise.resolve({
       request,
-      features: []
+      featureTypeResponses: [
+        {
+          features: []
+        }
+      ]
     });
   }
 }

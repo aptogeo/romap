@@ -19,8 +19,8 @@ export interface ISnapshotProjection {
 }
 
 export interface ISnapshotLayer {
-  getSourceTypeName: string;
-  getSourceOptions: any;
+  sourceTypeName: string;
+  sourceOptions: any;
   props: any;
 }
 

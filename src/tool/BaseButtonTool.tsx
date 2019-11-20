@@ -24,7 +24,7 @@ export class BaseButtonTool<P extends IBaseButtonToolProps = IBaseButtonToolProp
     buttonTitle: ''
   };
 
-  public handleButtonClick = (event: any) => {
+  public handleBaseButtonClick = (event: any) => {
     event.preventDefault();
     if (!this.props.disabled) {
       if (this.props.onButtonClick) {
@@ -48,7 +48,7 @@ export class BaseButtonTool<P extends IBaseButtonToolProps = IBaseButtonToolProp
       ${this.props.activated ? `${this.props.className}-activated` : `${this.props.className}-unactivated`}
       ${this.props.disabled ? `${this.props.className}-disabled` : `${this.props.className}-activated`}`;
     return (
-      <button className={className} title={this.props.buttonTitle} onClick={this.handleButtonClick}>
+      <button className={className} title={this.props.buttonTitle} onClick={this.handleBaseButtonClick}>
         {this.renderTool()}
       </button>
     );

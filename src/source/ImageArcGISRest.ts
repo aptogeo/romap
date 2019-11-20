@@ -31,7 +31,11 @@ export class ImageArcGISRest extends OlImageArcGISRest implements IImage {
     const features = [] as OlFeature[];
     return Promise.resolve({
       request,
-      features
+      featureTypeResponses: [
+        {
+          features
+        }
+      ]
     });
   }
 }

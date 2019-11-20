@@ -191,47 +191,76 @@ export function getDefaultLayerStyles(): LayerStyles {
 /**
  * Load KML from file.
  */
-export function loadKML(file: File, layersManager: LayersManager) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    const kmlString = reader.result as string;
-    const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
-    const features: Feature[] = kmlFormat.readFeatures(kmlString, {
-      featureProjection: layersManager
-        .getOlMap()
-        .getView()
-        .getProjection()
-    }) as Feature[];
-    const localVectorSource = layersManager.createAndAddLayerFromSource(
-      'LocalVector',
-      {},
-      { uid: uid(), name }
-    ) as LocalVector;
-    localVectorSource.addFeatures(features);
-  };
-  reader.readAsText(file);
+export function loadKML(file: File, layersManager: LayersManager): Promise<React.Key> {
+  return new Promise<React.Key>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const kmlString = reader.result as string;
+      const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
+      const features: Feature[] = kmlFormat.readFeatures(kmlString, {
+        featureProjection: layersManager
+          .getOlMap()
+          .getView()
+          .getProjection()
+      }) as Feature[];
+      const layerProps = {
+        uid: uid(),
+        name,
+        layerStyles: getDefaultLayerStyles(),
+        type: 'OVERLAY'
+      };
+      const localVectorSource = layersManager.createAndAddLayerFromSource('LocalVector', {}, layerProps) as LocalVector;
+      localVectorSource.addFeatures(features);
+      resolve(layerProps.uid);
+    };
+    reader.readAsText(file);
+  });
 }
 
 /**
  * Load KMZ from file.
  */
-export function loadKMZ(file: File, layersManager: LayersManager) {
-  const zipFile = new JSZip();
-  zipFile.loadAsync(file).then(zip => {
-    const promises = Object.keys(zip.files)
-      .map(name => zip.files[name])
-      .map(entry =>
-        entry.async('blob').then(blob => ({
-          name: entry.name,
-          blob
-        }))
-      );
-    Promise.all(promises).then(elements => {
-      const imageElements = elements.filter(element => /\.(jpe?g|png|gif|bmp)$/i.test(element.name));
-      const docElement = elements.filter(element => element.name === 'doc.kml').pop();
-      const reader = new FileReader();
-      reader.onload = () => {
-        const kmlString = reader.result as string;
+export function loadKMZ(file: File, layersManager: LayersManager): Promise<React.Key> {
+  return new Promise<React.Key>((resolve, reject) => {
+    const zipFile = new JSZip();
+    zipFile.loadAsync(file).then(zip => {
+      const promises = Object.keys(zip.files)
+        .map(name => zip.files[name])
+        .map(
+          entry =>
+            new Promise<{ name: string; data: string }>((resolve, reject) => {
+              entry.async('blob').then(blob => {
+                if (/\.(jpe?g|png|gif|bmp)$/i.test(entry.name)) {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    resolve({
+                      name: entry.name,
+                      data: reader.result as any
+                    });
+                  };
+                  reader.readAsDataURL(blob);
+                } else {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    resolve({
+                      name: entry.name,
+                      data: reader.result as any
+                    });
+                  };
+                  reader.readAsText(blob);
+                }
+              });
+            })
+        );
+      Promise.all(promises).then(elements => {
+        const imageElements = elements.filter(element => /\.(jpe?g|png|gif|bmp)$/i.test(element.name));
+        const docElement = elements.filter(element => element.name === 'doc.kml').pop();
+        let kmlString = docElement.data;
+        imageElements.forEach(imageElement => {
+          const name = imageElement.name.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
+          kmlString = kmlString.replace(new RegExp(name, 'g'), imageElement.data);
+        });
+        console.log(kmlString);
         const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
         const features: Feature[] = kmlFormat.readFeatures(kmlString, {
           featureProjection: layersManager
@@ -239,15 +268,20 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
             .getView()
             .getProjection()
         }) as Feature[];
-        const props = {
+        const layerProps = {
           uid: uid(),
           name,
-          layerStyles: getDefaultLayerStyles()
+          layerStyles: getDefaultLayerStyles(),
+          type: 'OVERLAY'
         };
-        const localVectorSource = layersManager.createAndAddLayerFromSource('LocalVector', {}, props) as LocalVector;
+        const localVectorSource = layersManager.createAndAddLayerFromSource(
+          'LocalVector',
+          {},
+          layerProps
+        ) as LocalVector;
         localVectorSource.addFeatures(features);
-      };
-      reader.readAsText(docElement.blob);
+        resolve(layerProps.uid);
+      });
     });
   });
 }
@@ -255,4 +289,36 @@ export function loadKMZ(file: File, layersManager: LayersManager) {
 /**
  * Load zipped Shapefile from file.
  */
-export function loadZippedShapefile(file: File, layersManager: LayersManager) {}
+export function loadZippedShapefile(file: File, layersManager: LayersManager): Promise<React.Key> {
+  return new Promise<React.Key>((resolve, reject) => {
+    resolve(null);
+  });
+}
+
+/**
+ * Load WMS.
+ */
+export function loadWMS(
+  title: string,
+  serverUrl: string,
+  types: IFeatureType<string>[],
+  gisProxyUrl: string,
+  layersManager: LayersManager
+): Promise<React.Key> {
+  return new Promise<React.Key>((resolve, reject) => {
+    let url = serverUrl;
+    if (gisProxyUrl != null && gisProxyUrl !== '') {
+      url = `${gisProxyUrl}/${btoa(serverUrl)
+        .replace('=', '%3D')
+        .replace('/', '%2F')
+        .replace('+', '%2B')}?service=WMS&version=1.3.0&request=GetCapabilities`;
+    }
+    const layerProps = {
+      uid: uid(),
+      name: title,
+      type: 'OVERLAY'
+    };
+    layersManager.createAndAddLayerFromSource('ImageWms', { types, url }, layerProps);
+    resolve(layerProps.uid);
+  });
+}

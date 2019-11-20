@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { romapContext } from '../../RomapContext';
 import WMSCapabilities from 'ol/format/WMSCapabilities';
 import { send, IResponse } from 'bhreq';
-import { toByteArray as b64encode } from 'base64-js';
+import { loadWMS } from '../../utils';
+import { LayersManager } from '../../LayersManager';
+import { IFeatureType } from '../../source';
 
 const Container = styled.div`
   display: flex;
@@ -24,22 +26,27 @@ const parser = new WMSCapabilities();
 
 export const WmsLoader = () => {
   const [capabilities, setCapabilities] = React.useState<any>(null);
-  const [url, setUrl] = React.useState<string>('');
+  const [title, setTitle] = React.useState<string>('');
+  const [serverUrl, setServerUrl] = React.useState<string>('');
   const [gisProxyUrl, setGisProxyUrl] = React.useState<string>('');
   const [selected, setSelected] = React.useState<string[]>([]);
 
-  const handleUrlChange = (event: any) => {
-    setUrl(event.currentTarget.value);
+  const handleTitleChange = (event: any) => {
+    setTitle(event.currentTarget.value);
   };
 
-  const handleGisProxyUrlChange = (event: any) => {
+  const handleUrlChange = (event: any) => {
+    setServerUrl(event.currentTarget.value);
+  };
+
+  const handleGisProxyUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGisProxyUrl(event.currentTarget.value);
   };
 
   const handleButtonClick = (event: any) => {
-    let capUrl = url;
-    if (gisProxyUrl !== '') {
-      capUrl = `${gisProxyUrl}/${btoa(url)
+    let capUrl = serverUrl;
+    if (gisProxyUrl != null && gisProxyUrl !== '') {
+      capUrl = `${gisProxyUrl}/${btoa(serverUrl)
         .replace('=', '%3D')
         .replace('/', '%2F')
         .replace('+', '%2B')}?service=WMS&version=1.3.0&request=GetCapabilities`;
@@ -49,15 +56,21 @@ export const WmsLoader = () => {
     });
   };
 
-  const handleCheckboxChange = (name: string) => (e: any) => {
-    if (e.currentTarget.checked === true) {
+  const handleCheckboxChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.checked === true) {
       setSelected(selected.concat([name]));
     } else {
-      setSelected(selected.splice(selected.indexOf(name), 1));
+      setSelected(selected.filter((elem: string) => elem !== name));
     }
   };
 
-  const handleAddButtonClick = (event: any) => {};
+  const handleAddButtonClick = (layersManager: LayersManager) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    const types: IFeatureType<string>[] = [];
+    selected.forEach((service: string) => {
+      types.push({ id: service });
+    });
+    loadWMS(title, serverUrl, types, gisProxyUrl, layersManager);
+  };
 
   return (
     <romapContext.Consumer>
@@ -65,28 +78,33 @@ export const WmsLoader = () => {
         <Container>
           {capabilities == null && (
             <React.Fragment>
-              <label htmlFor="url">
+              <label htmlFor="serverUrl">
                 {context.getLocalizedText(
-                  'wmsLoader.url',
-                  'Enter WMS URL (required, example: http://172.20.0.3:8080/geoserver/wms)'
+                  'wmsLoader.serverUr',
+                  'Enter WMS Server URL* (example: http://172.20.0.3:8080/geoserver/wms)'
                 )}
               </label>
-              <input id="url" type="text" value={url} onChange={handleUrlChange}></input>
+              <input id="url" type="text" value={serverUrl} onChange={handleUrlChange}></input>
               <label htmlFor="gisProxyUrl">
                 {context.getLocalizedText(
                   'wmsLoader.gisProxyUrl',
-                  'Enter Gis Proxy URL (optional, example: http://localhost:8181)'
+                  'Enter Gis Proxy URL (example: http://localhost:8181)'
                 )}
               </label>
               <input id="gisProxyUrl" type="text" value={gisProxyUrl} onChange={handleGisProxyUrlChange}></input>
-              <button onClick={handleButtonClick}>
+              <button onClick={handleButtonClick} disabled={serverUrl === ''}>
                 {context.getLocalizedText('wmsLoader.load', 'Load capabilities')}
               </button>
             </React.Fragment>
           )}
           {capabilities != null && (
             <React.Fragment>
+              <label htmlFor="title">
+                {context.getLocalizedText('wmsLoader.title', 'Enter title* (required, example: WMS service)')}
+              </label>
+              <input id="title" type="text" value={title} onChange={handleTitleChange}></input>
               <LayerContainer>
+                <label>{context.getLocalizedText('wmsLoader.selection', 'Select layers*')}</label>
                 {capabilities.Capability.Layer.Layer.map((layer: any) => {
                   return (
                     <li>
@@ -102,7 +120,10 @@ export const WmsLoader = () => {
                   );
                 })}
               </LayerContainer>
-              <button onClick={handleAddButtonClick}>
+              <button
+                onClick={handleAddButtonClick(context.layersManager)}
+                disabled={title === '' || selected.length === 0}
+              >
                 {context.getLocalizedText('wmsLoader.add', 'Add selected')}
               </button>
             </React.Fragment>

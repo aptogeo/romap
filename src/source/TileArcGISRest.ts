@@ -31,7 +31,11 @@ export class TileArcGISRest extends OlTileArcGISRest implements ITileImage {
     const features = [] as OlFeature[];
     return Promise.resolve({
       request,
-      features
+      featureTypeResponses: [
+        {
+          features
+        }
+      ]
     });
   }
 }

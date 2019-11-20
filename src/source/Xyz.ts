@@ -15,10 +15,13 @@ export class Xyz extends OlXyz implements ITileImage {
   }
 
   public query(request: IQueryRequest): Promise<IQueryResponse> {
-    const features = [] as OlFeature[];
     return Promise.resolve({
       request,
-      features
+      featureTypeResponses: [
+        {
+          features: []
+        }
+      ]
     });
   }
 

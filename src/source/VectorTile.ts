@@ -29,7 +29,11 @@ export abstract class VectorTile extends OlVectorTile implements IExtended {
   public query(request: IQueryRequest): Promise<IQueryResponse> {
     return Promise.resolve({
       request,
-      features: []
+      featureTypeResponses: [
+        {
+          features: []
+        }
+      ]
     });
   }
 }

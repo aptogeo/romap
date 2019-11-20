@@ -79,7 +79,11 @@ export abstract class Vector extends OlVector implements IVector {
     }
     return Promise.resolve({
       request,
-      features
+      featureTypeResponses: [
+        {
+          features
+        }
+      ]
     });
   }
 }

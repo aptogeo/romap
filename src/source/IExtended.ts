@@ -24,6 +24,11 @@ export interface IQueryRequest {
 
 export interface IQueryResponse {
   request: IQueryRequest;
+  featureTypeResponses: IQueryFeatureTypeResponse[];
+}
+
+export interface IQueryFeatureTypeResponse {
+  type?: IFeatureType<any>;
   features: OlFeature[];
 }
 
