@@ -6,7 +6,11 @@ import { IQueryRequest, IFeatureType, IQueryFeatureTypeResponse } from '../IExte
 import { send } from 'bhreq';
 import { toGeoJSONGeometry, revertCoordinate, disjoint } from '../../utils';
 
-export function wmsQueryOne(serviceUrl: string, type: IFeatureType<string>, request: IQueryRequest): Promise<IQueryFeatureTypeResponse> {
+export function wmsQueryOne(
+  serviceUrl: string,
+  type: IFeatureType<string>,
+  request: IQueryRequest
+): Promise<IQueryFeatureTypeResponse> {
   const { mapProjection, geometry, geometryProjection, limit } = request;
   let extent = transformExtent(geometry.getExtent(), geometryProjection, mapProjection);
   if (extent[0] > extent[2]) {
@@ -23,9 +27,9 @@ export function wmsQueryOne(serviceUrl: string, type: IFeatureType<string>, requ
   const cql = ''; // TODO
   let url = `${serviceUrl}?SERVICE=WMS&VERSION=1.1.0&REQUEST=GetFeatureInfo&QUERY_LAYERS=${type.id}&LAYERS=${
     type.id
-    }&SLD_BODY=${encodeURIComponent(sld)}&X=1&Y=1&SRS=${mapProjection.getCode()}&WIDTH=3&HEIGHT=3&BBOX=${extent.join(
-      ','
-    )}&INFO_FORMAT=application/vnd.ogc.gml`;
+  }&SLD_BODY=${encodeURIComponent(sld)}&X=1&Y=1&SRS=${mapProjection.getCode()}&WIDTH=3&HEIGHT=3&BBOX=${extent.join(
+    ','
+  )}&INFO_FORMAT=application/vnd.ogc.gml`;
   if (cql != null && cql != '') {
     url += `&CQL_FILTER=${cql}`;
   }
