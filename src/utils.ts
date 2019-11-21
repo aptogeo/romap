@@ -2,14 +2,20 @@ import OlMap from 'ol/Map';
 import OlGroupLayer from 'ol/layer/Group';
 import OlBaseLayer from 'ol/layer/Base';
 import OlView from 'ol/View';
+import OlGeometry from 'ol/geom/Geometry';
 import OlSimpleGeometry from 'ol/geom/SimpleGeometry';
 import { IFeatureType, LocalVector } from './source';
 import { LayersManager } from './LayersManager';
 import KML from 'ol/format/KML';
+import GeoJSON, { GeoJSONGeometry } from 'ol/format/GeoJSON';
 import Feature from 'ol/Feature';
 import * as JSZip from 'jszip';
 import { LayerStyles } from './LayerStyles';
+import { fromCircle } from 'ol/geom/Polygon';
+import Circle from 'ol/geom/Circle';
+import booleanDisjoint from '@turf/boolean-disjoint';
 
+const geoJSONFormat = new GeoJSON();
 const kmlFormat = new KML({ extractStyles: true, showPointNames: false });
 
 /**
@@ -70,6 +76,26 @@ export function revertCoordinate(geometry: OlSimpleGeometry) {
     }
     return ouput;
   });
+}
+
+/**
+ * Transform OpenLayers geometry to GeoJSON geometry
+ * @param geometry OpenLayers geometry
+ */
+export function toGeoJSONGeometry(geometry: OlGeometry): GeoJSONGeometry {
+  if (geometry.getType() === 'Circle') {
+    geometry = fromCircle(geometry as Circle);
+  }
+  return (geoJSONFormat.writeGeometryObject(geometry) as any) as GeoJSONGeometry;
+}
+
+/**
+ * Check if two geojson geometries are disjoint
+ * @param g1 GeoJSON geometry
+ * @param g2 GeoJSON geometry
+ */
+export function disjoint(g1: GeoJSONGeometry, g2: GeoJSONGeometry) {
+  return booleanDisjoint(g1 as any, g2 as any);
 }
 
 /**
@@ -311,7 +337,7 @@ export function loadWMS(
       url = `${gisProxyUrl}/${btoa(serverUrl)
         .replace('=', '%3D')
         .replace('/', '%2F')
-        .replace('+', '%2B')}?service=WMS&version=1.3.0&request=GetCapabilities`;
+        .replace('+', '%2B')}`;
     }
     const layerProps = {
       uid: uid(),

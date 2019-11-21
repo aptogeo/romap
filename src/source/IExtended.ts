@@ -14,11 +14,10 @@ export interface IExtended extends OlSource {
 }
 
 export interface IQueryRequest {
-  mapProjection?: OlProjection;
-  geometry?: OlGeometry;
-  geometryProjection?: OlProjection;
+  mapProjection: OlProjection;
+  geometry: OlGeometry;
+  geometryProjection: OlProjection;
   filters?: IFilter[];
-  offset?: number;
   limit?: number;
 }
 
@@ -62,7 +61,9 @@ export function constructQueryRequestFromPixel(pixel: number[], tolerance: numbe
     coord[1] + tolerance * resolution
   ];
   return {
-    geometry: fromExtent(extent)
+    mapProjection: olMap.getView().getProjection(),
+    geometry: fromExtent(extent),
+    geometryProjection: olMap.getView().getProjection()
   };
 }
 

@@ -58,11 +58,17 @@ export class BaseTool<P extends IBaseToolProps, S> extends React.Component<P, S>
     }
   }
 
+  public componentWillUnmount() {
+    this.toolDidDestroy();
+  }
+
   public toolDidConstruct(): void {}
 
   public toolDidActivate(): void {}
 
   public toolDidDeactivate(): void {}
+
+  public toolDidDestroy(): void {}
 
   /**
    * Activate tool.
