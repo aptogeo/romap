@@ -133,7 +133,7 @@ export class LocalVector extends Vector {
     }
   };
 
-  private handleChangeGeometry(event: any) {
+  private handleChangeGeometry = (event: any) => {
     const geometry = event.target;
     if (geometry != null) {
       const feature = geometry.get('feature');
@@ -142,5 +142,5 @@ export class LocalVector extends Vector {
         this.setOriginal(feature);
       }
     }
-  }
+  };
 }
