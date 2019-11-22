@@ -47,6 +47,8 @@
     "ol": "6.1.1",
     "prettier": "^1.19.1",
     "proj4": "2.6.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "rimraf": "^3.0.0",
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.0.0",
@@ -63,14 +65,13 @@
     "bhreq": "0.0.12",
     "jszip": "^3.2.2",
     "ol-mapbox-style": "^5.0.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
     "react-draggable": "^4.1.0",
     "styled-components": "^4.4.1"
   },
   "peerDependencies": {
     "ol": "6.1.1",
-    "proj4": "2.6.0"
+    "proj4": "2.6.0",
+    "react": "^16.12.0"
   },
   "engines": {
     "node": ">= 10.10.0",
