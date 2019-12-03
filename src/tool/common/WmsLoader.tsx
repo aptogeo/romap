@@ -24,11 +24,18 @@ const LayerContainer = styled.ul`
 
 const parser = new WMSCapabilities();
 
-export const WmsLoader = () => {
+export interface IWmsLoaderProps {
+  /**
+   * Fixed GIS proxy url
+   */
+  gisProxyUrl?: string;
+}
+
+export const WmsLoader = (props: IWmsLoaderProps) => {
   const [capabilities, setCapabilities] = React.useState<any>(null);
   const [title, setTitle] = React.useState<string>('');
   const [serverUrl, setServerUrl] = React.useState<string>('');
-  const [gisProxyUrl, setGisProxyUrl] = React.useState<string>('');
+  const [gisProxyUrl, setGisProxyUrl] = React.useState<string>(props.gisProxyUrl ? props.gisProxyUrl : '');
   const [selected, setSelected] = React.useState<string[]>([]);
 
   const handleTitleChange = (event: any) => {
@@ -85,13 +92,17 @@ export const WmsLoader = () => {
                 )}
               </label>
               <input id="url" type="text" value={serverUrl} onChange={handleUrlChange}></input>
-              <label htmlFor="gisProxyUrl">
-                {context.getLocalizedText(
-                  'wmsLoader.gisProxyUrl',
-                  'Enter Gis Proxy URL (example: http://localhost:8181)'
-                )}
-              </label>
-              <input id="gisProxyUrl" type="text" value={gisProxyUrl} onChange={handleGisProxyUrlChange}></input>
+              {(props.gisProxyUrl == null || props.gisProxyUrl === '') &&
+                <React.Fragment>
+                  <label htmlFor="gisProxyUrl">
+                    {context.getLocalizedText(
+                      'wmsLoader.gisProxyUrl',
+                      'Enter Gis Proxy URL (example: http://localhost:8181)'
+                    )}
+                  </label>
+                  <input id="gisProxyUrl" type="text" value={gisProxyUrl} onChange={handleGisProxyUrlChange}></input>
+                </React.Fragment>
+              }
               <button onClick={handleButtonClick} disabled={serverUrl === ''}>
                 {context.getLocalizedText('wmsLoader.load', 'Load capabilities')}
               </button>

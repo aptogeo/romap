@@ -91,7 +91,7 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
               <CounterButton uid="CounterButton3" />
               <CounterWindow uid="CounterWindow" />
               <QueryWindow uid="QueryWindow" />
-              <LayerLoader uid="LayerLoader" />
+              <LayerLoader uid="LayerLoader" gisProxyUrl="http://localhost:8181" />
               <ShowSnapshot uid="ShowSnapshot" />
               <DrawLine uid="DrawLine" />
             </Zone>
