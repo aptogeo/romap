@@ -92,7 +92,7 @@ export const WmsLoader = (props: IWmsLoaderProps) => {
                 )}
               </label>
               <input id="url" type="text" value={serverUrl} onChange={handleUrlChange}></input>
-              {(props.gisProxyUrl == null || props.gisProxyUrl === '') &&
+              {(props.gisProxyUrl == null || props.gisProxyUrl === '') && (
                 <React.Fragment>
                   <label htmlFor="gisProxyUrl">
                     {context.getLocalizedText(
@@ -102,7 +102,7 @@ export const WmsLoader = (props: IWmsLoaderProps) => {
                   </label>
                   <input id="gisProxyUrl" type="text" value={gisProxyUrl} onChange={handleGisProxyUrlChange}></input>
                 </React.Fragment>
-              }
+              )}
               <button onClick={handleButtonClick} disabled={serverUrl === ''}>
                 {context.getLocalizedText('wmsLoader.load', 'Load capabilities')}
               </button>

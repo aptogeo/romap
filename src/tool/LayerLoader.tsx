@@ -83,7 +83,11 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
               { type: '.kml', description: 'KML (.kml)', showFileDropZone: true },
               { type: '.kmz', description: 'KMZ (.kmz)', showFileDropZone: true },
               { type: '.zip', description: 'Zipped Shapefile (.zip)', showFileDropZone: true },
-              { type: 'WMS', description: 'Web Map Service', content: <WmsLoader gisProxyUrl={this.props.gisProxyUrl} /> }
+              {
+                type: 'WMS',
+                description: 'Web Map Service',
+                content: <WmsLoader gisProxyUrl={this.props.gisProxyUrl} />
+              }
             ]}
             onFileSelected={this.handleFileSelectorChange}
             onTypeSelected={this.handleTypeSelectorChange}
