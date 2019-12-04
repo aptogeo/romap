@@ -39,17 +39,14 @@ export const WmsLoader = (props: IWmsLoaderProps) => {
   const [selected, setSelected] = React.useState<string[]>([]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     setTitle(event.currentTarget.value);
   };
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     setServerUrl(event.currentTarget.value);
   };
 
   const handleGisProxyUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     setGisProxyUrl(event.currentTarget.value);
   };
 
@@ -68,7 +65,6 @@ export const WmsLoader = (props: IWmsLoaderProps) => {
   };
 
   const handleCheckboxChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     if (event.currentTarget.checked === true) {
       setSelected(selected.concat([name]));
     } else {

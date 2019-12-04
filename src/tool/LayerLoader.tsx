@@ -38,14 +38,12 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
   }
 
   public handleTypeSelectorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    event.preventDefault();
     this.setState({
       type: event.currentTarget.value
     });
   };
 
   public handleFileSelectorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     const file: File = event.currentTarget.files[0];
     switch (this.state.type) {
       case '.kml':

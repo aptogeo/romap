@@ -55,12 +55,10 @@ export class Toc extends BaseTool<ITocProps, {}> {
   public context: IRomapContext;
 
   public handleRadioChange = (key: React.Key) => (e: React.ChangeEvent) => {
-    event.preventDefault();
     this.context.layersManager.updateLayerProps(key, { visible: true });
   };
 
   public handleCheckboxChange = (key: React.Key) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     this.context.layersManager.updateLayerProps(key, { visible: e.currentTarget.checked });
   };
 
