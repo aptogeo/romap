@@ -183,7 +183,7 @@ export class BaseWindowTool<
     });
   }
 
-  public handleButtonClick = (event: any) => {
+  public handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!this.props.disabled) {
       if (this.props.onButtonClick) {
@@ -194,12 +194,12 @@ export class BaseWindowTool<
     }
   };
 
-  public handleWindowClick = () => {
+  public handleWindowClick = (event: React.MouseEvent<HTMLDivElement>) => {
     this.setState({ zIndex: topZIndex++ });
     this.activate();
   };
 
-  public handleCloseClick = (event: any) => {
+  public handleCloseClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.close();
   };

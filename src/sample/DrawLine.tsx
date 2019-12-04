@@ -54,7 +54,7 @@ export class DrawLine extends BaseButtonTool<IBaseButtonToolProps, any> {
     });
   }
 
-  public renderTool(): any {
+  public renderTool(): React.ReactNode {
     return <span>Draw line</span>;
   }
 }

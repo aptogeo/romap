@@ -38,19 +38,23 @@ export const WmsLoader = (props: IWmsLoaderProps) => {
   const [gisProxyUrl, setGisProxyUrl] = React.useState<string>(props.gisProxyUrl ? props.gisProxyUrl : '');
   const [selected, setSelected] = React.useState<string[]>([]);
 
-  const handleTitleChange = (event: any) => {
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     setTitle(event.currentTarget.value);
   };
 
-  const handleUrlChange = (event: any) => {
+  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     setServerUrl(event.currentTarget.value);
   };
 
   const handleGisProxyUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     setGisProxyUrl(event.currentTarget.value);
   };
 
-  const handleButtonClick = (event: any) => {
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     let capUrl = serverUrl;
     if (gisProxyUrl != null && gisProxyUrl !== '') {
       capUrl = `${gisProxyUrl}/${btoa(serverUrl)
@@ -64,6 +68,7 @@ export const WmsLoader = (props: IWmsLoaderProps) => {
   };
 
   const handleCheckboxChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     if (event.currentTarget.checked === true) {
       setSelected(selected.concat([name]));
     } else {
@@ -72,6 +77,7 @@ export const WmsLoader = (props: IWmsLoaderProps) => {
   };
 
   const handleAddButtonClick = (layersManager: LayersManager) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     const types: IFeatureType<string>[] = [];
     selected.forEach((service: string) => {
       types.push({ id: service });

@@ -249,41 +249,49 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     this.btnThumb.style.top = (this.containerThumb.offsetHeight - btnThumbHeight) * position - btnThumbHeight + 'px';
   };
 
-  public handleZoom = () => {
+  public handleZoom = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     this.zoom(1);
   };
 
-  public handleUnzoom = () => {
+  public handleUnzoom = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     this.zoom(-1);
   };
 
-  public handleOrigin = () => {
+  public handleOrigin = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     if (this.origin) {
       this.context.olMap.setView(cloneView(this.origin));
     }
   };
 
-  public handleLeft = () => {
-    this.handleResetRotation();
+  public handleLeft = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.handleResetRotation(event);
     this.pan(-128, 0);
   };
 
-  public handleRight = () => {
-    this.handleResetRotation();
+  public handleRight = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.handleResetRotation(event);
     this.pan(128, 0);
   };
 
-  public handleUp = () => {
-    this.handleResetRotation();
+  public handleUp = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.handleResetRotation(event);
     this.pan(0, 128);
   };
 
-  public handleDown = () => {
-    this.handleResetRotation();
+  public handleDown = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.handleResetRotation(event);
     this.pan(0, -128);
   };
 
-  public handleResetRotation = () => {
+  public handleResetRotation = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     const view = this.context.olMap.getView();
     if (view.getRotation() !== undefined) {
       if (view.getAnimating()) {
@@ -326,7 +334,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     });
   }
 
-  public renderPan(): any {
+  public renderPan(): React.ReactNode {
     if (!this.props.showPan) {
       return null;
     }
@@ -354,7 +362,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     );
   }
 
-  public renderZoom(): any {
+  public renderZoom(): React.ReactNode {
     if (!this.props.showZoom) {
       return null;
     }
@@ -387,7 +395,7 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     );
   }
 
-  public renderRotation(): any {
+  public renderRotation(): React.ReactNode {
     if (!this.props.showRotation) {
       return null;
     }

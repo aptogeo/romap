@@ -24,25 +24,25 @@ export class ShowSnapshot extends BaseWindowTool<IBaseWindowToolProps, any> {
     this.setState({ snapshot });
   }
 
-  public handleGetButtonClick = (event: any) => {
+  public handleGetButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const snapshot = JSON.stringify(this.context.layersManager.getSnapshot());
     this.setState({ snapshot });
   };
 
-  public handleReloadButtonClick = (event: any) => {
+  public handleReloadButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const snapshot = JSON.parse(this.state.snapshot);
     this.context.layersManager.reloadFromSnapshot(snapshot);
   };
 
-  public handleClearButtonClick = (event: any) => {
+  public handleClearButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const clearSnapshot = { ...JSON.parse(this.state.snapshot), layers: [] };
     this.context.layersManager.reloadFromSnapshot(clearSnapshot);
   };
 
-  public handleTextareaChange = (event: any) => {
+  public handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({ snapshot: event.target.value });
   };
 

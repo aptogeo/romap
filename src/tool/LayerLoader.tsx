@@ -37,14 +37,16 @@ export class LayerLoader extends BaseWindowTool<ILayerLoaderProps, ILayerLoaderS
     this.state = {} as Readonly<ILayerLoaderState>;
   }
 
-  public handleTypeSelectorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  public handleTypeSelectorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    event.preventDefault();
     this.setState({
-      type: e.currentTarget.value
+      type: event.currentTarget.value
     });
   };
 
-  public handleFileSelectorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file: File = e.currentTarget.files[0];
+  public handleFileSelectorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const file: File = event.currentTarget.files[0];
     switch (this.state.type) {
       case '.kml':
         this.setState({ file });
