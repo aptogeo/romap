@@ -14,6 +14,8 @@ import { LayerStyles } from './LayerStyles';
 import { fromCircle } from 'ol/geom/Polygon';
 import Circle from 'ol/geom/Circle';
 import booleanDisjoint from '@turf/boolean-disjoint';
+import * as shapefile2geojson from 'shapefile2geojson';
+import { addProjection } from './Projection';
 
 const geoJSONFormat = new GeoJSON();
 const kmlFormat = new KML({ extractStyles: true, showPointNames: false });
@@ -165,7 +167,7 @@ export function uid(): React.Key {
     d += performance.now(); //use high-precision timer if available
   }
   return (
-    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function(c) {
+    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function (c) {
       var r = (d + Math.random() * 16) % 16 | 0;
       d = Math.floor(d / 16);
       return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
@@ -278,36 +280,40 @@ export function loadKMZ(file: File, layersManager: LayersManager): Promise<React
               });
             })
         );
-      Promise.all(promises).then(elements => {
-        const imageElements = elements.filter(element => /\.(jpe?g|png|gif|bmp)$/i.test(element.name));
-        const docElement = elements.filter(element => element.name === 'doc.kml').pop();
-        let kmlString = docElement.data;
-        imageElements.forEach(imageElement => {
-          const name = imageElement.name.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
-          kmlString = kmlString.replace(new RegExp(name, 'g'), imageElement.data);
-        });
-        console.log(kmlString);
-        const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
-        const features: Feature[] = kmlFormat.readFeatures(kmlString, {
-          featureProjection: layersManager
-            .getOlMap()
-            .getView()
-            .getProjection()
-        }) as Feature[];
-        const layerProps = {
-          uid: uid(),
-          name,
-          layerStyles: getDefaultLayerStyles(),
-          type: 'OVERLAY'
-        };
-        const localVectorSource = layersManager.createAndAddLayerFromSource(
-          'LocalVector',
-          {},
-          layerProps
-        ) as LocalVector;
-        localVectorSource.addFeatures(features);
-        resolve(layerProps.uid);
-      });
+      Promise.all(promises).then(
+        elements => {
+          const imageElements = elements.filter(element => /\.(jpe?g|png|gif|bmp)$/i.test(element.name));
+          const docElement = elements.filter(element => element.name === 'doc.kml').pop();
+          let kmlString = docElement.data;
+          imageElements.forEach(imageElement => {
+            const name = imageElement.name.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
+            kmlString = kmlString.replace(new RegExp(name, 'g'), imageElement.data);
+          });
+          const name = `${kmlFormat.readName(kmlString)} (${file.name})`;
+          const features: Feature[] = kmlFormat.readFeatures(kmlString, {
+            featureProjection: layersManager
+              .getOlMap()
+              .getView()
+              .getProjection()
+          }) as Feature[];
+          const layerProps = {
+            uid: uid(),
+            name,
+            layerStyles: getDefaultLayerStyles(),
+            type: 'OVERLAY'
+          };
+          const localVectorSource = layersManager.createAndAddLayerFromSource(
+            'LocalVector',
+            {},
+            layerProps
+          ) as LocalVector;
+          localVectorSource.addFeatures(features);
+          resolve(layerProps.uid);
+        },
+        err => {
+          reject(err);
+        }
+      );
     });
   });
 }
@@ -317,7 +323,71 @@ export function loadKMZ(file: File, layersManager: LayersManager): Promise<React
  */
 export function loadZippedShapefile(file: File, layersManager: LayersManager): Promise<React.Key> {
   return new Promise<React.Key>((resolve, reject) => {
-    resolve(null);
+    const zipFile = new JSZip();
+    zipFile.loadAsync(file).then(
+      zip => {
+        const promises = Object.keys(zip.files)
+          .map(name => zip.files[name])
+          .map(
+            entry =>
+              new Promise<{ name: string; data: string }>((resolve, reject) => {
+                entry.async('blob').then(blob => {
+                  if (entry.name.endsWith('.prj')) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      resolve({
+                        name: entry.name,
+                        data: reader.result as any
+                      });
+                    };
+                    reader.readAsText(blob);
+                  } else {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      resolve({
+                        name: entry.name,
+                        data: reader.result as any
+                      });
+                    };
+                    reader.readAsArrayBuffer(blob);
+                  }
+                });
+              })
+          );
+        Promise.all(promises).then(elements => {
+          const dbfElement = elements.filter(element => element.name.endsWith('.dbf')).pop();
+          const shpElement = elements.filter(element => element.name.endsWith('.shp')).pop();
+          const prjElement = elements.filter(element => element.name.endsWith('.prj')).pop();
+          const featureCollection = shapefile2geojson(shpElement.data, dbfElement.data);
+          const name = shpElement.name;
+          const featureProjection = layersManager.getOlMap().getView().getProjection();
+          let dataProjection = featureProjection;
+          if (prjElement != null) {
+            dataProjection = addProjection(prjElement.name, prjElement.data).olProjection;
+          }
+          const features: Feature[] = geoJSONFormat.readFeatures(featureCollection, {
+            dataProjection,
+            featureProjection
+          }) as Feature[];
+          const layerProps = {
+            uid: uid(),
+            name,
+            layerStyles: getDefaultLayerStyles(),
+            type: 'OVERLAY'
+          };
+          const localVectorSource = layersManager.createAndAddLayerFromSource(
+            'LocalVector',
+            {},
+            layerProps
+          ) as LocalVector;
+          localVectorSource.addFeatures(features);
+          resolve(null);
+        });
+      },
+      err => {
+        reject(err);
+      }
+    );
   });
 }
 
@@ -331,7 +401,7 @@ export function loadWMS(
   gisProxyUrl: string,
   layersManager: LayersManager
 ): Promise<React.Key> {
-  return new Promise<React.Key>((resolve, reject) => {
+  return new Promise<React.Key>(resolve => {
     let url = serverUrl;
     if (gisProxyUrl != null && gisProxyUrl !== '') {
       url = `${gisProxyUrl}/${btoa(serverUrl)

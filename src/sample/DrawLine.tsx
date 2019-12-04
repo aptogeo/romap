@@ -23,7 +23,6 @@ export class DrawLine extends BaseButtonTool<IBaseButtonToolProps, any> {
 
   public toolDidActivate(): void {
     if (draw == null) {
-      console.log('add interaction');
       draw = this.buildDrawInteractionAndLayer();
       this.context.olMap.addInteraction(draw);
     }
@@ -31,7 +30,6 @@ export class DrawLine extends BaseButtonTool<IBaseButtonToolProps, any> {
 
   public toolDidDeactivate(): void {
     if (draw != null) {
-      console.log('remove interaction');
       this.context.olMap.removeInteraction(draw);
       draw = null;
     }
