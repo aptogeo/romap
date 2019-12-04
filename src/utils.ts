@@ -167,7 +167,7 @@ export function uid(): React.Key {
     d += performance.now(); //use high-precision timer if available
   }
   return (
-    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function (c) {
+    'xxxxxxxxxxxxxxxy'.replace(/[xy]/g, function(c) {
       var r = (d + Math.random() * 16) % 16 | 0;
       d = Math.floor(d / 16);
       return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
@@ -360,7 +360,10 @@ export function loadZippedShapefile(file: File, layersManager: LayersManager): P
           const prjElement = elements.filter(element => element.name.endsWith('.prj')).pop();
           const featureCollection = shapefile2geojson(shpElement.data, dbfElement.data);
           const name = shpElement.name;
-          const featureProjection = layersManager.getOlMap().getView().getProjection();
+          const featureProjection = layersManager
+            .getOlMap()
+            .getView()
+            .getProjection();
           let dataProjection = featureProjection;
           if (prjElement != null) {
             dataProjection = addProjection(prjElement.name, prjElement.data).olProjection;
