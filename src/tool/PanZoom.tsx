@@ -346,7 +346,11 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
     let origin = null;
     if (this.props.showOrigin) {
       origin = (
-        <ButtonOrigin className={`${this.props.className}-origin`} onClick={this.handleOriginButtonClick} title={originTitle} />
+        <ButtonOrigin
+          className={`${this.props.className}-origin`}
+          onClick={this.handleOriginButtonClick}
+          title={originTitle}
+        />
       );
     } else {
       origin = <ButtonNoorigin className={`${this.props.className}-noorigin`} disabled />;
@@ -356,7 +360,11 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
         <ButtonUp className={`${this.props.className}-up`} onClick={this.handleUpButtonClick} title={upTitle} />
         <ButtonLeft className={`${this.props.className}-left`} onClick={this.handleLeftButtonClick} title={leftTitle} />
         {origin}
-        <ButtonRight className={`${this.props.className}-right`} onClick={this.handleRightButtonClick} title={rightTitle} />
+        <ButtonRight
+          className={`${this.props.className}-right`}
+          onClick={this.handleRightButtonClick}
+          title={rightTitle}
+        />
         <ButtonDown className={`${this.props.className}-down`} onClick={this.handleDownButtonClick} title={downTitle} />
       </div>
     );
@@ -390,7 +398,11 @@ export class PanZoom extends BaseTool<IPanZoomProps, any> {
       <div>
         <ButtonZoom className={`${this.props.className}-zoom`} onClick={this.handleZoomButtonClick} title={zoomTitle} />
         {slider}
-        <ButtonUnzoom className={`${this.props.className}-unzoom`} onClick={this.handleUnzoomButtonClick} title={unzoomTitle} />
+        <ButtonUnzoom
+          className={`${this.props.className}-unzoom`}
+          onClick={this.handleUnzoomButtonClick}
+          title={unzoomTitle}
+        />
       </div>
     );
   }
