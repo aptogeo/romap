@@ -1,6 +1,6 @@
 {
   "name": "romap",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "OpenLayers with React",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -55,7 +55,7 @@
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.1.0",
-    "typescript": "3.7.2",
+    "typescript": "3.7.3",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
