@@ -22,11 +22,6 @@ export class BaseContainer<P extends IBaseContainerProps, S extends IBaseContain
 
   public context: IRomapContext;
 
-  /**
-   * Tools manager.
-   */
-  private toolsManager: ToolsManager;
-
   public constructor(props: P) {
     super(props);
   }

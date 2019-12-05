@@ -43,7 +43,13 @@ const GlobalStyle = createGlobalStyle`
 }
 `;
 
-export type after = (olMap: OlMap) => void;
+export interface IAfterData {
+  olMap: OlMap;
+  layersManager: LayersManager;
+  toolsManager: ToolsManager;
+}
+
+export type after = (data: IAfterData) => void;
 
 export interface IRomapProps {
   /**
@@ -150,7 +156,11 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
     this.layersManager.fromChildren(this.props.children);
     this.toolsManager.fromChildren(this.props.children);
     if (this.props.afterMount) {
-      this.props.afterMount.call(this, this.olMap);
+      this.props.afterMount.call(this, {
+        olMap: this.olMap,
+        layersManager: this.layersManager,
+        toolsManager: this.toolsManager
+      } as IAfterData);
     }
   }
 
@@ -158,7 +168,11 @@ export class Romap extends React.Component<IRomapProps, IRomapState> {
     this.layersManager.fromChildren(this.props.children);
     this.toolsManager.fromChildren(this.props.children);
     if (this.props.afterUpdate) {
-      this.props.afterUpdate.call(this, this.olMap);
+      this.props.afterUpdate.call(this, {
+        olMap: this.olMap,
+        layersManager: this.layersManager,
+        toolsManager: this.toolsManager
+      } as IAfterData);
     }
   }
 
