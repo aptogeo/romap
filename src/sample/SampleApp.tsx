@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Romap } from '../Romap';
+import { Romap, IAfterData } from '../Romap';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import { CounterButton } from './CounterButton';
@@ -58,8 +58,8 @@ export class SampleApp extends React.Component<{}, { hideTools: boolean }> {
         uid="map"
         keyboardEventTarget={document}
         olMapStyle={{ position: 'absolute', width: 'calc(100% - 15px)', height: 'calc(100% - 15px)' }}
-        afterMount={(olMap: OlMap) => {
-          olMap.setView(
+        afterMount={(afterData: IAfterData) => {
+          afterData.olMap.setView(
             new OlView({
               center: [490000, 6800000],
               zoom: 5,
